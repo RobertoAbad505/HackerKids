@@ -1,0 +1,580 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		6FD516F82CA5131F0052F1D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6FD516DB2CA5131D0052F1D3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6FD516E22CA5131D0052F1D3;
+			remoteInfo = HackerKids;
+		};
+		6FD517022CA5131F0052F1D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6FD516DB2CA5131D0052F1D3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6FD516E22CA5131D0052F1D3;
+			remoteInfo = HackerKids;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6FD516E32CA5131D0052F1D3 /* HackerKids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerKids.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FD516F72CA5131F0052F1D3 /* HackerKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HackerKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FD517012CA5131F0052F1D3 /* HackerKidsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HackerKidsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6FD517092CA5131F0052F1D3 /* Exceptions for "HackerKids" folder in "HackerKids" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6FD516E22CA5131D0052F1D3 /* HackerKids */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		6FD516E52CA5131D0052F1D3 /* HackerKids */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6FD517092CA5131F0052F1D3 /* Exceptions for "HackerKids" folder in "HackerKids" target */,
+			);
+			path = HackerKids;
+			sourceTree = "<group>";
+		};
+		6FD516FA2CA5131F0052F1D3 /* HackerKidsTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = HackerKidsTests;
+			sourceTree = "<group>";
+		};
+		6FD517042CA5131F0052F1D3 /* HackerKidsUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = HackerKidsUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6FD516E02CA5131D0052F1D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6FD516F42CA5131F0052F1D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6FD516FE2CA5131F0052F1D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6FD516DA2CA5131D0052F1D3 = {
+			isa = PBXGroup;
+			children = (
+				6FD516E52CA5131D0052F1D3 /* HackerKids */,
+				6FD516FA2CA5131F0052F1D3 /* HackerKidsTests */,
+				6FD517042CA5131F0052F1D3 /* HackerKidsUITests */,
+				6FD516E42CA5131D0052F1D3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6FD516E42CA5131D0052F1D3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6FD516E32CA5131D0052F1D3 /* HackerKids.app */,
+				6FD516F72CA5131F0052F1D3 /* HackerKidsTests.xctest */,
+				6FD517012CA5131F0052F1D3 /* HackerKidsUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6FD516E22CA5131D0052F1D3 /* HackerKids */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6FD5170A2CA5131F0052F1D3 /* Build configuration list for PBXNativeTarget "HackerKids" */;
+			buildPhases = (
+				6FD516DF2CA5131D0052F1D3 /* Sources */,
+				6FD516E02CA5131D0052F1D3 /* Frameworks */,
+				6FD516E12CA5131D0052F1D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				6FD516E52CA5131D0052F1D3 /* HackerKids */,
+			);
+			name = HackerKids;
+			packageProductDependencies = (
+			);
+			productName = HackerKids;
+			productReference = 6FD516E32CA5131D0052F1D3 /* HackerKids.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6FD516F62CA5131F0052F1D3 /* HackerKidsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6FD5170F2CA5131F0052F1D3 /* Build configuration list for PBXNativeTarget "HackerKidsTests" */;
+			buildPhases = (
+				6FD516F32CA5131F0052F1D3 /* Sources */,
+				6FD516F42CA5131F0052F1D3 /* Frameworks */,
+				6FD516F52CA5131F0052F1D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6FD516F92CA5131F0052F1D3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6FD516FA2CA5131F0052F1D3 /* HackerKidsTests */,
+			);
+			name = HackerKidsTests;
+			packageProductDependencies = (
+			);
+			productName = HackerKidsTests;
+			productReference = 6FD516F72CA5131F0052F1D3 /* HackerKidsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6FD517002CA5131F0052F1D3 /* HackerKidsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6FD517122CA5131F0052F1D3 /* Build configuration list for PBXNativeTarget "HackerKidsUITests" */;
+			buildPhases = (
+				6FD516FD2CA5131F0052F1D3 /* Sources */,
+				6FD516FE2CA5131F0052F1D3 /* Frameworks */,
+				6FD516FF2CA5131F0052F1D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6FD517032CA5131F0052F1D3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6FD517042CA5131F0052F1D3 /* HackerKidsUITests */,
+			);
+			name = HackerKidsUITests;
+			packageProductDependencies = (
+			);
+			productName = HackerKidsUITests;
+			productReference = 6FD517012CA5131F0052F1D3 /* HackerKidsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6FD516DB2CA5131D0052F1D3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					6FD516E22CA5131D0052F1D3 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					6FD516F62CA5131F0052F1D3 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 6FD516E22CA5131D0052F1D3;
+					};
+					6FD517002CA5131F0052F1D3 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 6FD516E22CA5131D0052F1D3;
+					};
+				};
+			};
+			buildConfigurationList = 6FD516DE2CA5131D0052F1D3 /* Build configuration list for PBXProject "HackerKids" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6FD516DA2CA5131D0052F1D3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6FD516E42CA5131D0052F1D3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6FD516E22CA5131D0052F1D3 /* HackerKids */,
+				6FD516F62CA5131F0052F1D3 /* HackerKidsTests */,
+				6FD517002CA5131F0052F1D3 /* HackerKidsUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6FD516E12CA5131D0052F1D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6FD516F52CA5131F0052F1D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6FD516FF2CA5131F0052F1D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6FD516DF2CA5131D0052F1D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6FD516F32CA5131F0052F1D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6FD516FD2CA5131F0052F1D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6FD516F92CA5131F0052F1D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6FD516E22CA5131D0052F1D3 /* HackerKids */;
+			targetProxy = 6FD516F82CA5131F0052F1D3 /* PBXContainerItemProxy */;
+		};
+		6FD517032CA5131F0052F1D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6FD516E22CA5131D0052F1D3 /* HackerKids */;
+			targetProxy = 6FD517022CA5131F0052F1D3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		6FD5170B2CA5131F0052F1D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HackerKids/HackerKids.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"HackerKids/Preview Content\"";
+				DEVELOPMENT_TEAM = KK7484G74W;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HackerKids/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertsoft.HackerKids;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6FD5170C2CA5131F0052F1D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HackerKids/HackerKids.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"HackerKids/Preview Content\"";
+				DEVELOPMENT_TEAM = KK7484G74W;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HackerKids/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertsoft.HackerKids;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6FD5170D2CA5131F0052F1D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6FD5170E2CA5131F0052F1D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6FD517102CA5131F0052F1D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KK7484G74W;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertsoft.HackerKidsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HackerKids.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HackerKids";
+			};
+			name = Debug;
+		};
+		6FD517112CA5131F0052F1D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KK7484G74W;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertsoft.HackerKidsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HackerKids.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HackerKids";
+			};
+			name = Release;
+		};
+		6FD517132CA5131F0052F1D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KK7484G74W;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertsoft.HackerKidsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = HackerKids;
+			};
+			name = Debug;
+		};
+		6FD517142CA5131F0052F1D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KK7484G74W;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertsoft.HackerKidsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = HackerKids;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6FD516DE2CA5131D0052F1D3 /* Build configuration list for PBXProject "HackerKids" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6FD5170D2CA5131F0052F1D3 /* Debug */,
+				6FD5170E2CA5131F0052F1D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6FD5170A2CA5131F0052F1D3 /* Build configuration list for PBXNativeTarget "HackerKids" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6FD5170B2CA5131F0052F1D3 /* Debug */,
+				6FD5170C2CA5131F0052F1D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6FD5170F2CA5131F0052F1D3 /* Build configuration list for PBXNativeTarget "HackerKidsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6FD517102CA5131F0052F1D3 /* Debug */,
+				6FD517112CA5131F0052F1D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6FD517122CA5131F0052F1D3 /* Build configuration list for PBXNativeTarget "HackerKidsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6FD517132CA5131F0052F1D3 /* Debug */,
+				6FD517142CA5131F0052F1D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6FD516DB2CA5131D0052F1D3 /* Project object */;
+}
