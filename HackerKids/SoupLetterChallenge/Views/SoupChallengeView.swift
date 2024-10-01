@@ -8,17 +8,31 @@
 import SwiftUI
 
 struct SoupChallengeView: View {
-    @State private var counter: Int = 0
     @StateObject private var viewModel = SoupGridViewModel()
 
     var body: some View {
         VStack {
-            title
-            gameView
-            controls
+            ScrollView {
+                title
+                gameView
+                controls
+            }
         }
         .onAppear {
             viewModel.startGame()
+        }
+//        .sheet(isPresented: $viewModel.win, content: {
+//            VStack {
+//                Text("You won!")
+//                controls
+//            }
+//        })
+        .popover(isPresented: $viewModel.win) {
+            VStack {
+                Text("")
+                Text("You won!")
+                controls
+            }
         }
     }
     var title: some View {
@@ -38,8 +52,8 @@ struct SoupChallengeView: View {
     }
     var controls: some View {
         HStack {
-            Button(counter > 0 ? "Nuevo juego!":"Comenzar!") {
-                counter += 1
+            Button(viewModel.counter > 0 ? "Nuevo juego!":"Comenzar!") {
+                viewModel.counter += 1
                 viewModel.startGame()
             }
             .padding()

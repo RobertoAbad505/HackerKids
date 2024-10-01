@@ -27,31 +27,51 @@ struct SoupGridView: View {
         return LazyVGrid(columns: columns, spacing: 5) {
             ForEach(0..<viewModel.gridSize, id: \.self) { row in
                 ForEach(0..<viewModel.gridSize, id: \.self) { col in
-                    SoupLetterView(viewModel: viewModel, row: row, col: col)                        
+                    Button(action: {
+                        // Agregar la letra seleccionada a la lista temporal
+                        viewModel.selectedPositions.append(GridPosition(row: row, col: col))
+                        
+                        // Si la dirección de selección está completa, validar
+                        if viewModel.selectedPositions.count >= 2 {
+                            viewModel.validateSelection()
+                        }
+                        // Handle letter selection here if needed
+                        print("Selected: \(viewModel.grid[row][col])")
+                    }, label: {
+                        SoupLetterView(viewModel: viewModel, row: row, col: col)
+                    })
+                    .id("\(row)-\(col)")
                 }
             }
         }
     }
     // Grid de palabras que deben ser encontradas
     var wordsListView: some View {
-        let columns = [GridItem(.flexible()), GridItem(.flexible())] // Una columna con palabras apiladas verticalmente
-        return LazyVGrid(columns: columns, spacing: 10) {
-            ForEach(viewModel.challengeWords, id: \.self) { word in
-                HStack {
-                    Image(systemName: "character.magnify")
-                    Text(word)
-                        .font(.footnote)
+        return VStack(alignment: .leading) {
+            let columns = [GridItem(.flexible()), GridItem(.flexible())] // Una columna con palabras apiladas verticalmente
+            LazyVGrid(columns: columns, spacing: 15) {
+                ForEach(viewModel.challengeWords, id: \.self) { word in
+                    let found = viewModel.isWordFound(word)
+                    HStack {
+                        Image(systemName: found ? "checkmark.circle":"questionmark.diamond")
+                            .foregroundStyle(found ? .white:.black)
+                        Text(word)
+                            .font(.footnote)
+                            .foregroundStyle(found ? .white:.black)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(found ? Color.green : Color.white.opacity(0.3)) // Marcar palabras encontradas
+                    .border(.white, width: 2)
+                    .cornerRadius(10)
                 }
-                .padding()
-                .background(viewModel.isWordFound(word) ? Color.green : Color.white.opacity(0.3)) // Marcar palabras encontradas
-                .cornerRadius(8)
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(10)
+        .padding(20)
         .background(UIColor.lightGray.toColor().opacity(0.3))
         .border(UIColor.lightGray.toColor().opacity(0.8))
-        .cornerRadius(8)
+        .cornerRadius(15)
         .padding(.top, 20)
     }
     var loadingGridBody: some View {

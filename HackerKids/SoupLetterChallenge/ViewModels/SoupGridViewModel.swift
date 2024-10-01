@@ -15,17 +15,30 @@ class SoupGridViewModel: ObservableObject {
     @Published var selectedPositions: [GridPosition] = [] // Posiciones seleccionadas temporalmente
     @Published var correctWordsPositions: Set<GridPosition> = [] // Palabras correctamente seleccionadas
     @Published var foundWords: Set<String> = [] // Palabras encontradas
+    @Published var win: Bool = false
+    @Published var counter: Int = 0
+    let isIPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
 
     func startGame() {
         //GENERAR ARRAY VACIO
-        grid = Array(repeating: Array(repeating: SoupChallengeConstants.emptyChar, count: gridSize), count: gridSize)
+        let gridLimit = getGridSize()
+        gridSize = gridLimit
+        grid = Array(repeating: Array(repeating: SoupChallengeConstants.emptyChar, count: gridLimit), count: gridLimit)
         selectedPositions = []
         correctWordsPositions = []
         foundWords.removeAll()
+        win = false
         //COLOCAR LAS PALABRAS
         placeWordsInGrid()
         // Rellenar el resto con letras aleatorias
         fillEmptySpaces()
+    }
+    func getGridSize() -> Int {
+        if isIPad {
+            return 15
+        } else {
+            return 10
+        }
     }
 
     func generateRandomGrid(_ size: Int) {
@@ -107,6 +120,10 @@ class SoupGridViewModel: ObservableObject {
             foundWords.insert(selectedWord)
             // Limpiar las posiciones seleccionadas después de validar
             clearCurrentSelection()
+            if challengeWords.count == foundWords.count {
+                win = true
+                counter += 1
+            }
         } else {
             //La palabra correcta no es la misma, validar inicio de secuencia entonces
             // Obtener las primeras letras seleccionadas
