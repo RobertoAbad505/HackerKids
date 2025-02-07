@@ -4,7 +4,7 @@
 //
 //  Created by Roberto Ramirez on 9/25/24.
 //
-
+import GoogleSignIn
 import SwiftUI
 import SwiftData
 
@@ -26,6 +26,11 @@ struct HackerKidsApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .onAppear {
+                    GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
+                        // Check if `user` exists; otherwise, do something with `error`
+                    }
+                }
         }
 //        .modelContainer(sharedModelContainer)
     }

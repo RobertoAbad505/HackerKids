@@ -4,7 +4,7 @@
 //
 //  Created by Roberto Ramirez on 2/2/25.
 //
-
+import GoogleSignInSwift
 import SwiftUI
 
 struct LoginView: View {
@@ -138,6 +138,7 @@ struct LoginView: View {
                 .clipShape(Circle())
                 .shadow(color: Color.purple.opacity(0.5), radius: 10, x: 5, y: 5)
             }
+            googleSignInButton
         }
         .padding(.top, 150)
     }
@@ -157,6 +158,12 @@ struct LoginView: View {
             .background(Color.red)
             .cornerRadius(20)
         })
+    }
+    var googleSignInButton: some View {
+        VStack {
+            GoogleSignInButton(action: viewModel.handleGoogleSignIn)
+                .clipShape(Circle())
+        }
     }
 }
 

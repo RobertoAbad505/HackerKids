@@ -41,5 +41,16 @@
     <string>This app requires access to the photo library.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>This app requires access to your location.</string>
+    <key>GIDClientID</key>
+    <string>1087825595658-k3s5bmlio0hgh50btmdto6rv0c0advbl.apps.googleusercontent.com</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>com.googleusercontent.apps.1087825595658-k3s5bmlio0hgh50btmdto6rv0c0advbl</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>
