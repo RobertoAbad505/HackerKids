@@ -8,13 +8,20 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(\.modelContext) private var modelContext
     @State var viewModel: AboutAppViewModel = AboutAppViewModel()
     @State var infoView: Bool = false
     @State var loginView: Bool = false
     @State var gameRoute: GameRoute = .home
+    
+    init() {
+        SessionManager.shared.fetchLastSession(modelContext)
+    }
+    
     var body: some View {
         NavigationStack {
             VStack {
+                activeProfile
                 Spacer()
                 title
                 startButton
@@ -24,9 +31,6 @@ struct HomeView: View {
                 infoButton
             }
             .padding(.top)
-            .onAppear {
-                loginView.toggle()
-            }
             .background(
                 LinearGradient(
                     gradient: Gradient(colors: [Color.white, Color.blue.opacity(0.2)]),
@@ -58,18 +62,30 @@ struct HomeView: View {
                 }
                 .edgesIgnoringSafeArea(.all)
             }
-//            .overlay {
-//                if loginView {
-//                    LoginView()
-//                }
-//            }
-            .sheet(isPresented: $loginView) {
-                LoginView()
+            .overlay {
+                if loginView {
+                    withAnimation(.default) {
+                        LoginView(onExit: { self.loginView = false })
+                    }
+                }
             }
-            //            .popover(isPresented: $loginView) {
-            //                LoginView()
-            //            }
         }
+    }
+    var activeProfile: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                loginView.toggle()
+            }) {
+                Image(systemName: "person.fill")
+                    .foregroundColor(.white)
+                    .frame(width: 32, height: 32)
+                    .padding(3)
+                    .background(UIManager.shared.backgroundGradient)
+                    .clipShape(Circle())
+            }
+        }
+        .padding()
     }
     var title: some View {
         VStack {

@@ -7,6 +7,7 @@
 
 import GoogleSignIn
 import SwiftUI
+import SwiftData
 
 class LoginViewModel: ObservableObject {
     @Published var email: String = ""
@@ -16,22 +17,32 @@ class LoginViewModel: ObservableObject {
     @Published var playerImg: Image?
     @Published var googleSignIn: Bool = false
 
-    func startLogin() {
+    func startLogin(_ modelContext: ModelContext) {
         if let localPlayer = readLocalData(){
             self.player = localPlayer
-            createSession()
+            createSession(modelContext, localPlayer)
             userSession = true
         }
     }
     func readLocalData() -> PlayerUser? {
-        return PlayerUser(id: "12334555", name: "Roberto Abad", email: "roberto.rmzabad@gmail.com", password: "********", picture: nil)
+        let userDefault = SessionManager.shared.getCurrentUser()
+        return PlayerUser(id: userDefault.id ?? UUID().uuidString,
+                          name: userDefault.userName,
+                          email: userDefault.email,
+                          password: "********",
+                          picture: userDefault.picture)
     }
-    func createSession() {
-        self.playerImg = player?.getPlayerImage()
+    func createSession(_ modelContext: ModelContext, _ player: PlayerUser) {
+        self.playerImg = player.getPlayerImage()
+        let newSessionUser = LocalUser(userName: player.name,
+                                   email: player.email)
+        
+        SwiftDataManager.shared.create(modelContext, newSessionUser)
     }
-    func signOff() {
+    func signOff(_ modelContext: ModelContext) {
         player = nil
         userSession = false
+        SessionManager.shared.signOff(modelContext)
         if googleSignIn {
             GIDSignIn.sharedInstance.signOut()
         }

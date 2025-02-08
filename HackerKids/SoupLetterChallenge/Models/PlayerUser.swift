@@ -15,6 +15,7 @@ struct PlayerUser: Identifiable, Codable {
     var password: String
     var picture: Data?
     var hasImage: Bool?
+    var signOnType: SignOnType? = .account
     
     init(id: String, name: String, email: String, password: String, picture: Data? = nil) {
         self.id = id
@@ -30,6 +31,8 @@ struct PlayerUser: Identifiable, Codable {
             self.name = result.user.profile?.name ?? ""
             self.password = ""
             self.hasImage = result.user.profile?.hasImage ?? false
+            self.signOnType = .google
+//            self.picture = getPlayerImage(googleResult)
         } else {
             return nil
         }
@@ -41,4 +44,8 @@ struct PlayerUser: Identifiable, Codable {
         }
         return Image(systemName: "person")
     }
+}
+enum SignOnType: String, Codable {
+    case google
+    case account
 }

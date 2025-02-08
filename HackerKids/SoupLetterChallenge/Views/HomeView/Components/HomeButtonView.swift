@@ -21,13 +21,7 @@ struct HomeButtonView: View {
         .foregroundColor(.white)
         .padding()
         .frame(maxWidth: .infinity) // Ocupa todo el ancho disponible
-        .background(
-            LinearGradient(
-                gradient: Gradient(colors: [Color.blue, Color.purple]),
-                startPoint: .leading,
-                endPoint: .trailing
-            )
-        )
+        .background(UIManager.shared.backgroundGradient)
         .cornerRadius(20)
         .shadow(color: Color.purple.opacity(0.5), radius: 10, x: 5, y: 5)
         .padding(.horizontal, 40) // Espaciado lateral

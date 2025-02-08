@@ -8,18 +8,24 @@ import GoogleSignInSwift
 import SwiftUI
 
 struct LoginView: View {
+    @Environment(\.modelContext) private var modelContext
     @StateObject private var cameraManager = CameraManager()
     @ObservedObject var viewModel: LoginViewModel
     @State private var player1Name: String = "Roberto Abad"
+    @State private var player1email: String = "invitado@invitado.com"
     @State private var cameraShoot: Image?
-    init() {
+    @Environment(\.presentationMode) private var presentationMode
+    public var onExit: () -> Void = { }
+    init(onExit: @escaping (() -> Void)) {
         self.viewModel = LoginViewModel()
-        viewModel.startLogin()
+        viewModel.startLogin(modelContext)
+        self.onExit = onExit
     }
     var body: some View {
         ZStack {
             ScrollView {
                 VStack(alignment: .center) {
+                    exitButton
                     Spacer()
                     if viewModel.userSession {
                         loggedUserView
@@ -40,12 +46,28 @@ struct LoginView: View {
             ImagePicker(image: $cameraManager.image, isPresented: $cameraManager.showImagePicker)
         }
     }
+    var exitButton: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                onExit()
+                self.presentationMode.wrappedValue.dismiss()
+            }, label: {
+                Image(systemName: "clear")
+                    .foregroundColor(.white)
+                    .frame(width: 32, height: 32)
+                    .padding(3)
+                    .background(UIManager.shared.backgroundGradient)
+                    .clipShape(Circle())
+            })
+        }
+    }
     var loggedUserView: some View {
-        VStack {
+        VStack(alignment: .center) {
             if let img = viewModel.playerImg {
                 img
                     .resizable()
-                    .frame(width: 140, height: 140)
+                    .frame(width: 120, height: 120)
                     .padding(30)
                     .background(Color.green)
                     .clipShape(Circle())
@@ -54,9 +76,12 @@ struct LoginView: View {
                     .clipShape(Circle())
                 
             }
-            Text(viewModel.player?.name ?? "N/A")
-            Text(viewModel.player?.email ?? "N/A")
+            Text("Player name:")
+            Text(viewModel.player?.name ?? "N/A").bold().padding(.bottom)
+            Text("account email:")
+            Text(viewModel.player?.email ?? "N/A").bold()
         }
+        .padding()
     }
     var createUser: some View {
         VStack(alignment: .center) {
@@ -65,6 +90,9 @@ struct LoginView: View {
                 .padding(.bottom, 20)
             Text("Enter your name:")
             TextField("Player 1 name", text: $player1Name)
+                .padding(.bottom, 15)
+            Text("Enter your email")
+            TextField("email", text: $player1email)
             if !player1Name.isEmpty {
                 takeAPictureView
             }
@@ -99,6 +127,24 @@ struct LoginView: View {
                 .foregroundStyle(Color.white)
                 .padding()
                 .background(Color.blue)
+                .cornerRadius(15)
+            })
+            Button(action: {
+                SessionManager.shared.signIn(modelContext, user: PlayerUser(id: UUID().uuidString,
+                                                              name: $player1Name.wrappedValue,
+                                                              email: $player1email.wrappedValue,
+                                                              password: "dataPassword",
+                                                              picture: cameraManager.image?.pngData()))
+            }, label: {
+                HStack {
+                    Image(systemName: "person.fill.badge.plus")
+                        .resizable()
+                        .frame(width: 18, height: 18)
+                    Text("Create user account!")
+                }
+                .foregroundStyle(Color.white)
+                .padding()
+                .background(Color.green)
                 .cornerRadius(15)
             })
         }
@@ -144,7 +190,7 @@ struct LoginView: View {
     }
     var signOffLink: some View {
         Button(action: {
-            viewModel.signOff()
+            viewModel.signOff(modelContext)
         }, label: {
             HStack {
                 Image(systemName: "person.crop.circle.badge.xmark")
@@ -161,12 +207,15 @@ struct LoginView: View {
     }
     var googleSignInButton: some View {
         VStack {
-            GoogleSignInButton(action: viewModel.handleGoogleSignIn)
-                .clipShape(Circle())
+            HStack {
+                GoogleSignInButton(action: viewModel.handleGoogleSignIn)
+                Spacer()
+            }
+            .clipShape(Circle())
         }
     }
 }
 
 #Preview {
-    LoginView()
+    LoginView(onExit: {})
 }
