@@ -15,7 +15,6 @@ struct AboutAppView: View {
     @State private var result: Result<MessageComposeResult, Error>? = nil
     init(_ viewModel: AboutAppViewModel, showMailView: Bool = false) {
         self.viewModel = viewModel
-        viewModel.getGitUser()
         self.showMailView = showMailView
     }
     var body: some View {
@@ -32,6 +31,13 @@ struct AboutAppView: View {
                         .foregroundStyle(Color.blue)
                 })
             }
+//            AsyncImage(url: URL(string: "https://cdn.guidedogs.com.au/wp-content/uploads/2024/07/GD-Homepage-Manton-Mobile.jpg")!) { img in
+//                img
+//                    .resizable()
+//                    .frame(width: 30, height: 30)
+//            } placeholder: {
+//                ProgressView()
+//            }
             AsyncImage(url: URL(string: viewModel.gitHubUser?.avatarUrl ?? "")) { img in
                 img
                     .resizable()

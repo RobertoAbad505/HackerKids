@@ -35,9 +35,12 @@ class LoginViewModel: ObservableObject {
     func createSession(_ modelContext: ModelContext, _ player: PlayerUser) {
         self.playerImg = player.getPlayerImage()
         let newSessionUser = LocalUser(userName: player.name,
-                                   email: player.email)
-        
-        SwiftDataManager.shared.create(modelContext, newSessionUser)
+                                   email: player.email,
+                                       picture: player.picture
+        )
+        let user = SwiftDataManager.shared.create(modelContext, newSessionUser)
+        self.player = PlayerUser(id: user.id ?? "", name: user.userName, email: user.email, password: "")
+        self.userSession = true
     }
     func signOff(_ modelContext: ModelContext) {
         player = nil

@@ -15,6 +15,10 @@ class AboutAppViewModel: ObservableObject {
     let developerEmailAddress = "roberto.rmzabad@gmail.com"
     private var cancellables = Set<AnyCancellable>()
     
+    init() {
+//        getGitUser()
+    }
+    
     func getGitUser() {
         // URL del API
         guard let url = URL(string: "https://api.github.com/users/RobertoAbad505") else {
@@ -39,7 +43,7 @@ class AboutAppViewModel: ObservableObject {
                     DispatchQueue.main.async {
                         self?.errorMessage = "Failed to load user: \(error.localizedDescription)"
                     }
-                    self?.logErrorDetails(error)
+                    self?.logErrorDetails(error as! NetworkError)
                 }
             }, receiveValue: { [weak self] user in
                 // Actualiza el usuario en la propiedad publicada
@@ -48,7 +52,7 @@ class AboutAppViewModel: ObservableObject {
             })
             .store(in: &cancellables)
     }
-    private func logErrorDetails(_ error: Error) {
+    private func logErrorDetails(_ error: NetworkError) {
         print("⚠️ API Error: \(error.localizedDescription)")
         
         if let urlError = error as? URLError {
@@ -76,10 +80,4 @@ class AboutAppViewModel: ObservableObject {
         MFMailComposeViewController.canSendMail()
     }
     
-}
-
-enum GitError: Error {
-    case urlError
-    case invalidResponse
-    case parseError
 }

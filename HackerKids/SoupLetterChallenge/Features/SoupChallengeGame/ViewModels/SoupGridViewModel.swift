@@ -12,7 +12,7 @@ class SoupGridViewModel: ObservableObject {
     @Published var gridSize: Int = 0
     @Published var difficultyLevel: DifficultyLevel = .easy
     @Published var grid: [[Character]] = []
-    @Published var challengeWords: [String] = ["GREEN", "OSO", "ROBERTO", "WEED", "SATURNO", "APOLLO", "ZEBRA", "STAR", "CALIFORNIA", "ICEBERG"]
+    @Published var challengeWords: [String] = ["GREEN", "OSO", "ROBERTO", "RAMIREZ", "SATURNO", "APOLLO", "ZEBRA", "STAR", "CALIFORNIA", "ICEBERG"]
     @Published var selectedPositions: [GridPosition] = [] // Posiciones seleccionadas temporalmente
     @Published var correctWordsPositions: Set<GridPosition> = [] // Palabras correctamente seleccionadas
     @Published var foundWords: Set<String> = [] // Palabras encontradas

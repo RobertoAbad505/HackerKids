@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
           // Show the app's signed-out state.
         } else {
           // Show the app's signed-in state.
+//            SessionManager.shared.signIn(ModelContext.init(), user: user)
         }
       }
       return true

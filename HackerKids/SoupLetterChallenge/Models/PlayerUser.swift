@@ -37,6 +37,18 @@ struct PlayerUser: Identifiable, Codable {
             return nil
         }
     }
+    init?(_ localUser: LocalUser) {
+        if !localUser.email.isEmpty {
+            self.id = localUser.email
+            self.email = localUser.email
+            self.name = localUser.email
+            self.password = ""
+            self.hasImage = false
+            self.signOnType = .account
+        } else {
+            return nil
+        }
+    }
     
     func getPlayerImage() -> Image {
         if let pictureData = picture?.createImage() {

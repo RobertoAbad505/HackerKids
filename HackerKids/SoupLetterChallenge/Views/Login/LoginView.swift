@@ -11,40 +11,49 @@ struct LoginView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject private var cameraManager = CameraManager()
     @ObservedObject var viewModel: LoginViewModel
-    @State private var player1Name: String = "Roberto Abad"
-    @State private var player1email: String = "invitado@invitado.com"
-    @State private var cameraShoot: Image?
+    @State private var accountCreated: Bool = false
     @Environment(\.presentationMode) private var presentationMode
     public var onExit: () -> Void = { }
     init(onExit: @escaping (() -> Void)) {
         self.viewModel = LoginViewModel()
-        viewModel.startLogin(modelContext)
         self.onExit = onExit
     }
     var body: some View {
-        ZStack {
+        VStack {
             ScrollView {
                 VStack(alignment: .center) {
-                    exitButton
+                    VStack {
+                        exitButton
+                        Spacer()
+                        if viewModel.userSession {
+                            loggedUserView
+                        } else {
+                            createUser
+                            loginWithSocial
+                        }
+                    }
+                    .padding()
                     Spacer()
                     if viewModel.userSession {
-                        loggedUserView
                         signOffLink
-                    } else {
-                        createUser
-                        loginWithSocial
                     }
-                    Spacer()
                 }
-                .padding()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.ultraThinMaterial)
-        .sheet(isPresented: $cameraManager.showImagePicker) {
-            ImagePicker(image: $cameraManager.image, isPresented: $cameraManager.showImagePicker)
+        .onAppear {
+            viewModel.startLogin(modelContext)
         }
+        .popover(isPresented: $accountCreated, content: {
+            VStack {
+                Text("Usuario creado con exito!✔️")
+            }
+            .onTapGesture {
+                self.accountCreated.toggle()
+            }
+        })
     }
     var exitButton: some View {
         HStack {
@@ -67,92 +76,32 @@ struct LoginView: View {
             if let img = viewModel.playerImg {
                 img
                     .resizable()
-                    .frame(width: 120, height: 120)
+                    .frame(width: 110, height: 110)
                     .padding(30)
-                    .background(Color.green)
+                    .background(.thinMaterial)
                     .clipShape(Circle())
                     .padding(10)
-                    .background(LinearGradient(colors: [.blue, .white, .blue], startPoint: .bottomLeading, endPoint: .top))
+                    .background(UIManager.shared.backgroundGradient)
                     .clipShape(Circle())
+                    .padding(.bottom, 10)
                 
             }
             Text("Player name:")
             Text(viewModel.player?.name ?? "N/A").bold().padding(.bottom)
             Text("account email:")
             Text(viewModel.player?.email ?? "N/A").bold()
+            Spacer()
         }
         .padding()
     }
     var createUser: some View {
-        VStack(alignment: .center) {
-            Text("Who is the player 1?")
-                .font(.title)
-                .padding(.bottom, 20)
-            Text("Enter your name:")
-            TextField("Player 1 name", text: $player1Name)
-                .padding(.bottom, 15)
-            Text("Enter your email")
-            TextField("email", text: $player1email)
-            if !player1Name.isEmpty {
-                takeAPictureView
-            }
-        }
-        .padding(.horizontal, 30)
-    }
-    var takeAPictureView: some View {
-        VStack {
-            Text("Toma una foto del jugador")
-            if let image = cameraManager.image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-            }
-            Button(action: {
-                //TAKE A PICTURe
-                cameraManager.checkCameraPermission(completion: { cameraPermisison in
-                    if cameraPermisison {
-                        cameraManager.openCamera()
-                    }
-                })
-                
-            }, label: {
-                HStack {
-                    Image(systemName: "camera.fill")
-                        .resizable()
-                        .frame(width: 18, height: 18)
-                    Text(cameraManager.image == nil ? "Take a picture!":"Retake picture!")
-                }
-                .foregroundStyle(Color.white)
-                .padding()
-                .background(Color.blue)
-                .cornerRadius(15)
-            })
-            Button(action: {
-                SessionManager.shared.signIn(modelContext, user: PlayerUser(id: UUID().uuidString,
-                                                              name: $player1Name.wrappedValue,
-                                                              email: $player1email.wrappedValue,
-                                                              password: "dataPassword",
-                                                              picture: cameraManager.image?.pngData()))
-            }, label: {
-                HStack {
-                    Image(systemName: "person.fill.badge.plus")
-                        .resizable()
-                        .frame(width: 18, height: 18)
-                    Text("Create user account!")
-                }
-                .foregroundStyle(Color.white)
-                .padding()
-                .background(Color.green)
-                .cornerRadius(15)
-            })
-        }
+        CreateAccountView(self.viewModel)
     }
     var loginWithSocial: some View {
         VStack {
             Text("Or get login by using one of these")
             HStack {
+                googleSignInButton
                 Button(action: {
 //                    openUrl(source)
                 }, label: {
@@ -164,7 +113,6 @@ struct LoginView: View {
                         .foregroundStyle(Color.white)
                         .clipShape(Circle())
                 })
-                .padding(1)
                 .background(LinearGradient(colors: [.white, .gray, .white, .gray], startPoint: .bottomLeading, endPoint: .top))
                 .clipShape(Circle())
                 .shadow(color: Color.purple.opacity(0.5), radius: 10, x: 5, y: 5)
@@ -184,33 +132,40 @@ struct LoginView: View {
                 .clipShape(Circle())
                 .shadow(color: Color.purple.opacity(0.5), radius: 10, x: 5, y: 5)
             }
-            googleSignInButton
         }
         .padding(.top, 150)
     }
     var signOffLink: some View {
-        Button(action: {
-            viewModel.signOff(modelContext)
-        }, label: {
-            HStack {
-                Image(systemName: "person.crop.circle.badge.xmark")
-                Text("Sign Off")
-                    .font(.headline)
-                    .fontWeight(.bold)
-            }
-            .foregroundStyle(.white)
-            .padding(.horizontal, 15)
-            .padding(.vertical, 10)
-            .background(Color.red)
-            .cornerRadius(20)
-        })
+        VStack {
+            Button(action: {
+                viewModel.signOff(modelContext)
+            }, label: {
+                HStack {
+                    Image(systemName: "person.crop.circle.badge.xmark")
+                    Text("Sign Off")
+                }
+                .foregroundStyle(.white)
+                .font(.callout)
+                .fontWeight(.bold)
+                .padding(.horizontal, 15)
+                .padding(.vertical, 10)
+            })
+            .frame(maxWidth: .infinity)
+        }
+        .background(Color.red)
+        .cornerRadius(25)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal)
     }
     var googleSignInButton: some View {
         VStack {
-            HStack {
-                GoogleSignInButton(action: viewModel.handleGoogleSignIn)
-                Spacer()
+            ZStack {
+                GoogleSignInButton(scheme: .light,
+                                   style: .icon,
+                                   state: .normal,
+                                   action: viewModel.handleGoogleSignIn)
             }
+            .background(Color.white)
             .clipShape(Circle())
         }
     }

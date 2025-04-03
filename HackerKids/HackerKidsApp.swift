@@ -14,7 +14,7 @@ struct HackerKidsApp: App {
         let schema = Schema([
             LocalUser.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
 
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
@@ -32,6 +32,6 @@ struct HackerKidsApp: App {
                     }
                 }
         }
-//        .modelContainer(sharedModelContainer)
+        .modelContainer(sharedModelContainer)
     }
 }

@@ -2,55 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleDevelopmentRegion</key>
-    <string>en</string>
-    <key>CFBundleExecutable</key>
-    <string>$(EXECUTABLE_NAME)</string>
-    <key>CFBundleIdentifier</key>
-    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-    <key>CFBundleInfoDictionaryVersion</key>
-    <string>6.0</string>
-    <key>CFBundleName</key>
-    <string>$(PRODUCT_NAME)</string>
-    <key>CFBundlePackageType</key>
-    <string>APPL</string>
-    <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
-    <key>CFBundleVersion</key>
-    <string>1</string>
-    <key>LSRequiresIPhoneOS</key>
-    <true/>
-    <key>UILaunchStoryboardName</key>
-    <string>LaunchScreen</string>
-    <key>NSAppTransportSecurity</key>
-    <key>NSExceptionDomains</key>
-    <key>api.github.com</key>
-    <dict>
-        <key>NSIncludesSubdomains</key>
-        <true/>
-        <key>NSExceptionAllowsInsecureHTTPLoads</key>
-        <false/>
-        <key>NSExceptionRequiresForwardSecrecy</key>
-        <true/>
-        <key>NSRequiresCertificateTransparency</key>
-        <false/>
-    </dict>
-    <key>NSCameraUsageDescription</key>
-    <string>This app requires access to the camera.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>This app requires access to the photo library.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>This app requires access to your location.</string>
-    <key>GIDClientID</key>
-    <string>1087825595658-k3s5bmlio0hgh50btmdto6rv0c0advbl.apps.googleusercontent.com</string>
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>com.googleusercontent.apps.1087825595658-k3s5bmlio0hgh50btmdto6rv0c0advbl</string>
-            </array>
-        </dict>
-    </array>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleExecutable</key>
+	<string></string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.1087825595658-k3s5bmlio0hgh50btmdto6rv0c0advbl</string>
+			</array>
+		</dict>
+	</array>
+	<key>GIDClientID</key>
+	<string>1087825595658-k3s5bmlio0hgh50btmdto6rv0c0advbl.apps.googleusercontent.com</string>
+	<key>NSAppTransportSecurity</key>
+	<string>NSExceptionDomains</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>HackerKids necesita tu permiso para emitir datos.</string>
+	<key>api.github.com</key>
+	<dict>
+		<key>NSExceptionAllowsInsecureHTTPLoads</key>
+		<false/>
+		<key>NSExceptionRequiresForwardSecrecy</key>
+		<true/>
+		<key>NSIncludesSubdomains</key>
+		<true/>
+		<key>NSRequiresCertificateTransparency</key>
+		<false/>
+	</dict>
 </dict>
 </plist>

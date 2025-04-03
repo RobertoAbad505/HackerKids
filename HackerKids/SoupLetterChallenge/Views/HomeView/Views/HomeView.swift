@@ -9,14 +9,12 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
-    @State var viewModel: AboutAppViewModel = AboutAppViewModel()
+    @ObservedObject var viewModel: AboutAppViewModel = AboutAppViewModel()
+    @ObservedObject var userViewModel: LoginViewModel = LoginViewModel()
     @State var infoView: Bool = false
     @State var loginView: Bool = false
     @State var gameRoute: GameRoute = .home
-    
-    init() {
-        SessionManager.shared.fetchLastSession(modelContext)
-    }
+    @State var playerInfo: LocalUser?
     
     var body: some View {
         NavigationStack {
@@ -26,7 +24,9 @@ struct HomeView: View {
                 title
                 startButton
                 challengeButton
-                highScoresButton
+                chatWithBTFriend
+//                highScoresButton --> Create a single game view for the soup letter view
+                apisDemoButton
                 Spacer()
                 infoButton
             }
@@ -39,6 +39,15 @@ struct HomeView: View {
                 )
                 .ignoresSafeArea()
             )
+            .onChange(of: SessionManager.shared.signedInUser) { user in
+                if user == nil {
+                    loginView = true
+                    playerInfo = user
+                }
+            }
+            .onAppear {
+                SessionManager.shared.fetchLastSession(modelContext)
+            }
             .navigationDestination(for: GameRoute.self) { route in
                 switch route {
                 case .game:
@@ -74,41 +83,36 @@ struct HomeView: View {
     var activeProfile: some View {
         HStack {
             Spacer()
-            Button(action: {
-                loginView.toggle()
-            }) {
-                Image(systemName: "person.fill")
-                    .foregroundColor(.white)
-                    .frame(width: 32, height: 32)
-                    .padding(3)
-                    .background(UIManager.shared.backgroundGradient)
-                    .clipShape(Circle())
+            VStack(alignment: .trailing) {
+                Text("Hi! \(playerInfo?.userName ?? "")")
             }
+            Image(systemName: "person.fill")
+                .foregroundColor(.white)
+                .frame(width: 32, height: 32)
+                .padding(3)
+                .background(UIManager.shared.backgroundGradient)
+                .clipShape(Circle())
         }
         .padding()
+        .onTapGesture {
+            loginView.toggle()
+        }
     }
     var title: some View {
         VStack {
             Text("Sopita challenge")
                 .font(.largeTitle)
-                .fontWeight(.bold)
-                .rotation3DEffect(
-                    .degrees(20), // Ángulo de rotación
-                    axis: (x: 1, y: 0, z: 0)
-                )
-                .foregroundColor(.blue)
-                .shadow(color: .gray, radius: 10, x: 5, y: 5) // Sombra para mayor profundidad
             Text("by RobertSoft")
                 .font(.subheadline)
-                .fontWeight(.bold)
-                .rotation3DEffect(
-                    .degrees(20), // Ángulo de rotación
-                    axis: (x: 1, y: 0, z: 0)
-                )
-                .foregroundColor(.blue)
-                .shadow(color: .gray, radius: 10, x: 5, y: 5) // Sombra para mayor profundidad
         }
         .padding(.bottom, 10)
+        .fontWeight(.bold)
+        .rotation3DEffect(
+            .degrees(20), // Ángulo de rotación
+            axis: (x: 1, y: 0, z: 0)
+        )
+        .foregroundColor(.blue)
+        .shadow(color: .gray, radius: 10, x: 5, y: 5) // Sombra para mayor profundidad
     }
     var startButton: some View {
         withAnimation(.easeInOut(duration: 0.2)) {
@@ -128,6 +132,13 @@ struct HomeView: View {
             })
         }
     }
+    var chatWithBTFriend: some View {
+        withAnimation(.easeInOut(duration: 0.2)) {
+            NavigationLink(destination: ChatWithBTFriendView(), label: {
+                HomeButtonView(title: "Chat with a friend", icon: "bubble.left.and.text.bubble.right")
+            })
+        }
+    }
     var highScoresButton: some View {
         withAnimation(.easeInOut(duration: 0.2)) {
             NavigationLink(destination: SoupChallengeView(onExit: {
@@ -137,13 +148,22 @@ struct HomeView: View {
             })
         }
     }
+    var apisDemoButton: some View {
+        withAnimation(.easeInOut(duration: 0.2)) {
+            NavigationLink(destination: APISDemoView(), label: {
+                HomeButtonView(title: "APIs Demo", icon: "network")
+            })
+        }
+    }
     var infoButton: some View {
         Button(action: {
             infoView.toggle()
         }) {
             HStack {
-                Spacer()
                 Image(systemName: "info.circle")
+                    .resizable()
+                    .frame(width: 28, height: 28)
+                Spacer()
             }
             .padding()
         }
@@ -158,4 +178,5 @@ enum GameRoute: Hashable {
 
 #Preview {
     HomeView()
+        .modelContainer(for: LocalUser.self, inMemory: true)
 }

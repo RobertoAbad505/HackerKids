@@ -21,7 +21,6 @@ final class SessionManager {
         if blankUser.email != persistentUserSigned.email {
             self.signedInUser = persistentUserSigned
         }
-        
         if signedInUser == nil {
             self.signedInUser = blankUser
         }
