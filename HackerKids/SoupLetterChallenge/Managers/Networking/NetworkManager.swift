@@ -8,12 +8,11 @@ import Combine
 import Foundation
 
 class NetworkManager: NetworkManagerProtocol {
-    
-    func fetch<T: Decodable>(_ url: URL) -> AnyPublisher<T, NetworkError> {
+    func fetch<T>(_ url: URL, _ decodeStrategy: JSONDecoder.KeyDecodingStrategy?) -> AnyPublisher<T, NetworkError> where T : Decodable {
         let decoder = JSONDecoder()
-//        if let strategy = decodeStrategy {
-//            decoder.keyDecodingStrategy = strategy
-//        }
+        if let strategy = decodeStrategy {
+            decoder.keyDecodingStrategy = strategy
+        }
         return URLSession.shared.dataTaskPublisher(for: url)
             .tryMap { data, response in
                 guard let httpResponse = response as? HTTPURLResponse else {

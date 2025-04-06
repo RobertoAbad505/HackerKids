@@ -31,13 +31,6 @@ struct AboutAppView: View {
                         .foregroundStyle(Color.blue)
                 })
             }
-//            AsyncImage(url: URL(string: "https://cdn.guidedogs.com.au/wp-content/uploads/2024/07/GD-Homepage-Manton-Mobile.jpg")!) { img in
-//                img
-//                    .resizable()
-//                    .frame(width: 30, height: 30)
-//            } placeholder: {
-//                ProgressView()
-//            }
             AsyncImage(url: URL(string: viewModel.gitHubUser?.avatarUrl ?? "")) { img in
                 img
                     .resizable()
@@ -82,6 +75,9 @@ struct AboutAppView: View {
                 controller.recipients = ["+1 470 965 9798"] // Número de teléfono
                 controller.body = "Hola, este es un mensaje generado desde la app Sopitas." // Texto del mensaje
             }
+        }
+        .onAppear {
+            viewModel.fetchGitHubUser()
         }
     }
     func getButton(_ source: ContactSource) -> some View {

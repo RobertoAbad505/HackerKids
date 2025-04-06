@@ -8,7 +8,12 @@ import Combine
 import Foundation
 
 protocol NetworkManagerProtocol {
-    func fetch<T: Decodable>(_ url: URL) -> AnyPublisher<T, NetworkError>
+    func fetch<T: Decodable>(_ url: URL, _ decodeStrategy: JSONDecoder.KeyDecodingStrategy?) -> AnyPublisher<T, NetworkError>
+}
+extension NetworkManagerProtocol {
+    func fetch<T: Decodable>(_ url: URL) -> AnyPublisher<T, NetworkError> {
+        fetch(url, .useDefaultKeys)
+    }
 }
 enum NetworkError: Error, LocalizedError {
     case invalidURL
