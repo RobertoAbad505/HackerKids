@@ -4,7 +4,7 @@
 //
 //  Created by Roberto Ramirez on 9/25/24.
 //
-
+import AVFoundation
 import Foundation
 import UIKit
 
@@ -154,6 +154,7 @@ class SoupGridViewModel: ObservableObject {
                 counter += 1
                 detenerTimer()
             }
+            playSelectionSound()
         } else {
             //La palabra correcta no es la misma, validar inicio de secuencia entonces
             // Obtener las primeras letras seleccionadas
@@ -263,6 +264,10 @@ class SoupGridViewModel: ObservableObject {
             self.challengeWords = challenge.challengeWords
         }
         startGame()
+    }
+
+    func playSelectionSound() {
+        AudioServicesPlaySystemSound(1104) // "Tock" como el de los botones del teclado
     }
 }
 enum DifficultyLevel: String, Identifiable, CaseIterable {

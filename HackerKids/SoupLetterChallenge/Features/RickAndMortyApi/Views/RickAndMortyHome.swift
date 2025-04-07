@@ -23,19 +23,21 @@ struct RickAndMortyHome: View {
         self.viewModel = viewModel
     }
     var body: some View {
-        VStack {
-            Text("Rick and Morty API")
-                .font(.largeTitle)
-            catalogPicker
-            scrollView
-        }
-        .onAppear {
-            viewModel.fetchData()
-            updateOrientation()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-            print("orientation changed!")
-            updateOrientation()
+        NavigationView {
+            VStack {
+                Text("Rick and Morty API")
+                    .font(.largeTitle)
+                catalogPicker
+                scrollView
+            }
+            .onAppear {
+                viewModel.fetchData()
+                updateOrientation()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                print("orientation changed!")
+                updateOrientation()
+            }
         }
     }
     var catalogPicker: some View {
@@ -52,26 +54,32 @@ struct RickAndMortyHome: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 5) {
                 ForEach(viewModel.charactersCatalog.indices, id: \.self) { index in
-                    let character = viewModel.charactersCatalog[index]
-                    VStack {
-                        AsyncImage(url: URL(string: character.image ?? "")) { image in
-                            image.resizable()
-                        } placeholder: {
-                            Image(systemName: "person.fill.questionmark")
-                        }
-                        .frame(width: 128, height: 128)
-                        .clipShape(.rect(cornerRadius: 25))
-                        Text(character.name ?? "")
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.3))
-                    .cornerRadius(25)
+                    getCharacterCard(character: viewModel.charactersCatalog[index])
                     .onAppear {
                         if index == viewModel.charactersCatalog.count - 3 {
                             viewModel.fetchData(true)
                         }
                     }
                 }
+            }
+        }
+    }
+    private func getCharacterCard(character: RnMCharacter) -> some View {
+        VStack {
+            NavigationLink(destination: CharacterDetailView(character: character)) {
+                VStack {
+                    AsyncImage(url: URL(string: character.image ?? "")) { image in
+                        image.resizable()
+                    } placeholder: {
+                        Image(systemName: "person.fill.questionmark")
+                    }
+                    .frame(width: 148, height: 148)
+                    .clipShape(.rect(cornerRadius: 25))
+                    Text(character.name ?? "")
+                        .padding()
+                }
+                .background(Color.gray.opacity(0.3))
+                .cornerRadius(25)
             }
         }
     }

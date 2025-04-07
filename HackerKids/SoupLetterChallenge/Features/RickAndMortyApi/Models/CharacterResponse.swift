@@ -28,6 +28,8 @@ struct RnMCharacter: Codable {
     let episode: [String]?
     let url: String?
     let created: String?
+    let origin: CharacterOrigin?
+    let location: CharacterLocation?
 }
 struct CharacterOrigin: Codable {
     let name: String?

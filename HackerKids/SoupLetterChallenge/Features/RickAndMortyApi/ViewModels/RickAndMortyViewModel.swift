@@ -4,7 +4,7 @@
 //
 //  Created by Roberto Ramirez on 4/2/25.
 //
-
+import AVFoundation
 import Combine
 import Foundation
 
@@ -19,6 +19,16 @@ class RickAndMortyViewModel: ObservableObject {
     private var service: RickAndMortyServiceAPI = RickAndMortyServiceAPI()
     private var baseUrl: String = "https://rickandmortyapi.com/api/"
     private var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        // Escuchar cambios en el catalogo
+//        $queryObject
+//            .removeDuplicates()
+//            .sink { [weak self] newValue in
+//                self?.fetchData()
+//            }
+//            .store(in: &cancellables)
+    }
     
     //api CALLLS
     func fetchData(_ getNextPage: Bool = false) {
@@ -80,8 +90,11 @@ class RickAndMortyViewModel: ObservableObject {
             return LocationResponse.self
         }
     }
+    func playSelectionSound() {
+        AudioServicesPlaySystemSound(1104) // "Tock" como el de los botones del teclado
+    }
 }
-enum RickAndMortyQueryObject: String, Identifiable, CaseIterable {
+enum RickAndMortyQueryObject: String, Identifiable, CaseIterable, Equatable {
     case character = "Characters"
     case episode = "Episodes"
     case location = "Locations"

@@ -23,7 +23,7 @@ struct ChallengeWordsListView: View {
                             Image(systemName: found ? "checkmark.circle":"questionmark.diamond")
                                 .foregroundStyle(found ? .white:.black)
                             Text(word)
-                                .foregroundStyle(found ? .white:.black)
+                                .foregroundStyle(.white)
                                 .fixedSize()
                                 .font(.headline)
                             Spacer()
