@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6F08AA282D55CC1500E60163 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 6F08AA272D55CC1500E60163 /* GoogleSignIn */; };
 		6F08AA2A2D55CC1500E60163 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6F08AA292D55CC1500E60163 /* GoogleSignInSwift */; };
+		6FB0209E2DA47D4D00B66A9B /* pokemonAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pokemonAudio.mp3; sourceTree = "<group>"; };
 		6FD516E32CA5131D0052F1D3 /* HackerKids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerKids.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD516F72CA5131F0052F1D3 /* HackerKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HackerKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD517012CA5131F0052F1D3 /* HackerKidsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HackerKidsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,8 +47,8 @@
 		6FE0A73A2D50174300E1C917 /* Exceptions for "HackerKids" folder in "HackerKidsTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				SoupLetterChallenge/Models/PlayerUser.swift,
-				SoupLetterChallenge/ViewModels/LoginViewModel.swift,
+				HackerKidsApp/Models/PlayerUser.swift,
+				HackerKidsApp/ViewModels/LoginViewModel.swift,
 			);
 			target = 6FD516F62CA5131F0052F1D3 /* HackerKidsTests */;
 		};
@@ -101,9 +103,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6FB0209C2DA47D3100B66A9B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		6FD516DA2CA5131D0052F1D3 = {
 			isa = PBXGroup;
 			children = (
+				6FB0209C2DA47D3100B66A9B /* Resources */,
 				6FD516E52CA5131D0052F1D3 /* HackerKids */,
 				6FD516FA2CA5131F0052F1D3 /* HackerKidsTests */,
 				6FD517042CA5131F0052F1D3 /* HackerKidsUITests */,
@@ -246,6 +257,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FB0209E2DA47D4D00B66A9B /* pokemonAudio.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

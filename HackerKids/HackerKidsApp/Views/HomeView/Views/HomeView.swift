@@ -100,7 +100,7 @@ struct HomeView: View {
     }
     var title: some View {
         VStack {
-            Text("Sopita challenge")
+            Text("Swift Skills")
                 .font(.largeTitle)
             Text("by RobertSoft")
                 .font(.subheadline)
