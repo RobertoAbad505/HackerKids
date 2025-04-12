@@ -46,6 +46,11 @@ struct HomeView: View {
                 }
             }
             .onAppear {
+                #if ISDEBUG
+                print("IS DEVELOPMENT TARGET")
+                #else
+                print("IS RELEASE TARGET")
+                #endif
                 SessionManager.shared.fetchLastSession(modelContext)
             }
             .navigationDestination(for: GameRoute.self) { route in
@@ -67,7 +72,6 @@ struct HomeView: View {
             .sheet(isPresented: $infoView) {
                 ZStack {
                     AboutAppView(self.viewModel)
-                        .background(Color.clear.blur(radius: 0.5))
                 }
                 .edgesIgnoringSafeArea(.all)
             }
@@ -105,7 +109,7 @@ struct HomeView: View {
             Text("by RobertSoft")
                 .font(.subheadline)
         }
-        .padding(.bottom, 10)
+        .padding(.bottom, 20)
         .fontWeight(.bold)
         .rotation3DEffect(
             .degrees(20), // Ángulo de rotación
@@ -159,14 +163,16 @@ struct HomeView: View {
         Button(action: {
             infoView.toggle()
         }) {
-            HStack {
+            HStack(spacing: 0) {
                 Image(systemName: "info.circle")
                     .resizable()
-                    .frame(width: 28, height: 28)
+                    .frame(width: 30, height: 30)
+                Text("about the app")
+                    .setTitle3D(.subheadline)
                 Spacer()
             }
-            .padding()
         }
+        .padding(.leading)
     }
 }
 enum GameRoute: Hashable {

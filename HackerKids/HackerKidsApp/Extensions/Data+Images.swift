@@ -1,5 +1,5 @@
 //
-//  Image+Conversions.swift
+//  Data+Images.swift
 //  HackerKids
 //
 //  Created by Roberto Ramirez on 2/2/25.

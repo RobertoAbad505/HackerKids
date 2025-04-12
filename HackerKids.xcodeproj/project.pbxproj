@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6F059D4B2DA9DB70008C5718 /* pokemonAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */; };
+		6F059D932DA9DECC008C5718 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 6F059D922DA9DECC008C5718 /* AsyncAlgorithms */; };
+		6F059D952DA9DEF2008C5718 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 6F059D942DA9DEF2008C5718 /* AsyncAlgorithms */; };
+		6F059D972DA9DF73008C5718 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 6F059D962DA9DF73008C5718 /* AsyncAlgorithms */; };
+		6F059D9A2DA9E046008C5718 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 6F059D992DA9E046008C5718 /* GoogleSignIn */; };
+		6F059D9C2DA9E046008C5718 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6F059D9B2DA9E046008C5718 /* GoogleSignInSwift */; };
 		6F08AA282D55CC1500E60163 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 6F08AA272D55CC1500E60163 /* GoogleSignIn */; };
 		6F08AA2A2D55CC1500E60163 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6F08AA292D55CC1500E60163 /* GoogleSignInSwift */; };
 		6FB0209E2DA47D4D00B66A9B /* pokemonAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */; };
@@ -30,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6F059D222DA9D86C008C5718 /* HackerKids_DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerKids_DEV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pokemonAudio.mp3; sourceTree = "<group>"; };
 		6FD516E32CA5131D0052F1D3 /* HackerKids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerKids.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD516F72CA5131F0052F1D3 /* HackerKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HackerKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,6 +44,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6F059D902DA9DC76008C5718 /* Exceptions for "HackerKids" folder in "HackerKids_DEV" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6F059D212DA9D86C008C5718 /* HackerKids_DEV */;
+		};
 		6FD517092CA5131F0052F1D3 /* Exceptions for "HackerKids" folder in "HackerKids" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -60,6 +74,7 @@
 			exceptions = (
 				6FD517092CA5131F0052F1D3 /* Exceptions for "HackerKids" folder in "HackerKids" target */,
 				6FE0A73A2D50174300E1C917 /* Exceptions for "HackerKids" folder in "HackerKidsTests" target */,
+				6F059D902DA9DC76008C5718 /* Exceptions for "HackerKids" folder in "HackerKids_DEV" target */,
 			);
 			path = HackerKids;
 			sourceTree = "<group>";
@@ -77,6 +92,16 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6F059D1F2DA9D86C008C5718 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F059D9C2DA9E046008C5718 /* GoogleSignInSwift in Frameworks */,
+				6F059D932DA9DECC008C5718 /* AsyncAlgorithms in Frameworks */,
+				6F059D9A2DA9E046008C5718 /* GoogleSignIn in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6FD516E02CA5131D0052F1D3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -90,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F059D952DA9DEF2008C5718 /* AsyncAlgorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F059D972DA9DF73008C5718 /* AsyncAlgorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +155,7 @@
 				6FD516E32CA5131D0052F1D3 /* HackerKids.app */,
 				6FD516F72CA5131F0052F1D3 /* HackerKidsTests.xctest */,
 				6FD517012CA5131F0052F1D3 /* HackerKidsUITests.xctest */,
+				6F059D222DA9D86C008C5718 /* HackerKids_DEV.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,6 +163,31 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		6F059D212DA9D86C008C5718 /* HackerKids_DEV */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F059D422DA9D86F008C5718 /* Build configuration list for PBXNativeTarget "HackerKids_DEV" */;
+			buildPhases = (
+				6F059D1E2DA9D86C008C5718 /* Sources */,
+				6F059D1F2DA9D86C008C5718 /* Frameworks */,
+				6F059D202DA9D86C008C5718 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				6FD516E52CA5131D0052F1D3 /* HackerKids */,
+			);
+			name = HackerKids_DEV;
+			packageProductDependencies = (
+				6F059D922DA9DECC008C5718 /* AsyncAlgorithms */,
+				6F059D992DA9E046008C5718 /* GoogleSignIn */,
+				6F059D9B2DA9E046008C5718 /* GoogleSignInSwift */,
+			);
+			productName = HackerKids_DEV;
+			productReference = 6F059D222DA9D86C008C5718 /* HackerKids_DEV.app */;
+			productType = "com.apple.product-type.application";
+		};
 		6FD516E22CA5131D0052F1D3 /* HackerKids */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6FD5170A2CA5131F0052F1D3 /* Build configuration list for PBXNativeTarget "HackerKids" */;
@@ -177,6 +230,7 @@
 			);
 			name = HackerKidsTests;
 			packageProductDependencies = (
+				6F059D942DA9DEF2008C5718 /* AsyncAlgorithms */,
 			);
 			productName = HackerKidsTests;
 			productReference = 6FD516F72CA5131F0052F1D3 /* HackerKidsTests.xctest */;
@@ -200,6 +254,7 @@
 			);
 			name = HackerKidsUITests;
 			packageProductDependencies = (
+				6F059D962DA9DF73008C5718 /* AsyncAlgorithms */,
 			);
 			productName = HackerKidsUITests;
 			productReference = 6FD517012CA5131F0052F1D3 /* HackerKidsUITests.xctest */;
@@ -212,9 +267,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					6F059D212DA9D86C008C5718 = {
+						CreatedOnToolsVersion = 16.3;
+					};
 					6FD516E22CA5131D0052F1D3 = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -239,6 +297,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				6F08AA262D55CB5300E60163 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				6F059D912DA9DCFA008C5718 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6FD516E42CA5131D0052F1D3 /* Products */;
@@ -248,11 +307,20 @@
 				6FD516E22CA5131D0052F1D3 /* HackerKids */,
 				6FD516F62CA5131F0052F1D3 /* HackerKidsTests */,
 				6FD517002CA5131F0052F1D3 /* HackerKidsUITests */,
+				6F059D212DA9D86C008C5718 /* HackerKids_DEV */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		6F059D202DA9D86C008C5718 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F059D4B2DA9DB70008C5718 /* pokemonAudio.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6FD516E12CA5131D0052F1D3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -278,6 +346,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		6F059D1E2DA9D86C008C5718 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6FD516DF2CA5131D0052F1D3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -315,6 +390,69 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		6F059D432DA9D86F008C5718 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KK7484G74W;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				"OTHER_SWIFT_FLAGS[sdk=iphoneos*]" = HACKERKIDS_DEV;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.robertsoft.HackerKids-DEV";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ISDEBUG;
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=iphoneos*]" = HACKERKIDS_DEV;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6F059D442DA9D86F008C5718 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KK7484G74W;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.robertsoft.HackerKids-DEV";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ISDEBUG;
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=iphoneos*]" = HACKERKIDS_DEV;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		6FD5170B2CA5131F0052F1D3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -528,6 +666,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertsoft.HackerKidsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ISDEBUG;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -547,6 +686,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertsoft.HackerKidsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ISDEBUG;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -593,6 +733,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		6F059D422DA9D86F008C5718 /* Build configuration list for PBXNativeTarget "HackerKids_DEV" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F059D432DA9D86F008C5718 /* Debug */,
+				6F059D442DA9D86F008C5718 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6FD516DE2CA5131D0052F1D3 /* Build configuration list for PBXProject "HackerKids" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -632,6 +781,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6F059D912DA9DCFA008C5718 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-async-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.3;
+			};
+		};
 		6F08AA262D55CB5300E60163 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
@@ -643,6 +800,31 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6F059D922DA9DECC008C5718 /* AsyncAlgorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6F059D912DA9DCFA008C5718 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;
+			productName = AsyncAlgorithms;
+		};
+		6F059D942DA9DEF2008C5718 /* AsyncAlgorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6F059D912DA9DCFA008C5718 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;
+			productName = AsyncAlgorithms;
+		};
+		6F059D962DA9DF73008C5718 /* AsyncAlgorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6F059D912DA9DCFA008C5718 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;
+			productName = AsyncAlgorithms;
+		};
+		6F059D992DA9E046008C5718 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6F08AA262D55CB5300E60163 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		6F059D9B2DA9E046008C5718 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6F08AA262D55CB5300E60163 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
 		6F08AA272D55CC1500E60163 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6F08AA262D55CB5300E60163 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;

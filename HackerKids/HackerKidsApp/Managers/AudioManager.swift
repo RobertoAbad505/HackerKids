@@ -19,6 +19,7 @@ class AudioManager: ObservableObject {
         do {
             player = try AVAudioPlayer(contentsOf: url)
             player?.numberOfLoops = -1 // Repetir indefinidamente
+            player?.volume = 0.3
             player?.prepareToPlay()
             player?.play()
         } catch {

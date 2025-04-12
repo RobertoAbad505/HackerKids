@@ -7,7 +7,6 @@
 
 import UIKit
 import GoogleSignIn
-
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(
         _ app: UIApplication,
