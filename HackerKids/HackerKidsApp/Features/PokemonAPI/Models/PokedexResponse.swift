@@ -11,12 +11,18 @@ struct PokedexResponse: Decodable {
     let count: Int?
     let next: String?
     let previous: String?
-    let results: [PokedexItem]?
+    let results: [PokemonItem]?
 }
-struct PokedexItem: Decodable, Hashable {
+struct PokemonItem: Decodable, Hashable {
     let name: String?
     let url: String?
-    func calcImageUrl(_ index: Int) -> URL {
-        return URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(index).png")!
+}
+struct PokedexItem: Identifiable, Hashable {
+    let id: Int
+    let pokemon: PokemonItem
+    var favorite: Bool = false
+    
+    func calcImageUrl() -> URL {
+        URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(id).png")!
     }
 }

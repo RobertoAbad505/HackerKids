@@ -15,6 +15,8 @@
 		6F059D9C2DA9E046008C5718 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6F059D9B2DA9E046008C5718 /* GoogleSignInSwift */; };
 		6F08AA282D55CC1500E60163 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 6F08AA272D55CC1500E60163 /* GoogleSignIn */; };
 		6F08AA2A2D55CC1500E60163 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6F08AA292D55CC1500E60163 /* GoogleSignInSwift */; };
+		6F617EC62DAA561500753DF7 /* coinFx.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F617EC52DAA561500753DF7 /* coinFx.mp3 */; };
+		6F617EC72DAA561500753DF7 /* coinFx.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F617EC52DAA561500753DF7 /* coinFx.mp3 */; };
 		6FB0209E2DA47D4D00B66A9B /* pokemonAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		6F059D222DA9D86C008C5718 /* HackerKids_DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerKids_DEV.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F617EC52DAA561500753DF7 /* coinFx.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = coinFx.mp3; sourceTree = "<group>"; };
 		6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pokemonAudio.mp3; sourceTree = "<group>"; };
 		6FD516E32CA5131D0052F1D3 /* HackerKids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerKids.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD516F72CA5131F0052F1D3 /* HackerKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HackerKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,6 +136,7 @@
 		6FB0209C2DA47D3100B66A9B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6F617EC52DAA561500753DF7 /* coinFx.mp3 */,
 				6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */,
 			);
 			path = Resources;
@@ -317,6 +321,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F617EC72DAA561500753DF7 /* coinFx.mp3 in Resources */,
 				6F059D4B2DA9DB70008C5718 /* pokemonAudio.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -325,6 +330,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F617EC62DAA561500753DF7 /* coinFx.mp3 in Resources */,
 				6FB0209E2DA47D4D00B66A9B /* pokemonAudio.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -405,7 +411,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -437,7 +443,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

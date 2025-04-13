@@ -12,7 +12,7 @@ struct CreateAccountView: View {
     @StateObject private var cameraManager: CameraManager = CameraManager()
     @ObservedObject var viewModel: LoginViewModel
     @State private var player1Name: String = "Roberto Abad"
-    @State private var player1email: String = "invitado@invitado.com"
+    @State private var player1email: String = "roberto.rmzabad@gmail.com"
     @State private var cameraShoot: Image?
     @Environment(\.presentationMode) private var presentationMode
     
@@ -25,10 +25,10 @@ struct CreateAccountView: View {
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .rotation3DEffect(
-                    .degrees(20), // Ángulo de rotación
-                    axis: (x: 1, y: 0, z: 0)
+                    .degrees(-15), // Ángulo de rotación
+                    axis: (x: 1, y: 1, z: 0)
                 )
-                .foregroundColor(.blue)
+                .foregroundColor(.purple)
                 .shadow(color: .gray, radius: 10, x: 5, y: 5) // Sombra para mayor profundidad
             Text("Enter your name:")
             TextField("Player 1 name", text: $player1Name)
@@ -76,7 +76,11 @@ struct CreateAccountView: View {
             .background(Color.blue)
             .cornerRadius(15)
             Button(action: {
-                viewModel.createSession(modelContext, readAccountForm())
+                if cameraManager.image == nil {
+//                    cameraManager.image = UIImage(systemName: "airplane.departure")!
+                    cameraManager.image = UIImage(named: "gitIcon")!
+                }
+                viewModel.createUserAccount(modelContext, readNewAccountForm())
             }, label: {
                 HStack {
                     Image(systemName: "person.fill.badge.plus")
@@ -91,12 +95,12 @@ struct CreateAccountView: View {
             })
         }
     }
-    func readAccountForm() -> PlayerUser {
+    func readNewAccountForm() -> PlayerUser {
         return PlayerUser(id: UUID().uuidString,
                           name: player1Name,
                           email: player1email,
-                          password: "",
-                          picture: cameraManager.image?.pngData()
+                          picture: cameraManager.image?.pngData(),
+                          signOnType: .account
         )
     }
 }

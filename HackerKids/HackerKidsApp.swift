@@ -10,11 +10,14 @@ import SwiftData
 
 @main
 struct HackerKidsApp: App {
+    @ObservedObject var userViewModel: LoginViewModel = LoginViewModel()
+    @Environment(\.modelContext) private var modelContext
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             LocalUser.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        let modelConfiguration = ModelConfiguration(schema: schema,
+                                                    isStoredInMemoryOnly: true)
 
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
@@ -25,10 +28,16 @@ struct HackerKidsApp: App {
 
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            HomeView(viewModel: userViewModel)
                 .onAppear {
                     GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
                         // Check if `user` exists; otherwise, do something with `error`
+                        if let error {
+                            print("GooglePreviousSignIn error: \(error.localizedDescription)")
+                        }
+                        if let user {
+                            userViewModel.successGoogleSignIn(user, modelContext)
+                        }
                     }
                 }
         }

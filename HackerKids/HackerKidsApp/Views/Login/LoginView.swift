@@ -4,8 +4,10 @@
 //
 //  Created by Roberto Ramirez on 2/2/25.
 //
+import GoogleSignIn
 import GoogleSignInSwift
 import SwiftUI
+import SwiftData
 
 struct LoginView: View {
     @Environment(\.modelContext) private var modelContext
@@ -25,7 +27,7 @@ struct LoginView: View {
                     VStack {
                         exitButton
                         Spacer()
-                        if viewModel.userSession {
+                        if SessionManager.shared.sessionAlive {
                             loggedUserView
                         } else {
                             createUser
@@ -34,7 +36,7 @@ struct LoginView: View {
                     }
                     .padding()
                     Spacer()
-                    if viewModel.userSession {
+                    if SessionManager.shared.sessionAlive {
                         signOffLink
                     }
                 }
@@ -44,7 +46,7 @@ struct LoginView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.ultraThinMaterial)
         .onAppear {
-            viewModel.startLogin(modelContext)
+            viewModel.startLoginView(modelContext)
         }
         .popover(isPresented: $accountCreated, content: {
             VStack {
@@ -73,12 +75,13 @@ struct LoginView: View {
     }
     var loggedUserView: some View {
         VStack(alignment: .center) {
-            if let img = viewModel.playerImg {
+            Spacer()
+            if let img = SessionManager.shared.signedInUser?.getPlayerBadge().getPlayerImage() {
                 img
                     .resizable()
                     .frame(width: 110, height: 110)
                     .padding(30)
-                    .background(.thinMaterial)
+                    .background(.black)
                     .clipShape(Circle())
                     .padding(10)
                     .background(UIManager.shared.backgroundGradient)
@@ -87,9 +90,9 @@ struct LoginView: View {
                 
             }
             Text("Player name:")
-            Text(viewModel.player?.name ?? "N/A").bold().padding(.bottom)
+            Text(SessionManager.shared.signedInUser?.userName ?? "N/A").bold().padding(.bottom)
             Text("account email:")
-            Text(viewModel.player?.email ?? "N/A").bold()
+            Text(SessionManager.shared.signedInUser?.email ?? "N/A").bold()
             Spacer()
         }
         .padding()
@@ -163,14 +166,33 @@ struct LoginView: View {
                 GoogleSignInButton(scheme: .light,
                                    style: .icon,
                                    state: .normal,
-                                   action: viewModel.handleGoogleSignIn)
+                                   action: handleGoogleSignIn)
             }
             .background(Color.white)
             .clipShape(Circle())
         }
     }
+    func handleGoogleSignIn() {
+        guard let rootViewController = UIApplication.shared.windows.first?.rootViewController else { return }
+
+        GIDSignIn.sharedInstance.signIn(
+            withPresenting: rootViewController
+        ) { signInResult, error in
+            if let error = error {
+                print("Error al iniciar sesión:", error.localizedDescription)
+                self.viewModel.googleSignIn = false
+                return
+            }
+
+            if let user = signInResult?.user {
+                self.viewModel.googleResult = signInResult
+                self.viewModel.successGoogleSignIn(user, modelContext)
+                print("✅ Usuario autenticado: \(user.profile?.email ?? "No Email")")
+            }
+        }
+    }
 }
 
-#Preview {
-    LoginView(onExit: {})
-}
+//#Preview {
+//    LoginView(onExit: {}, ModelContext.init())
+//}

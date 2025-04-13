@@ -7,35 +7,63 @@
 import SwiftData
 import Foundation
 
+import SwiftData
+
 final class SwiftDataManager {
-    static let shared: SwiftDataManager = .init()
-    private init() {}
+    static let shared = SwiftDataManager()
     
-    func fetchOrCreate<T: PersistentModel>(_ modelContext: ModelContext,
-                                           defaultValue: @autoclosure () -> T) -> T {
+    private init() {} // No se necesita container aquí, el contexto se inyecta
+
+    // MARK: - Create
+    func insert<T: PersistentModel>(_ model: T, in context: ModelContext) throws {
+        context.insert(model)
+        try context.save()
+    }
+
+    func insertAsync<T: PersistentModel>(_ model: T, in context: ModelContext) async throws {
+        context.insert(model)
+        try await context.save()
+    }
+
+    // MARK: - Read
+    func fetchAll<T: PersistentModel>(ofType type: T.Type, in context: ModelContext) throws -> [T] {
+        let descriptor = FetchDescriptor<T>()
+        return try context.fetch(descriptor)
+    }
+
+    func fetchLast<T: PersistentModel>(ofType type: T.Type, in context: ModelContext) throws -> T? {
+        let descriptor = FetchDescriptor<T>(sortBy: [.init(\.persistentModelID, order: .reverse)])
+        return try context.fetch(descriptor).first
+    }
+
+    // MARK: - Update
+    func update<T: PersistentModel>(_ model: T, in context: ModelContext) throws {
+        // Asumiendo que los cambios ya fueron hechos en el modelo
+        try context.save()
+    }
+
+    func updateAsync<T: PersistentModel>(_ model: T, in context: ModelContext) async throws {
+        try await context.save()
+    }
+
+    // MARK: - Delete
+    func delete<T: PersistentModel>(_ model: T, in context: ModelContext) throws {
+        context.delete(model)
+        try context.save()
+    }
+
+    func deleteAsync<T: PersistentModel>(_ model: T, in context: ModelContext) async throws {
+        context.delete(model)
+        try await context.save()
+    }
+    func deleteAll<T: PersistentModel>(_ type: T.Type, in context: ModelContext) throws {
         let fetchDescriptor = FetchDescriptor<T>()
-        
-        do {
-            if let existingObject = try modelContext.fetch(fetchDescriptor).first {
-                return existingObject  // Si hay datos, retorna el primero
-            } else {
-                let newObject = defaultValue()
-                modelContext.insert(newObject)
-                try modelContext.save()
-                return newObject
+        if let results = try? context.fetch(fetchDescriptor) {
+            for item in results {
+                context.delete(item)
             }
-        } catch {
-            fatalError("Error al hacer fetch o crear \(T.self): \(error)")
+            try context.save()
         }
     }
-    func create<T: PersistentModel>(_ modelContext: ModelContext,
-                                    _ value: T) -> T {
-        modelContext.insert(value)
-        try! modelContext.save()
-        return value
-    }
-    func delete<T: PersistentModel>(_ modelContext: ModelContext, _ value: T) {
-        modelContext.delete(value)
-        try! modelContext.save()
-    }
 }
+

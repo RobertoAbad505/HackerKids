@@ -7,15 +7,22 @@
 
 import Foundation
 import Combine
+import SwiftUICore
+import SwiftData
 
 class PokemonApiViewModel: ObservableObject {
-    
+    @Published var navigateDetail: Bool = false
     @Published var pokemonList: [PokedexItem] = []
+    @Published var selectedPokemon: PokedexItem = PokedexItem(id: 1, pokemon: PokemonItem(name: "unkonwn", url: ""))
     @Published var errorFetch: Bool = false
+    @Environment(\.modelContext) private var modelContext
     
     let service: PokemonServices = PokemonServices()
     let baseUrl: String = "https://pokeapi.co/api/v2/pokemon/?limit=151&offset="
     var cancellables = Set<AnyCancellable>()
+    
+    init() {
+    }
 
     func fetchData() {
         if pokemonList.count == 0 {
@@ -44,6 +51,17 @@ class PokemonApiViewModel: ObservableObject {
     }
     func processResponse(_ response: PokedexResponse) {
         guard let list = response.results else { return }
-        pokemonList.append(contentsOf: list)
+        var lastIndex = self.pokemonList.count + 1
+        let newList = list.enumerated().map { index, item in
+            PokedexItem(id: index + lastIndex, pokemon: item, favorite: Bool.random())
+        }
+        self.pokemonList.append(contentsOf: newList)
+    }
+    func setFavorites(pokemon: PokedexItem) {
+        var favoriteStatus = true
+        
+//        if let previousStatus = favoritePokemons.first(where: { $0.id == pokemon.id }) {
+//            
+//        }
     }
 }

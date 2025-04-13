@@ -22,4 +22,11 @@ final class LocalUser {
         self.signInType = signInType
         self.picture = picture
     }
+    func getPlayerBadge() -> PlayerUser {
+        return PlayerUser(id: self.id,
+                          name: self.userName,
+                          email: self.email,
+                          picture: self.picture,
+                          signOnType: self.signInType)
+    }
 }

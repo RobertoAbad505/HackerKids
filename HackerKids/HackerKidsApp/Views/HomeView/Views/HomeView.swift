@@ -4,17 +4,22 @@
 //
 //  Created by Roberto Ramirez on 12/6/24.
 //
-
+import SwiftData
 import SwiftUI
 
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @ObservedObject var viewModel: AboutAppViewModel = AboutAppViewModel()
-    @ObservedObject var userViewModel: LoginViewModel = LoginViewModel()
+    @ObservedObject var userViewModel: LoginViewModel
+    @ObservedObject var sessionMngr: SessionManager = .shared
+    @State var gameRoute: GameRoute = .home
+    //SHEET PRESENTATION FLAGS
     @State var infoView: Bool = false
     @State var loginView: Bool = false
-    @State var gameRoute: GameRoute = .home
-    @State var playerInfo: LocalUser?
+    
+    init(viewModel: LoginViewModel) {
+        self.userViewModel = viewModel
+    }
     
     var body: some View {
         NavigationStack {
@@ -25,7 +30,7 @@ struct HomeView: View {
                 startButton
                 challengeButton
                 chatWithBTFriend
-//                highScoresButton --> Create a single game view for the soup letter view
+                highScoresButton
                 apisDemoButton
                 Spacer()
                 infoButton
@@ -39,12 +44,6 @@ struct HomeView: View {
                 )
                 .ignoresSafeArea()
             )
-            .onChange(of: SessionManager.shared.signedInUser) { user in
-                if user == nil {
-                    loginView = true
-                    playerInfo = user
-                }
-            }
             .onAppear {
                 #if ISDEBUG
                 print("IS DEVELOPMENT TARGET")
@@ -66,7 +65,7 @@ struct HomeView: View {
                         Text("High scores")
                     }
                 case .home:
-                    HomeView()
+                    HomeView(viewModel: self.userViewModel)
                 }
             }
             .sheet(isPresented: $infoView) {
@@ -77,7 +76,7 @@ struct HomeView: View {
             }
             .overlay {
                 if loginView {
-                    withAnimation(.default) {
+                    withAnimation(.bouncy) {
                         LoginView(onExit: { self.loginView = false })
                     }
                 }
@@ -88,14 +87,27 @@ struct HomeView: View {
         HStack {
             Spacer()
             VStack(alignment: .trailing) {
-                Text("Hi! \(playerInfo?.userName ?? "")")
+                Text("Hi! \(sessionMngr.signedInUser?.userName ?? "")")
+                    .onAppear {
+                        print("Usuario \(sessionMngr.signedInUser?.email ?? "")")
+                    }
             }
-            Image(systemName: "person.fill")
-                .foregroundColor(.white)
-                .frame(width: 32, height: 32)
-                .padding(3)
-                .background(UIManager.shared.backgroundGradient)
-                .clipShape(Circle())
+            if let img = sessionMngr.signedInUser?.picture?.createImage() {
+                img
+                    .resizable()
+                    .frame(width: 32, height: 32)
+                    .clipShape(Circle())
+                    .padding(4)
+                    .background(UIManager.shared.backgroundGradient)
+                    .clipShape(Circle())
+            } else {
+                Image(systemName: "person.fill")
+                    .foregroundColor(.white)
+                    .frame(width: 32, height: 32)
+                    .padding(3)
+                    .background(UIManager.shared.backgroundGradient)
+                    .clipShape(Circle())
+            }
         }
         .padding()
         .onTapGesture {
@@ -183,6 +195,6 @@ enum GameRoute: Hashable {
 }
 
 #Preview {
-    HomeView()
+    HomeView(viewModel: LoginViewModel())
         .modelContainer(for: LocalUser.self, inMemory: true)
 }
