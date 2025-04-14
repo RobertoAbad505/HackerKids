@@ -34,4 +34,9 @@ extension URL {
             return nil
         }
     }
+    var strippedBaseURL: String {
+        var components = URLComponents(url: self, resolvingAgainstBaseURL: false)
+        components?.query = nil
+        return components?.url?.absoluteString ?? self.absoluteString
+    }
 }

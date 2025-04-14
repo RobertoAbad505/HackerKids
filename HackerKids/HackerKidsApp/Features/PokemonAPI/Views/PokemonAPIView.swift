@@ -18,7 +18,6 @@ struct PokemonAPIView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                titleHeader
                 if !viewModel.errorFetch {
                     pokedexScrollView
                 } else {
@@ -38,22 +37,36 @@ struct PokemonAPIView: View {
     }
     var pokedexScrollView: some View {
         NavigationStack {
-            List(viewModel.pokemonList) { pokemon in
-                getPokemonView(pokemon)
+            ZStack {
+                List(viewModel.pokemonList) { pokemon in
+                    PokedexItemView(viewModel: viewModel,item: pokemon, onSelected: {
+                        //play selected pokemon sound
+                        audioManager.playSoundEffect(named: "coinFx")
+                        viewModel.selectedPokemon = pokemon
+                        // Delay para permitir que el sonido suene antes de navegar
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            viewModel.navigateDetail = true
+                        }
+                    })
                     .onAppear {
                         if pokemon.id == viewModel.pokemonList.count - 1 {
                             viewModel.fetchData()
                         }
                     }
-            }
-            .background(
-                NavigationLink(
-                    destination: PokemonDetailView(item: viewModel.selectedPokemon),
-                    isActive: $viewModel.navigateDetail,
-                    label: { EmptyView() }
+                }
+                .background(
+                    NavigationLink(
+                        destination: PokemonDetailView(item: viewModel.selectedPokemon),
+                        isActive: $viewModel.navigateDetail,
+                        label: { EmptyView() }
+                    )
+                    .hidden()
                 )
-                .hidden()
-            )
+                VStack {
+                    titleHeader
+                    Spacer()
+                }
+            }
         }
     }
     var titleHeader: some View {
@@ -61,51 +74,16 @@ struct PokemonAPIView: View {
             Text("Pokémon API v2")
                 .setTitle3D()
         }
-        .background(Color.clear.blur(radius: 5))
+        .background(Color.white.opacity(0.5).blur(radius: 25))
     }
     var errorView: some View {
         VStack {
+            Spacer()
+            titleHeader
             Text("Error loading data!")
-                .setTitle3D()
+                .setTitle3D(.largeTitle)
+            Spacer()
         }
-    }
-    func getPokemonView(_ item: PokedexItem) -> some View {
-        Button(action: {
-            //play selected pokemon sound
-            audioManager.playSoundEffect(named: "coinFx")
-            viewModel.selectedPokemon = item
-            // Delay para permitir que el sonido suene antes de navegar
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                viewModel.navigateDetail = true
-            }
-        }, label: {
-            HStack {
-                AsyncImage(url: item.calcImageUrl()) { image in
-                    image.resizable()
-                } placeholder: {
-                    Image(systemName: "person.fill.questionmark")
-                }
-                .frame(width: 120, height: 120)
-                Button(action: {
-                    withAnimation {
-                        viewModel.setFavorites(pokemon: item)
-                    }
-                }, label: {
-                    Image(systemName: item.favorite ? "star.fill" :"star")
-                })
-                .foregroundStyle(.primary)
-                Spacer()
-                VStack(alignment: .leading) {
-                    Text((item.pokemon.name ?? "").capitalizingFirstLetter())
-                        .font(.title3)
-                    Text("Pokedex #\(item.id)")
-                        .font(.subheadline)
-                }
-                .fontDesign(.monospaced)
-                .foregroundStyle(.primary)
-                Image(systemName: "chevron.right")
-            }
-        })
     }
 }
 

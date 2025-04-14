@@ -10,11 +10,12 @@ import Combine
 
 class RickAndMortyServiceAPI {
     
-    var network: NetworkManagerProtocol {
-//        if 1 > 1 { //#IS_DEVELOPMENT
-//            return NetworkManagerMock()
-//        }
+    private var network: NetworkManagerProtocol {
+        #if ISDEBUG
+        return NetworkManagerMock()
+        #else
         return NetworkManager()
+        #endif
     }
     
     func fetchQuery(url: URL) -> AnyPublisher<CharactersResponse, NetworkError> {

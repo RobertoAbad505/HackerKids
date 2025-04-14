@@ -58,10 +58,6 @@ class PokemonApiViewModel: ObservableObject {
         self.pokemonList.append(contentsOf: newList)
     }
     func setFavorites(pokemon: PokedexItem) {
-        var favoriteStatus = true
-        
-//        if let previousStatus = favoritePokemons.first(where: { $0.id == pokemon.id }) {
-//            
-//        }
+        return
     }
 }

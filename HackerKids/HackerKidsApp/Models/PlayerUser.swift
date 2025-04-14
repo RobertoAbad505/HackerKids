@@ -27,7 +27,7 @@ struct PlayerUser: Identifiable, Codable {
     init?(googleUser: GIDGoogleUser, _ pictureData: Data? = nil) {
         self.id = googleUser.userID ?? ""
         self.email = googleUser.profile?.email ?? ""
-        self.name = googleUser.profile?.name ?? ""
+        self.name = googleUser.profile?.givenName  ?? ""
         self.hasImage = googleUser.profile?.hasImage ?? false
         self.signOnType = .google
         self.picture = pictureData

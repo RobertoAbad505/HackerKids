@@ -54,6 +54,24 @@
 			);
 			target = 6F059D212DA9D86C008C5718 /* HackerKids_DEV */;
 		};
+		6F98B7002DAC530200E3E7EB /* Exceptions for "HackerKidsTests" folder in "HackerKids_DEV" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MockData/PokemonAPI/responses/Pokemons.json,
+				MockData/RickAndMortyAPI/responses/Characters.json,
+				MockData/RickAndMortyAPI/responses/Episodes.json,
+				MockData/RickAndMortyAPI/responses/Locations.json,
+				MockData/urlMapping.json,
+			);
+			target = 6F059D212DA9D86C008C5718 /* HackerKids_DEV */;
+		};
+		6F98B70E2DAC547500E3E7EB /* Exceptions for "HackerKidsTests" folder in "HackerKids" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MockData/urlMapping.json,
+			);
+			target = 6FD516E22CA5131D0052F1D3 /* HackerKids */;
+		};
 		6FD517092CA5131F0052F1D3 /* Exceptions for "HackerKids" folder in "HackerKids" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -84,6 +102,10 @@
 		};
 		6FD516FA2CA5131F0052F1D3 /* HackerKidsTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6F98B70E2DAC547500E3E7EB /* Exceptions for "HackerKidsTests" folder in "HackerKids" target */,
+				6F98B7002DAC530200E3E7EB /* Exceptions for "HackerKidsTests" folder in "HackerKids_DEV" target */,
+			);
 			path = HackerKidsTests;
 			sourceTree = "<group>";
 		};

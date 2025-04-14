@@ -22,7 +22,7 @@ class NetworkManager: NetworkManagerProtocol {
                 guard (200...299).contains(httpResponse.statusCode) else {
                     throw NetworkError.badResponse(statusCode: httpResponse.statusCode)
                 }
-//                print(String(decoding: data, as: UTF8.self))
+                print("Response:\n\(String(decoding: data, as: UTF8.self))")
                 return data
             }
             .decode(type: T.self, decoder: decoder)
