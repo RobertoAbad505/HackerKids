@@ -37,36 +37,31 @@ struct PokemonAPIView: View {
     }
     var pokedexScrollView: some View {
         NavigationStack {
-            ZStack {
-                List(viewModel.pokemonList) { pokemon in
-                    PokedexItemView(viewModel: viewModel,item: pokemon, onSelected: {
-                        //play selected pokemon sound
-                        audioManager.playSoundEffect(named: "coinFx")
-                        viewModel.selectedPokemon = pokemon
-                        // Delay para permitir que el sonido suene antes de navegar
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            viewModel.navigateDetail = true
-                        }
-                    })
-                    .onAppear {
-                        if pokemon.id == viewModel.pokemonList.count - 1 {
-                            viewModel.fetchData()
-                        }
+            titleHeader
+            List(viewModel.pokemonList) { pokemon in
+                PokedexItemView(viewModel: viewModel,item: pokemon, onSelected: {
+                    //play selected pokemon sound
+                    audioManager.playSoundEffect(named: "coinFx")
+                    viewModel.selectedPokemon = pokemon
+                    // Delay para permitir que el sonido suene antes de navegar
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        viewModel.navigateDetail = true
+                    }
+                })
+                .onAppear {
+                    if pokemon.id == viewModel.pokemonList.count - 1 {
+                        viewModel.fetchData()
                     }
                 }
-                .background(
-                    NavigationLink(
-                        destination: PokemonDetailView(item: viewModel.selectedPokemon),
-                        isActive: $viewModel.navigateDetail,
-                        label: { EmptyView() }
-                    )
-                    .hidden()
-                )
-                VStack {
-                    titleHeader
-                    Spacer()
-                }
             }
+            .background(
+                NavigationLink(
+                    destination: PokemonDetailView(item: viewModel.selectedPokemon),
+                    isActive: $viewModel.navigateDetail,
+                    label: { EmptyView() }
+                )
+                .hidden()
+            )
         }
     }
     var titleHeader: some View {
@@ -74,7 +69,6 @@ struct PokemonAPIView: View {
             Text("Pokémon API v2")
                 .setTitle3D()
         }
-        .background(Color.white.opacity(0.5).blur(radius: 25))
     }
     var errorView: some View {
         VStack {

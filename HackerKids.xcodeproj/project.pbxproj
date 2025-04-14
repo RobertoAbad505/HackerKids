@@ -82,8 +82,8 @@
 		6FE0A73A2D50174300E1C917 /* Exceptions for "HackerKids" folder in "HackerKidsTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				HackerKidsApp/Models/PlayerUser.swift,
-				HackerKidsApp/ViewModels/LoginViewModel.swift,
+				HackerKidsApp/HomeApp/Login/Models/PlayerUser.swift,
+				HackerKidsApp/HomeApp/Login/ViewModels/LoginViewModel.swift,
 			);
 			target = 6FD516F62CA5131F0052F1D3 /* HackerKidsTests */;
 		};
