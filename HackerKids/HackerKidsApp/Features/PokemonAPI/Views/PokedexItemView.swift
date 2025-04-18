@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PokedexItemView: View {
+    @Environment(\.colorScheme) var colorScheme
     let item: PokedexItem
     @ObservedObject var viewModel: PokemonApiViewModel
     @State var favorite: Bool = false
@@ -31,10 +32,10 @@ struct PokedexItemView: View {
                         .font(.subheadline)
                 }
                 .fontDesign(.monospaced)
-                .foregroundStyle(.black)
                 Spacer()
                 Image(systemName: "chevron.right")
             }
+            .foregroundStyle(colorScheme == .dark ? .white : .black)
         })
     }
     var pokemonImage: some View {

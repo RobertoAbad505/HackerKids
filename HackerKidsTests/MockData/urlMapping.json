@@ -1,8 +1,8 @@
 {
     "mapping": {
         "https://pokeapi.co/api/v2/pokemon/": "Pokemons.json",
-        "https://rickandmortyapi.com/api/character/": "Characters.json",
-        "https://rickandmortyapi.com/api/episode/": "Episodes.json",
-        "https://rickandmortyapi.com/api/location/": "Locations.json"
+        "https://rickandmortyapi.com/api/character": "Characters.json",
+        "https://rickandmortyapi.com/api/episode": "Episodes.json",
+        "https://rickandmortyapi.com/api/location": "Locations.json"
     }
 }
