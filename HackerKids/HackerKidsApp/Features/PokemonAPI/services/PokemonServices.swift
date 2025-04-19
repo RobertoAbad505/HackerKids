@@ -17,7 +17,10 @@ class PokemonServices {
         #endif
     }
     
-    func fetchData(_ url: URL) -> AnyPublisher<PokedexResponse, NetworkError> {
+    func fetchPokedexPage(_ url: URL) -> AnyPublisher<PokedexResponse, NetworkError> {
         return network.fetch<PokedexResponse>(url)
+    }
+    func fetchPokedexDetail(_ url: URL) -> AnyPublisher<PokedexDetail, NetworkError> {
+        return network.fetch<PokedexDetail>(url)
     }
 }

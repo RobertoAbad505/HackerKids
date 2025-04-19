@@ -26,7 +26,7 @@ struct PokemonAPIView: View {
             }
             .onAppear {
                 audioManager.playBackgroundMusic(named: "pokemonAudio")
-                viewModel.fetchData()
+                viewModel.fetchPokedexPage()
             }
             .onDisappear {
                 if !viewModel.navigateDetail {
@@ -46,17 +46,18 @@ struct PokemonAPIView: View {
                     // Delay para permitir que el sonido suene antes de navegar
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         viewModel.navigateDetail = true
+                        viewModel.fetchPokemonDetail()
                     }
                 })
                 .onAppear {
                     if pokemon.id == viewModel.pokemonList.count - 1 {
-                        viewModel.fetchData()
+                        viewModel.fetchPokedexPage()
                     }
                 }
             }
             .background(
                 NavigationLink(
-                    destination: PokemonDetailView(item: viewModel.selectedPokemon),
+                    destination: PokemonDetailView(viewModel: self.viewModel),
                     isActive: $viewModel.navigateDetail,
                     label: { EmptyView() }
                 )

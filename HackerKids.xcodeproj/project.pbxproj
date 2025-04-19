@@ -57,6 +57,7 @@
 		6F98B7002DAC530200E3E7EB /* Exceptions for "HackerKidsTests" folder in "HackerKids_DEV" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				MockData/PokemonAPI/responses/PokedexDetails.json,
 				MockData/PokemonAPI/responses/Pokemons.json,
 				MockData/RickAndMortyAPI/responses/Characters.json,
 				MockData/RickAndMortyAPI/responses/Episodes.json,
