@@ -13724,6 +13724,13 @@
                 "name": "poison",
                 "url": "https://pokeapi.co/api/v2/type/4/"
             }
+        },
+        {
+            "slot": 7,
+            "type": {
+                "name": "water",
+                "url": "https://pokeapi.co/api/v2/type/4/"
+            }
         }
     ],
     "weight": 60

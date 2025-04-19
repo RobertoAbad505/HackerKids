@@ -18,6 +18,8 @@
 		6F617EC62DAA561500753DF7 /* coinFx.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F617EC52DAA561500753DF7 /* coinFx.mp3 */; };
 		6F617EC72DAA561500753DF7 /* coinFx.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F617EC52DAA561500753DF7 /* coinFx.mp3 */; };
 		6FB0209E2DA47D4D00B66A9B /* pokemonAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */; };
+		6FC283D02DB4264400356661 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6FC283CF2DB4264400356661 /* Kingfisher */; };
+		6FC283D32DB4267600356661 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6FC283D22DB4267600356661 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,6 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FC283D32DB4267600356661 /* Kingfisher in Frameworks */,
 				6F059D9C2DA9E046008C5718 /* GoogleSignInSwift in Frameworks */,
 				6F059D932DA9DECC008C5718 /* AsyncAlgorithms in Frameworks */,
 				6F059D9A2DA9E046008C5718 /* GoogleSignIn in Frameworks */,
@@ -132,6 +135,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FC283D02DB4264400356661 /* Kingfisher in Frameworks */,
 				6F08AA282D55CC1500E60163 /* GoogleSignIn in Frameworks */,
 				6F08AA2A2D55CC1500E60163 /* GoogleSignInSwift in Frameworks */,
 			);
@@ -165,6 +169,13 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		6FC283D12DB4267500356661 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6FD516DA2CA5131D0052F1D3 = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +183,7 @@
 				6FD516E52CA5131D0052F1D3 /* HackerKids */,
 				6FD516FA2CA5131F0052F1D3 /* HackerKidsTests */,
 				6FD517042CA5131F0052F1D3 /* HackerKidsUITests */,
+				6FC283D12DB4267500356661 /* Frameworks */,
 				6FD516E42CA5131D0052F1D3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -210,6 +222,7 @@
 				6F059D922DA9DECC008C5718 /* AsyncAlgorithms */,
 				6F059D992DA9E046008C5718 /* GoogleSignIn */,
 				6F059D9B2DA9E046008C5718 /* GoogleSignInSwift */,
+				6FC283D22DB4267600356661 /* Kingfisher */,
 			);
 			productName = HackerKids_DEV;
 			productReference = 6F059D222DA9D86C008C5718 /* HackerKids_DEV.app */;
@@ -234,6 +247,7 @@
 			packageProductDependencies = (
 				6F08AA272D55CC1500E60163 /* GoogleSignIn */,
 				6F08AA292D55CC1500E60163 /* GoogleSignInSwift */,
+				6FC283CF2DB4264400356661 /* Kingfisher */,
 			);
 			productName = HackerKids;
 			productReference = 6FD516E32CA5131D0052F1D3 /* HackerKids.app */;
@@ -325,6 +339,7 @@
 			packageReferences = (
 				6F08AA262D55CB5300E60163 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				6F059D912DA9DCFA008C5718 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
+				6FC283CE2DB4264400356661 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6FD516E42CA5131D0052F1D3 /* Products */;
@@ -824,6 +839,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		6FC283CE2DB4264400356661 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -861,6 +884,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6F08AA262D55CB5300E60163 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		6FC283CF2DB4264400356661 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6FC283CE2DB4264400356661 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		6FC283D22DB4267600356661 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6FC283CE2DB4264400356661 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

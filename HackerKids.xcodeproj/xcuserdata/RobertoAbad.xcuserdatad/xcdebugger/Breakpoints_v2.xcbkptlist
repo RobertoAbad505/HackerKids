@@ -334,8 +334,8 @@
             filePath = "HackerKids/HackerKidsApp/Features/PokemonAPI/Views/PokemonDetailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
+            startingLineNumber = "203"
+            endingLineNumber = "203"
             landmarkName = "getTypeIcon(_:)"
             landmarkType = "7">
          </BreakpointContent>

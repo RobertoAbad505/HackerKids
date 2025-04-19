@@ -26,7 +26,9 @@ struct PokemonAPIView: View {
             }
             .onAppear {
                 audioManager.playBackgroundMusic(named: "pokemonAudio")
-                viewModel.fetchPokedexPage()
+                if viewModel.pokemonList.isEmpty {
+                    viewModel.fetchPokedexPage()
+                }
             }
             .onDisappear {
                 if !viewModel.navigateDetail {

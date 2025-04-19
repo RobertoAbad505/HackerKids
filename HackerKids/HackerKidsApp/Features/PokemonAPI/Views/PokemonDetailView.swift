@@ -4,7 +4,7 @@
 //
 //  Created by Roberto Ramirez on 4/11/25.
 //
-
+import Kingfisher
 import SwiftUI
 
 struct PokemonDetailView: View {
@@ -19,9 +19,6 @@ struct PokemonDetailView: View {
     ], startPoint: .top, endPoint: .bottom)
     }
     let range: ClosedRange<Double>
-    var columns: [GridItem] {
-        return Array(repeating: GridItem(.flexible()), count: 3)
-    }
     var attakColumns: [GridItem] {
         return [GridItem(.flexible()), GridItem(.flexible())]
     }
@@ -46,14 +43,19 @@ struct PokemonDetailView: View {
     var imageTopHeader: some View {
         ZStack {
             gradient
-            AsyncImage(url: viewModel.selectedPokemon.calcImageUrl()) { image in
-                image.resizable()
-            } placeholder: {
-                Image(systemName: "person.fill.questionmark")
-            }
-            .frame(width: 200, height: 200)
-            .padding(.top, 70)
-            .padding(.bottom, 10)
+            
+            KFImage(viewModel.selectedPokemon.calcImageUrl())
+                .placeholder {
+                    ProgressView()
+                }
+                .retry(maxCount: 3, interval: .seconds(2))
+                .cacheOriginalImage()
+                .fade(duration: 0.25)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 200, height: 200)
+                .padding(.top, 70)
+                .padding(.bottom, 10)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .edgesIgnoringSafeArea(.all)
@@ -90,7 +92,7 @@ struct PokemonDetailView: View {
                 Spacer()
                 VStack(alignment: .center) {
                     Text("Types")
-                    LazyVGrid(columns: self.columns, spacing: 20) {
+                    LazyVGrid(columns: self.getTypeColumns(), spacing: 20) {
                         ForEach(viewModel.selectedPokemon.pokedexDetail?.types ?? [], id: \.self) { pokeType in
                             getTypeView(pokeType)
                                 .foregroundStyle(getTypeColor(pokeType))
@@ -176,6 +178,7 @@ struct PokemonDetailView: View {
         case "flying": return .blue
         case "grass": return .green
         case "poison": return .purple
+        case "water": return .blue.opacity(0.7)
         default: return .gray
         }
     }
@@ -204,8 +207,16 @@ struct PokemonDetailView: View {
         case "flying": return Image(systemName: "bird.circle.fill")
         case "grass": return Image(systemName: "leaf.circle.fill")
         case "poison": return Image(systemName: "ladybug.slash.circle.fill")
+        case "water": return Image(systemName: "drop.circle.fill")
         default: return Image(systemName: "questionmark.circle.fill")
         }
+    }
+    func getTypeColumns() -> [GridItem] {
+        var columns: Int = viewModel.selectedPokemon.pokedexDetail?.types?.count ?? 1
+        if columns > 4 {
+            columns = 4
+        }
+        return Array(repeating: GridItem(.flexible()), count: columns)
     }
 }
 

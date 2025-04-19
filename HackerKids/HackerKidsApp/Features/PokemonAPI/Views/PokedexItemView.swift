@@ -4,7 +4,7 @@
 //
 //  Created by Roberto Ramirez on 4/13/25.
 //
-
+import Kingfisher
 import SwiftUI
 
 struct PokedexItemView: View {
@@ -40,13 +40,16 @@ struct PokedexItemView: View {
     }
     var pokemonImage: some View {
         ZStack {
-            AsyncImage(url: item.calcImageUrl()) { image in
-                image
-                    .resizable()
-            } placeholder: {
-                ProgressView()
-            }
-            .frame(width: 100, height: 100)
+            KFImage(item.calcImageUrl())
+                .placeholder {
+                    ProgressView()
+                }
+                .retry(maxCount: 3, interval: .seconds(2))
+                .cacheOriginalImage()
+                .fade(duration: 0.25)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 100, height: 100)
             VStack {
                 Spacer()
                 HStack {
