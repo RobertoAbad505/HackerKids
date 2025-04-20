@@ -8,10 +8,23 @@ import Combine
 import Foundation
 
 class NetworkManager: NetworkManagerProtocol {
+    private var responseCache: [URL: Data] = [:]
+    private let lock = NSLock()
+
+
     func fetch<T>(_ url: URL, _ decodeStrategy: JSONDecoder.KeyDecodingStrategy?) -> AnyPublisher<T, NetworkError> where T : Decodable {
+        let cacheKey = url.absoluteString
         let decoder = JSONDecoder()
         if let strategy = decodeStrategy {
             decoder.keyDecodingStrategy = strategy
+        }
+        // Verifica cache primero
+        if let cachedData = ResponseCacheManager.shared.get(forKey: cacheKey) {
+            print("Response from cache for \(url.absoluteString)")
+            return Just(cachedData)
+                .decode(type: T.self, decoder: decoder)
+                .mapError { NetworkError.decodingError(underlying: $0) }
+                .eraseToAnyPublisher()
         }
         return URLSession.shared.dataTaskPublisher(for: url)
             .tryMap { data, response in
@@ -38,6 +51,27 @@ class NetworkManager: NetworkManagerProtocol {
                 return NetworkError.unknown(underlying: error)
             }
             .eraseToAnyPublisher()
+    }
+
+    private func decodePublisher<T: Decodable>(from data: Data, strategy: JSONDecoder.KeyDecodingStrategy?) -> AnyPublisher<T, NetworkError> {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = strategy ?? .useDefaultKeys
+        return Just(data)
+            .decode(type: T.self, decoder: decoder)
+            .mapError { .decodingError(underlying: $0) }
+            .eraseToAnyPublisher()
+    }
+
+    private func cache(data: Data, for url: URL) {
+        lock.lock()
+        defer { lock.unlock() }
+        responseCache[url] = data
+    }
+
+    private func getCachedData(for url: URL) -> Data? {
+        lock.lock()
+        defer { lock.unlock() }
+        return responseCache[url]
     }
 }
 

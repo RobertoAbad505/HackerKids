@@ -13731,6 +13731,20 @@
                 "name": "water",
                 "url": "https://pokeapi.co/api/v2/type/4/"
             }
+        },
+        {
+            "slot": 8,
+            "type": {
+                "name": "ground",
+                "url": "https://pokeapi.co/api/v2/type/4/"
+            }
+        },
+        {
+            "slot": 9,
+            "type": {
+                "name": "rock",
+                "url": "https://pokeapi.co/api/v2/type/4/"
+            }
         }
     ],
     "weight": 60

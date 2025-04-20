@@ -36,6 +36,7 @@ struct PokedexDetail: Decodable, Identifiable, Hashable {
     let name: String?
     let height: Int?
     let species: PokemonSpecies?
+    let sprites: PokemonSprites?
     let stats: [PokemonBaseStats]?
     let types: [PokemonType]?
     let moves: [PokemonMove]?
@@ -69,3 +70,56 @@ struct PokemonBaseStats: Decodable, Hashable {
         let url: String?
     }
 }
+struct PokemonSprites: Decodable, Hashable {
+    let back_default: String?
+    let back_female: String?
+    let back_shiny: String?
+    let back_shiny_female: String?
+    let front_default: String?
+    let front_female: String?
+    let front_shiny: String?
+    let front_shiny_female: String?
+    let other: OtherSprites?
+}
+struct OtherSprites: Decodable, Hashable {
+    let dream_world: DreamWorld?
+    let home: Home?
+    let official_artwork: OfficialArtwork?
+    let showdown: PokemonSpritesShowdown?
+    var codingKeys: [CodingKey] {
+        return [
+            CodingKeys(stringValue: "dream_world")!,
+            CodingKeys(stringValue: "home")!,
+            CodingKeys(stringValue: "official-artwork")!,
+            CodingKeys(stringValue: "showdown")!
+        ]
+    }
+}
+struct DreamWorld: Decodable, Hashable {
+    let front_default: String?
+    let front_female: String?
+}
+
+struct Home: Decodable, Hashable {
+    let front_default: String?
+    let front_female: String?
+    let front_shiny: String?
+    let front_shiny_female: String?
+}
+
+struct OfficialArtwork: Decodable, Hashable {
+    let front_default: String?
+    let front_shiny: String?
+}
+struct PokemonSpritesShowdown: Decodable, Hashable {
+    let back_default: String?
+    let back_female: String?
+    let back_shiny: String?
+    let back_shiny_female: String?
+    let front_default: String?
+    let front_female: String?
+    let front_shiny: String?
+    let front_shiny_female: String?
+}
+
+

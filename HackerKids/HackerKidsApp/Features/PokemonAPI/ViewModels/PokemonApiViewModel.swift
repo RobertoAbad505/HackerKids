@@ -54,7 +54,7 @@ class PokemonApiViewModel: ObservableObject {
     func fetchPokemonDetail() {
         if let previousFetched = pokemonsDetail.first(where: { $0.id == self.selectedPokemon.id }) {
             print("Pokemon detail already fetched for \(selectedPokemon.pokemon.name ?? "")")
-            processDetailsResponse(previousFetched)
+            processDetailsResponse(previousFetched, true)
             return
         }
         guard var urlString = URL(string: selectedPokemon.pokemon.url ?? "") else {
@@ -78,7 +78,7 @@ class PokemonApiViewModel: ObservableObject {
                     return
                 }
             }, receiveValue: { [weak self] response in
-                self?.processDetailsResponse(response)
+                self?.processDetailsResponse(response, false)
             })
             .store(in: &cancellables)
     }
@@ -90,8 +90,10 @@ class PokemonApiViewModel: ObservableObject {
         }
         self.pokemonList.append(contentsOf: newList)
     }
-    func processDetailsResponse(_ response: PokedexDetail) {
-        self.pokemonsDetail.append(response)
+    func processDetailsResponse(_ response: PokedexDetail, _ fromPreviousRequest: Bool = false) {
+        if !fromPreviousRequest {
+            self.pokemonsDetail.append(response)
+        }
         self.selectedPokemon.pokedexDetail = response
     }
     func setFavorites(pokemon: PokedexItem) {

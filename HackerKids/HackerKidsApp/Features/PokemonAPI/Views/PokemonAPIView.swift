@@ -24,6 +24,7 @@ struct PokemonAPIView: View {
                     errorView
                 }
             }
+            .toolbarBackground(.ultraThinMaterial, for: .automatic)
             .onAppear {
                 audioManager.playBackgroundMusic(named: "pokemonAudio")
                 if viewModel.pokemonList.isEmpty {
@@ -39,8 +40,10 @@ struct PokemonAPIView: View {
     }
     var pokedexScrollView: some View {
         NavigationStack {
-            titleHeader
             List(viewModel.pokemonList) { pokemon in
+                if pokemon.id == 1 {
+                    titleHeader
+                }
                 PokedexItemView(viewModel: viewModel,item: pokemon, onSelected: {
                     //play selected pokemon sound
                     audioManager.playSoundEffect(named: "coinFx")
