@@ -15,7 +15,7 @@ struct SoupChallengeView: View {
     var challenge: ChallengeModel?
     
     
-    init(onExit: @escaping (() -> Void), challenge: ChallengeModel? = nil) {
+    init(onExit: @escaping (() -> Void), _ challenge: ChallengeModel? = nil) {
         self.onExit = onExit
         self.challenge = challenge
     }

@@ -16,9 +16,7 @@ struct HackerKidsApp: App {
         let schema = Schema([
             LocalUser.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema,
-                                                    isStoredInMemoryOnly: true)
-
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
@@ -28,7 +26,7 @@ struct HackerKidsApp: App {
 
     var body: some Scene {
         WindowGroup {
-            HomeView(viewModel: userViewModel)
+            StartView(viewModel: userViewModel)
                 .onAppear {
                     GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
                         // Check if `user` exists; otherwise, do something with `error`

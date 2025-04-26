@@ -18,7 +18,34 @@
 	<key>GIDClientID</key>
 	<string>1087825595658-k3s5bmlio0hgh50btmdto6rv0c0advbl.apps.googleusercontent.com</string>
 	<key>NSAppTransportSecurity</key>
-	<string>NSExceptionDomains</string>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>pokeapi.co</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+			<key>rickandmortyapi.com</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+			<key>api.github.com</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Necesitamos tu ubicación para mostrar resultados cercanos.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>HackerKids necesita tu permiso para emitir datos.</string>
 	<key>api.github.com</key>
@@ -32,33 +59,5 @@
 		<key>NSRequiresCertificateTransparency</key>
 		<false/>
 	</dict>
-    <key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSExceptionDomains</key>
-        <dict>
-            <key>pokeapi.co</key>
-            <dict>
-                <key>NSIncludesSubdomains</key>
-                <true/>
-                <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-                <true/>
-            </dict>
-            <key>rickandmortyapi.com</key>
-            <dict>
-                <key>NSIncludesSubdomains</key>
-                <true/>
-                <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-                <true/>
-            </dict>
-            <key>api.github.com</key>
-            <dict>
-                <key>NSIncludesSubdomains</key>
-                <true/>
-                <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-                <true/>
-            </dict>
-        </dict>
-    </dict>
-
 </dict>
 </plist>

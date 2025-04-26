@@ -7,8 +7,11 @@
 
 import Foundation
 
-public class GitHubUser: Codable {
-    public var login: String?
-    public var avatarUrl: String?
-    public var bio: String?
+struct GitHubUser: Codable {
+    let login: String?
+    let avatarUrl: String?
+    let bio: String?
+    let name: String?
+    let location: String?
+    let html_url: String?
 }

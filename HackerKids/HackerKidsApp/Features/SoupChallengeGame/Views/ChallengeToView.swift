@@ -112,7 +112,7 @@ struct ChallengeToView: View {
         withAnimation(.easeInOut(duration: 0.2)) {
             NavigationLink(destination: SoupChallengeView(onExit: {
                 self.presentationMode.wrappedValue.dismiss()
-            }, challenge: challengeToViewModel.challenge), label: {
+            }, challengeToViewModel.challenge), label: {
                 HomeButtonView(title: "Start vs challenge!", icon: "play")
             })
             .padding(.bottom, 30)

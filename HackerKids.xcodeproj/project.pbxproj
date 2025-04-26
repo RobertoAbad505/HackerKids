@@ -59,12 +59,14 @@
 		6F98B7002DAC530200E3E7EB /* Exceptions for "HackerKidsTests" folder in "HackerKids_DEV" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				MockData/GitHub/GitHubCard.json,
 				MockData/PokemonAPI/responses/PokedexDetails.json,
 				MockData/PokemonAPI/responses/Pokemons.json,
 				MockData/RickAndMortyAPI/responses/Characters.json,
 				MockData/RickAndMortyAPI/responses/Episodes.json,
 				MockData/RickAndMortyAPI/responses/Locations.json,
 				MockData/urlMapping.json,
+				MockData/WeatherApp/WeatherModelResponse.json,
 			);
 			target = 6F059D212DA9D86C008C5718 /* HackerKids_DEV */;
 		};
@@ -85,8 +87,19 @@
 		6FE0A73A2D50174300E1C917 /* Exceptions for "HackerKids" folder in "HackerKidsTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"HackerKidsApp/Extensions/Double+FormatString.swift",
+				"HackerKidsApp/Extensions/View+Extensions.swift",
+				HackerKidsApp/Features/Portfolio/Models/FeatureModel.swift,
+				HackerKidsApp/Features/Portfolio/ViewModels/PortfolioViewModel.swift,
+				HackerKidsApp/Features/Portfolio/Views/PortafolioCardView.swift,
+				HackerKidsApp/Features/Portfolio/Views/PortafolioView.swift,
+				HackerKidsApp/Features/WeatherApp/Models/WeatherModel.swift,
+				HackerKidsApp/Features/WeatherApp/services/WeatherServices.swift,
+				HackerKidsApp/Features/WeatherApp/ViewModel/WeatherViewModel.swift,
+				HackerKidsApp/Features/WeatherApp/Views/WeatherAppView.swift,
 				HackerKidsApp/HomeApp/Login/Models/PlayerUser.swift,
 				HackerKidsApp/HomeApp/Login/ViewModels/LoginViewModel.swift,
+				HackerKidsApp/Managers/LocationManager.swift,
 			);
 			target = 6FD516F62CA5131F0052F1D3 /* HackerKidsTests */;
 		};
@@ -444,6 +457,7 @@
 				DEVELOPMENT_TEAM = KK7484G74W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "HackerKids-DEV-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -475,6 +489,7 @@
 				DEVELOPMENT_TEAM = KK7484G74W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "HackerKids-DEV-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -629,6 +644,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Solicita su permiso para buscar resultados cercanos";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -686,6 +702,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Solicita su permiso para buscar resultados cercanos";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;

@@ -9,7 +9,13 @@ import Combine
 import Foundation
 
 class AboutDeveloperServices {
-    let network = NetworkManager()
+    private var network: NetworkManagerProtocol {
+        #if ISDEBUG
+        return NetworkManagerMock()
+        #else
+        return NetworkManager()
+        #endif
+    }
     
     func fetchQuery(url: URL) -> AnyPublisher<GitHubUser, NetworkError> {
         return network.fetch<GitHubUser>(url, .convertFromSnakeCase)

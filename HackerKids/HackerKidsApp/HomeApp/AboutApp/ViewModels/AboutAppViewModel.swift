@@ -20,6 +20,9 @@ class AboutAppViewModel: ObservableObject {
     @Published var isLoading = false
     
     func fetchGitHubUser() {
+        if let gitHubUser = gitHubUser {
+            return
+        }
         guard let url = URL(string: "https://api.github.com/users/RobertoAbad505") else {
             errorMessage = "URL inválida"
             return

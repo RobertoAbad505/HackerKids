@@ -4,6 +4,8 @@
         "https://rickandmortyapi.com/api/character": "Characters.json",
         "https://rickandmortyapi.com/api/episode": "Episodes.json",
         "https://rickandmortyapi.com/api/location": "Locations.json",
-        "https://pokeapi.co/api/v2/pokemon/25/": "PokedexDetails.json"
+        "https://pokeapi.co/api/v2/pokemon/25/": "PokedexDetails.json",
+        "https://api.github.com/users/RobertoAbad505": "GitHubCard.json",
+        "https://api.openweathermap.org/data/2.5/weather": "WeatherModelResponse.json"
     }
 }
