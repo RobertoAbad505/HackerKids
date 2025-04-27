@@ -12,8 +12,14 @@ struct WeatherModel: Decodable {
     let name: String?
     let main: Main?
     let timezone: Int?
+    let dt: Int?
     let weather: [Weather]?
+    let wind: Wind?
     let sys: Sys?
+    struct Wind: Decodable {
+        let speed: Double
+        let deg: Int?
+    }
     struct Weather: Decodable {
         let id: Int?
         let main: String?

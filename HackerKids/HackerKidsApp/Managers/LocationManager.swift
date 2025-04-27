@@ -21,6 +21,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.allowsBackgroundLocationUpdates = false
+    }
+    func startService() {
         manager.requestWhenInUseAuthorization()
     }
 

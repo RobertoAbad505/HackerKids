@@ -26,6 +26,7 @@ struct HackerKidsApp: App {
 
     var body: some Scene {
         WindowGroup {
+//            WeatherAppView(viewModel: .init())
             StartView(viewModel: userViewModel)
                 .onAppear {
                     GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in

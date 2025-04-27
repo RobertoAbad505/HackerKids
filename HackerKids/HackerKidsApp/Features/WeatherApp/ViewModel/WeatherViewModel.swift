@@ -9,10 +9,13 @@ import CoreLocation
 import Foundation
 
 class WeatherViewModel: ObservableObject {
+    @Published var lastReportDateTime: Date = .now
+    @Published var startedFeature = false
     private var services = WeatherServices()
     var cancellables: Set<AnyCancellable> = .init()
     @Published var weather: WeatherModel?
     @Published var errorFetch: Bool = false
+    @Published var iconName: String = ""
     let languageEn = "en"
     let languageEs = "es"
 
@@ -33,6 +36,7 @@ class WeatherViewModel: ObservableObject {
                     print("Error: \(error)")
                     self?.errorFetch = true
                 case .finished:
+                    self?.startedFeature = true
                     return
                 }
             }, receiveValue: { [weak self] model in
@@ -42,5 +46,21 @@ class WeatherViewModel: ObservableObject {
     }
     func processResponse(_ response: WeatherModel) {
         self.weather = response
+        if let intTime = response.dt {
+            self.lastReportDateTime = Date(timeIntervalSince1970: TimeInterval(intTime))
+        }
+        self.iconName = getIconName()
+    }
+    func getIconName() -> String {
+        guard let main = weather?.weather?.first?.main else {
+            return ""
+        }
+        switch main.lowercased() {
+        case "clouds": return "cloud.fill"
+        case "clear": return "sun.max.fill"
+        case "rain": return "cloud.rain.fill"
+        case "wind": return "wind.circle.fill"
+        default: return main
+        }
     }
 }
