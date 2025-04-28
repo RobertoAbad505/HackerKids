@@ -5,19 +5,33 @@
 //  Created by Roberto Ramirez on 4/2/25.
 //
 
+import Kingfisher
 import SwiftUI
 
 struct RickAndMortyHome: View {
     @ObservedObject var viewModel: RickAndMortyViewModel
-    
+    @Environment(\.presentationMode) private var presentationMode
     //view orientation and design
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @State private var isLandscape: Bool = false
+    
+    var backgroundColor: LinearGradient {
+        LinearGradient(stops: [.init(color: .black, location: 0.25),
+                               .init(color: .pink, location: 0.40),
+                               .init(color: .purple, location: 0.55),
+                               .init(color: .white, location: 0.70),
+                               .init(color: .black, location: 0.90)
+                              ],
+                       startPoint: .top,
+                       endPoint: .bottom)
+    }
+    
     var columns: [GridItem] {
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
         let count = isIpad ? (isLandscape ? 5:4): (isLandscape ? 3:2)
         return Array(repeating: GridItem(.flexible()), count: count)
     }
+    
     
     init(viewModel: RickAndMortyViewModel) {
         self.viewModel = viewModel
@@ -25,9 +39,6 @@ struct RickAndMortyHome: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("Rick and Morty API")
-                    .font(.largeTitle)
-                catalogPicker
                 scrollView
             }
             .onAppear {
@@ -39,6 +50,8 @@ struct RickAndMortyHome: View {
                 updateOrientation()
             }
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
     }
     var catalogPicker: some View {
         Picker("Select catalog",
@@ -52,35 +65,39 @@ struct RickAndMortyHome: View {
     }
     var scrollView: some View {
         ScrollView {
-            LazyVGrid(columns: columns, spacing: 5) {
-                ForEach(viewModel.charactersCatalog.indices, id: \.self) { index in
-                    getCharacterCard(character: viewModel.charactersCatalog[index])
-                    .onAppear {
-                        if index == viewModel.charactersCatalog.count - 3 {
-                            viewModel.fetchData(true)
+            VStack {
+                header
+                LazyVGrid(columns: columns, spacing: 20) {
+                    ForEach(viewModel.charactersCatalog.indices, id: \.self) { index in
+                        CharacterCardView(character: viewModel.charactersCatalog[index])
+                        .onAppear {
+                            if index == viewModel.charactersCatalog.count - 1 {
+                                viewModel.fetchData(true)
+                            }
                         }
                     }
                 }
+                .padding()
             }
-        }
+        }.background(Image("seaBluebacground").edgesIgnoringSafeArea(.all))
     }
-    private func getCharacterCard(character: RnMCharacter) -> some View {
-        VStack {
-            NavigationLink(destination: CharacterDetailView(character: character)) {
-                VStack {
-                    AsyncImage(url: URL(string: character.image ?? "")) { image in
-                        image.resizable()
-                    } placeholder: {
-                        Image(systemName: "person.fill.questionmark")
-                    }
-                    .frame(width: 148, height: 148)
-                    .clipShape(.rect(cornerRadius: 25))
-                    Text(character.name ?? "")
-                        .padding()
-                }
-                .background(Color.gray.opacity(0.3))
-                .cornerRadius(25)
-            }
+    var header: some View {
+        HStack(alignment: .firstTextBaseline) {
+            Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+            }, label: {
+                Image(systemName: "chevron.backward")
+                    .foregroundColor(.primary)
+                    .font(.system(size: 24))
+                    .fontWeight(.bold)
+            })
+            .padding(.leading)
+            Spacer()
+            Text("Rick and Morty API")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundStyle(.white)
+            Spacer()
         }
     }
     private func updateOrientation() {

@@ -26,9 +26,14 @@ struct HackerKidsApp: App {
 
     var body: some Scene {
         WindowGroup {
-//            WeatherAppView(viewModel: .init())
             StartView(viewModel: userViewModel)
                 .onAppear {
+                    #if ISDEBUG
+                    print("🐛🐞🐜🦟🪲🪳🕷️ IS DEVELOPMENT TARGET")
+                    #else
+                    print("✈️✈️✈️✈️✈️✈️✈️ IS RELEASE TARGET")
+                    #endif
+                    SessionManager.shared.fetchLastSession(modelContext)
                     GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
                         // Check if `user` exists; otherwise, do something with `error`
                         if let error {

@@ -16,7 +16,7 @@ extension Text {
                 .degrees(20), // Ángulo de rotación
                 axis: (x: 1, y: 0, z: 0)
             )
-            .foregroundColor(.blue)
-            .shadow(color: .gray, radius: 10, x: 5, y: 5)
+            .foregroundColor(.white)
+            .shadow(color: .black, radius: 10, x: 7, y: 7)
     }
 }

@@ -30,8 +30,7 @@ struct StartView: View {
                            .white,
                            .green,
                            .white,
-                           .purple
-    ]
+                           .purple]
     
     @State private var rotationAngle: Angle = .degrees(0) // Ángulo de rotación
     @State private var lastDragValue: CGFloat = 0 // Última posición del arrastre
@@ -47,6 +46,7 @@ struct StartView: View {
                         mainDescription
                         contactoView
                         portfolioView
+                        aboutMe
                         Spacer()
                         versionView
                     }
@@ -71,11 +71,6 @@ struct StartView: View {
             .navigationBarHidden(true)
             .onAppear {
                 aboutViewModel.fetchGitHubUser()
-                #if ISDEBUG
-                print("IS DEVELOPMENT TARGET")
-                #else
-                print("IS RELEASE TARGET")
-                #endif
                 SessionManager.shared.fetchLastSession(modelContext)
             }
             .sheet(isPresented: $aboutViewModel.showMailView) {
@@ -173,19 +168,19 @@ struct StartView: View {
                 .bold()
             Text("iOS Dev • SwiftUI • GraphQL • APIs integrations • Clean Architecture")
                 .multilineTextAlignment(.center)
-                .font(.headline)
+                .font(.title3)
                 .foregroundColor(.secondary)
                 .fontWeight(.bold)
             if let location = aboutViewModel.gitHubUser?.location {
                 Text("📍\(location) | Always on the move ✈️")
                     .multilineTextAlignment(.center)
-                    .font(.subheadline)
+                    .font(.headline)
                     .fontWeight(.bold)
                 .foregroundColor(.secondary)
             }
             Text(aboutViewModel.gitHubUser?.bio ?? "")
                 .multilineTextAlignment(.center)
-                .font(.body)
+                .font(.headline)
         }
         .padding(20)
         .background(.ultraThinMaterial)
@@ -240,7 +235,9 @@ struct StartView: View {
             }
             Text("Una pequeña muestra de los proyectos que he desarrollado personalmente con SwiftUI. En estos prototipos encontrarás distintas técnicas, componentes personalizados, integración con APIs, llamadas HTTP, diseño de interfaces y más.")
                 .font(.body)
-            NavigationLink(destination: PortafolioView(), label: {
+            NavigationLink(destination: PortafolioView(onNavigate: {
+                aboutViewModel.openUrl(.github)
+            }), label: {
                 HStack {
                     Text("🍎📱 Apps y prototipos")
                         .font(.callout)
@@ -260,7 +257,27 @@ struct StartView: View {
         .background(.ultraThinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 45))
         .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
-        .padding(.bottom, 30)
+    }
+    var aboutMe: some View {
+        VStack(alignment: .center, spacing: 20) {
+            Text("📲 About me . . .")
+                .font(.title2)
+                .fontWeight(.bold)
+            Text("""
+                Software Engineer with 7+ years of experience in the tech industry, collaborating across different sectors and business complexities.
+
+                Specialized in developing and enhancing iOS applications, with strong expertise in software architecture, performance optimization, and accessibility. I have had the opportunity to work with companies in both Mexico and the United States, including my last two-year project as a Senior iOS Engineer for Wells Fargo, contributing to large-scale digital banking solutions.
+
+                Currently open to new opportunities where to collaborate and keep learning.
+                """)
+            .font(.body)
+        }
+        .padding(20)
+        .padding(.bottom, 20)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 45))
+        .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
+        .padding(.bottom, 20)
     }
     var versionView: some View {
         HStack {

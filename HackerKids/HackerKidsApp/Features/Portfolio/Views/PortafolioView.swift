@@ -9,9 +9,12 @@ import SwiftUI
 
 struct PortafolioView: View {
     @ObservedObject var viewModel: PortfolioViewModel = .init()
-    @State var audioManager: AudioManager = .init()
+    @Environment(\.presentationMode) private var presentationMode
     @State var selectedFeature: FeatureModel?
     @State var navigate: Bool = false
+    
+    //Managers
+    @State var audioManager: AudioManager = .init()
     
     //viewModels
     @ObservedObject var pokemonViewModel: PokemonApiViewModel = .init()
@@ -23,17 +26,16 @@ struct PortafolioView: View {
     @State private var scrollOffset: CGFloat = 0
     // Colores para la gradiente
     let colors: [Color] = [.indigo, .white, .orange, .red, .blue, .green]
+    let onNavigate: () -> Void
     
     var body: some View {
         VStack {
             ScrollView {
                 VStack {
-                    Text("🍎💼 iOS Portafolio")
-                        .font(.title)
-                        .fontDesign(.monospaced)
-                        .padding(.bottom, 50)
-                        .padding(.horizontal)
+                    header
+                    description
                     listView
+                    gitButton
                 }
                 .padding(.bottom, 50)
                 .modifier(ScrollViewOffset(offset: $scrollOffset))
@@ -48,7 +50,66 @@ struct PortafolioView: View {
                 .ignoresSafeArea()
             )
         }
-        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
+    }
+    var gitButton: some View {
+        VStack(alignment: .center, spacing: 10) {
+            Text("Más de mis proyectos en GitHub:")
+                .font(.body)
+                .foregroundColor(.white)
+                .padding(.horizontal)
+            Button(action: {
+                onNavigate()
+            }, label: {
+                HStack {
+                    Spacer()
+                    Image("gitIcon")
+                        .resizable()
+                        .frame(width: 42, height: 42)
+                    Spacer()
+                }
+                .foregroundStyle(.white)
+            })
+            .background(Color(red: 27 / 255, green: 31 / 255, blue: 35 / 255))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke((.white), lineWidth: 3)
+            )
+            .padding()
+        }
+        .padding(.vertical, 40)
+    }
+    var header: some View {
+        HStack(alignment: .top) {
+            Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+            }, label: {
+                Image(systemName: "chevron.backward")
+                    .foregroundColor(.white)
+                    .font(.system(size: 24))
+                    .fontWeight(.bold)
+            })
+            .padding(.leading)
+            Spacer()
+            Text("🍎💼 iOS Portafolio")
+                .font(.title)
+                .fontDesign(.monospaced)
+                .padding(.bottom, 50)
+                .padding(.horizontal)
+                .padding(.top, 60)
+            Spacer()
+        }
+    }
+    var description: some View {
+        VStack {
+            Text("Esta es una pequeña integracion de modulos hechos con SwiftUI, con uso de multiples tecnicas y frameworks. Estare actualizando este portafolio con mas proyectos en el futuro, disfruta de explorarlos!. Puedes encontrar el resto de mis proyectos para iOS en GitHub.")
+                .font(.body)
+                .foregroundColor(.white)
+                .padding(.horizontal)
+        }
+        .padding()
+        .padding(.bottom)
     }
     var listView: some View {
         LazyVGrid(columns: [GridItem(.flexible())], spacing: 25) {
@@ -93,7 +154,7 @@ struct PortafolioView: View {
         case .soupChallenge:
             SoupChallengeView(onExit: {})
         case .weather:
-            WeatherAppView(viewModel: self.weatherViewModel)
+            WeatherAppView(viewModel: .init(), locationManager: .init())
         }
     }
     // Interpola colores según el offset
@@ -139,5 +200,7 @@ struct PortafolioView: View {
 }
 
 #Preview {
-    PortafolioView()
+    PortafolioView(onNavigate: {
+        
+    })
 }

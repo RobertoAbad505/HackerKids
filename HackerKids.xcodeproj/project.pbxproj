@@ -89,6 +89,8 @@
 			membershipExceptions = (
 				"HackerKidsApp/Extensions/Double+FormatString.swift",
 				"HackerKidsApp/Extensions/View+Extensions.swift",
+				HackerKidsApp/Features/Login/Models/PlayerUser.swift,
+				HackerKidsApp/Features/Login/ViewModels/LoginViewModel.swift,
 				HackerKidsApp/Features/Portfolio/Models/FeatureModel.swift,
 				HackerKidsApp/Features/Portfolio/ViewModels/PortfolioViewModel.swift,
 				HackerKidsApp/Features/Portfolio/Views/PortafolioCardView.swift,
@@ -97,8 +99,7 @@
 				HackerKidsApp/Features/WeatherApp/services/WeatherServices.swift,
 				HackerKidsApp/Features/WeatherApp/ViewModel/WeatherViewModel.swift,
 				HackerKidsApp/Features/WeatherApp/Views/WeatherAppView.swift,
-				HackerKidsApp/HomeApp/Login/Models/PlayerUser.swift,
-				HackerKidsApp/HomeApp/Login/ViewModels/LoginViewModel.swift,
+				HackerKidsApp/Features/WeatherApp/Views/WeatherInitialView.swift,
 				HackerKidsApp/Managers/LocationManager.swift,
 			);
 			target = 6FD516F62CA5131F0052F1D3 /* HackerKidsTests */;

@@ -4,10 +4,11 @@
 //
 //  Created by Roberto Ramirez on 4/5/25.
 //
-
+import Kingfisher
 import SwiftUI
 
 struct CharacterDetailView: View {
+    @Environment(\.presentationMode) private var presentationMode
     let character: RnMCharacter
     init(character: RnMCharacter) {
         self.character = character
@@ -16,41 +17,88 @@ struct CharacterDetailView: View {
         VStack {
             ScrollView {
                 VStack(alignment: .center, spacing: 20) {
-                    AsyncImage(url: URL(string: character.image ?? "")) { image in
-                        image.resizable()
-                    } placeholder: {
-                        Image(systemName: "person.fill.questionmark")
-                    }
-                    .frame(width: 250, height: 250)
-                    .clipShape(.rect(cornerRadius: 25))
-                    Text(character.name ?? "")
-                        .multilineTextAlignment(.center)
-                        .font(.title2)
-                        .padding(.bottom)
-                    Text("Status: \(character.status ?? "")")
-                        .font(.title3)
-                    Text("Species: \(character.species ?? "")")
-                        .font(.title3)
-                    Text("Gender: \(character.gender ?? "")")
-                        .padding(.bottom)
-                        .font(.title3)
-                    HStack {
-                        Image(systemName: "mappin.circle")
+                    HStack{
+                        Spacer()
+                        KFImage(URL(string: character.image ?? "") ?? nil)
+                            .placeholder({
+                                Image(systemName: "person.fill.questionmark")
+                            })
                             .resizable()
-                            .frame(width: 35, height: 35)
-                        Text("Origin location: \n\(character.origin?.name ?? "")")
+                            .frame(width: 250, height: 250)
+                            .clipShape(.rect(cornerRadius: 25))
+                        Spacer()
                     }
-                    .padding(.bottom)
                     HStack {
-                        Image(systemName: "mappin.and.ellipse.circle.fill")
-                            .resizable()
-                            .frame(width: 35, height: 35)
-                        Text("Current location: \n\(character.origin?.name ?? "")")
+                        Spacer()
+                        Text(character.name ?? "")
+                            .multilineTextAlignment(.center)
+                            .font(.title)
+                            .padding(.bottom)
+                        Spacer()
                     }
+                    .padding(.vertical)
+                    .background(Color.clear)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke((.white), lineWidth: 3)
+                    )
+                    VStack {
+                        Text("Status: \(character.status ?? "")")
+                            .font(.title2)
+                        Text("Species: \(character.species ?? "")")
+                            .font(.title2)
+                        Text("Gender: \(character.gender ?? "")")
+                            .padding(.bottom)
+                            .font(.title2)
+                        HStack {
+                            Image(systemName: "mappin.circle")
+                                .font(.system(size: 35))
+                            Text("Origin location: \n\(character.origin?.name ?? "")")
+                                .font(.title2)
+                        }
+                        .padding(.bottom)
+                        HStack {
+                            Spacer()
+                            Image(systemName: "mappin.and.ellipse.circle.fill")
+                                .font(.system(size: 35))
+                            Text("Current location: \n\(character.origin?.name ?? "")")
+                                .font(.title2)
+                            Spacer()
+                        }
+                    }
+                    .padding(.vertical, 20)
+                    .background(Color.clear)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke((.white), lineWidth: 3)
+                    )
+                    
                 }
-                .fixedSize(horizontal: false, vertical: true)
                 .fontDesign(.monospaced)
                 .padding()
+            }
+        }
+        .foregroundStyle(.white)
+        .background(Color.blue.opacity(0.5).ignoresSafeArea(edges: .all))
+    }
+    var header: some View {
+        ZStack {
+            HStack {
+                Spacer()
+                Text("Rick and Morty API")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                Spacer()
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }, label: {
+                    Image(systemName: "clear")
+                        .foregroundColor(.white)
+                        .frame(width: 32, height: 32)
+                        .padding(3)
+                        .clipShape(Circle())
+                })
+                .padding(.trailing)
             }
         }
     }

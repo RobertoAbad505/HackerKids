@@ -16,14 +16,18 @@ class WeatherViewModel: ObservableObject {
     @Published var weather: WeatherModel?
     @Published var errorFetch: Bool = false
     @Published var iconName: String = ""
+    @Published var weatherStatus: WeatherState = .dayTime
     let languageEn = "en"
     let languageEs = "es"
+    
+    init() {
+        setCurrentDayTime()
+    }
 
     func fetchData(using coordinate: CLLocationCoordinate2D) {
         let latitude = coordinate.latitude
         let longitude = coordinate.longitude
         print("Llamando al API con lat: \(latitude), lon: \(longitude)")
-        
         guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=0ae7859c64174984eb990d6673e70098&units=metric") else {
             print("Error generando URL del clima para lat:\(latitude), lon:\(longitude)")
             return
@@ -63,4 +67,30 @@ class WeatherViewModel: ObservableObject {
         default: return main
         }
     }
+    func setCurrentDayTime() {
+        let hour = Calendar.current.component(.hour, from: Date())
+        switch hour {
+        case 6..<9 :
+            self.weatherStatus = .morning
+        case 9..<16 :
+            self.weatherStatus = .dayTime
+        case 16..<17 :
+            self.weatherStatus = .afternoon
+        case 17..<22 :
+            self.weatherStatus = .nighttime
+        default: self.weatherStatus = .dayTime
+        }
+    }
+    func readResponse() -> String {
+        guard let content = weather else {
+            return ""
+        }
+        return content.toJSON()
+    }
+}
+enum WeatherState: String, CaseIterable {
+    case nighttime = "Night time"
+    case dayTime = "Day time"
+    case afternoon = "Afternoon"
+    case morning = "Morning"
 }

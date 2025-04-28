@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeatherModel: Decodable {
+struct WeatherModel: Codable {
     let coord: Coord?
     let name: String?
     let main: Main?
@@ -16,28 +16,28 @@ struct WeatherModel: Decodable {
     let weather: [Weather]?
     let wind: Wind?
     let sys: Sys?
-    struct Wind: Decodable {
+    struct Wind: Codable {
         let speed: Double
         let deg: Int?
     }
-    struct Weather: Decodable {
+    struct Weather: Codable {
         let id: Int?
         let main: String?
         let description: String?
         let icon: String?
     }
-    struct Coord: Decodable {
+    struct Coord: Codable {
         let lon: Double
         let lat: Double
     }
-    struct Sys: Decodable {
+    struct Sys: Codable {
         let type: Int?
         let id: Int?
         let country: String?
         let sunrise: Int?
         let sunset: Int?
     }
-    struct Main: Decodable {
+    struct Main: Codable {
         let temp: Double
         let feels_like: Double
         let temp_min: Double
@@ -47,53 +47,4 @@ struct WeatherModel: Decodable {
         let sea_level: Int
         let grnd_level: Int
     }
-    /*
-     {
-         "coord": {
-             "lon": -74.006,
-             "lat": 40.7128
-         },
-         "weather": [
-             {
-                 "id": 804,
-                 "main": "Clouds",
-                 "description": "overcast clouds",
-                 "icon": "04n"
-             }
-         ],
-         "base": "stations",
-         "main": {
-             "temp": 291.01,
-             "feels_like": 290.76,
-             "temp_min": 288.69,
-             "temp_max": 293.27,
-             "pressure": 1018,
-             "humidity": 73,
-             "sea_level": 1018,
-             "grnd_level": 1017
-         },
-         "visibility": 10000,
-         "wind": {
-             "speed": 5.66,
-             "deg": 180
-         },
-         "clouds": {
-             "all": 100
-         },
-         "dt": 1745634065,
-         "sys": {
-             "type": 1,
-             "id": 4610,
-             "country": "US",
-             "sunrise": 1745575330,
-             "sunset": 1745624724
-         },
-         "timezone": -14400,
-         "id": 5128581,
-         "name": "New York",
-         "cod": 200
-     }
-
-     **/
-    
 }

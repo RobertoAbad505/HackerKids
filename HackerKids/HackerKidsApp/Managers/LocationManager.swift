@@ -23,17 +23,19 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         manager.allowsBackgroundLocationUpdates = false
     }
     func startService() {
-        manager.requestWhenInUseAuthorization()
+        manager.startUpdatingLocation()
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         authorizationStatus = manager.authorizationStatus
-
+        print("Testing location; authorization: \(authorizationStatus)")
         switch authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
-            manager.requestLocation()
+            print("location permission granted; authorization: \(authorizationStatus)")
+            return
         case .denied, .restricted:
             permissionDenied = true
+            print("Location permission denied; authorization: \(authorizationStatus)")
         default:
             break
         }

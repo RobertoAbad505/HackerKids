@@ -51,10 +51,9 @@ struct PortafolioCardView: View {
     var navigateButton: some View {
         HStack {
             Image(systemName: "chevron.right")
-                .resizable()
-                .frame(width: 10, height: 15)
+                .font(.system(size: 20, weight: .medium))
             Text("Navegar!")
-                .font(.footnote)
+                .font(.headline)
                 .fontWeight(.bold)
                 .fontDesign(.monospaced)
         }

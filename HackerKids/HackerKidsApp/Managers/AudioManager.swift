@@ -10,11 +10,14 @@ import AVFoundation
 class AudioManager: ObservableObject {
     private var player: AVAudioPlayer?
     private var soundEffectPlayer: AVAudioPlayer?
-    func playBackgroundMusic(named name: String) {
-        guard player == nil else { return }
+    func playBackgroundMusic(named name: String) -> Bool {
+        guard player == nil else {
+            player?.play()
+            return true
+        }
         guard let url = Bundle.main.url(forResource: name, withExtension: "mp3") else {
             print("❌Audio file not found.")
-            return
+            return false
         }
 
         do {
@@ -23,9 +26,11 @@ class AudioManager: ObservableObject {
             player?.volume = 0.2
             player?.prepareToPlay()
             player?.play()
+            return true
         } catch {
             print("❌Error al reproducir audio: \(error)")
         }
+        return false
     }
     func playSoundEffect(named name: String) {
         guard let url = Bundle.main.url(forResource: name, withExtension: "mp3") else {

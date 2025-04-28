@@ -20,16 +20,6 @@ class RickAndMortyViewModel: ObservableObject {
     private var baseUrl: String = "https://rickandmortyapi.com/api/"
     private var cancellables = Set<AnyCancellable>()
     
-    init() {
-        // Escuchar cambios en el catalogo
-//        $queryObject
-//            .removeDuplicates()
-//            .sink { [weak self] newValue in
-//                self?.fetchData()
-//            }
-//            .store(in: &cancellables)
-    }
-    
     //api CALLLS
     func fetchData(_ getNextPage: Bool = false) {
         guard let url = URL(string: buildQuery(getNextPage)) else {

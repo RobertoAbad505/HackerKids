@@ -27,38 +27,36 @@ struct PokedexItemView: View {
                 pokemonImage
                 VStack(alignment: .leading) {
                     Text((item.pokemon.name ?? "").capitalizingFirstLetter())
-                        .font(.title3)
+                        .font(.title2)
+                        .fontWeight(.bold)
                     Text("Pokedex #\(item.id)")
-                        .font(.subheadline)
+                        .font(.headline)
+                        .fontWeight(.semibold)
                 }
                 .fontDesign(.monospaced)
                 Spacer()
                 Image(systemName: "chevron.right")
             }
             .foregroundStyle(colorScheme == .dark ? .white : .black)
+            .padding(.horizontal)
         })
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke((.white), lineWidth: 4)
+        )
     }
     var pokemonImage: some View {
-        ZStack {
-            KFImage(item.calcImageUrl())
-                .placeholder {
-                    ProgressView()
-                }
-                .retry(maxCount: 3, interval: .seconds(2))
-                .cacheOriginalImage()
-                .fade(duration: 0.25)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 100, height: 100)
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    favoriteBtn
-                }
+        KFImage(item.calcImageUrl())
+            .placeholder {
+                ProgressView()
             }
-            .frame(width: 100, height: 80)
-        }
+            .retry(maxCount: 3, interval: .seconds(2))
+            .cacheOriginalImage()
+            .fade(duration: 0.25)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 100, height: 100)
     }
     var favoriteBtn: some View {
         Button(action: {

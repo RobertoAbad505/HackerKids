@@ -12,7 +12,7 @@ class PortfolioViewModel: ObservableObject {
         FeatureModel(
             id: 0,
             name: "Rick and Morty API",
-            description: "Populate a view with Rick and Morty characters.",
+            description: "Populate a view with Rick and Morty characters by making an API call, MVVVM architecture, Infinite scroll technique and pagination.",
             type: .rickAndMorty
         ),
         FeatureModel(
@@ -32,18 +32,6 @@ class PortfolioViewModel: ObservableObject {
             name: "WeatherApp",
             description: "All weather info from your current location. Using your device GPS, you can see the current weather, forecast, and more.",
             type: .weather
-        ),
-        FeatureModel(
-            id: 4,
-            name: "SoupChallenge game!",
-            description: "Letter soup game created with SwiftUI. Go as fast as you can to fill the soup with all the letters!",
-            type: .pokemon
-        ),
-        FeatureModel(
-            id: 5,
-            name: "SoupChallenge game!",
-            description: "Letter soup game created with SwiftUI. Go as fast as you can to fill the soup with all the letters!",
-            type: .pokemon
         )
     ]
 }

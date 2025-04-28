@@ -8,15 +8,18 @@
 import SwiftUI
 
 struct PokemonAPIView: View {
+    @Environment(\.presentationMode) private var presentationMode
     @StateObject var audioManager = AudioManager()
     @ObservedObject var viewModel: PokemonApiViewModel
+    @State var backgroundMusic: Bool = true
+    let backgrounMusicName: String = "pokemonAudioo"
     
     init(viewModel: PokemonApiViewModel) {
         self.viewModel = viewModel
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             VStack {
                 if !viewModel.errorFetch {
                     pokedexScrollView
@@ -24,9 +27,11 @@ struct PokemonAPIView: View {
                     errorView
                 }
             }
-            .toolbarBackground(.ultraThinMaterial, for: .automatic)
+            .background(Image("pokemonBg").edgesIgnoringSafeArea(.all))
             .onAppear {
-                audioManager.playBackgroundMusic(named: "pokemonAudio")
+                if self.backgroundMusic {
+                    self.backgroundMusic = audioManager.playBackgroundMusic(named: backgrounMusicName)
+                }
                 if viewModel.pokemonList.isEmpty {
                     viewModel.fetchPokedexPage()
                 }
@@ -37,43 +42,74 @@ struct PokemonAPIView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
     }
     var pokedexScrollView: some View {
-        NavigationStack {
-            List(viewModel.pokemonList) { pokemon in
-                if pokemon.id == 1 {
-                    titleHeader
-                }
-                PokedexItemView(viewModel: viewModel,item: pokemon, onSelected: {
-                    //play selected pokemon sound
-                    audioManager.playSoundEffect(named: "coinFx")
-                    viewModel.selectedPokemon = pokemon
-                    // Delay para permitir que el sonido suene antes de navegar
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        viewModel.navigateDetail = true
-                        viewModel.fetchPokemonDetail()
+        ScrollView {
+            VStack {
+                titleHeader
+                ForEach(Array(viewModel.pokemonList.enumerated()), id: \.element.id) { index, pokemon in
+                    PokedexItemView(viewModel: viewModel,item: pokemon, onSelected: {
+                        //play selected pokemon sound
+                        audioManager.playSoundEffect(named: "coinFx")
+                        viewModel.selectedPokemon = pokemon
+                        // Delay para permitir que el sonido suene antes de navegar
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            viewModel.navigateDetail = true
+                            viewModel.fetchPokemonDetail()
+                        }
+                    })
+                    .onAppear {
+                        if index == viewModel.pokemonList.count - 1 {
+                            print("Seen pokemonId \(index) last of the list \(viewModel.pokemonList.count)")
+                            viewModel.fetchPokedexPage()
+                        }
                     }
-                })
-                .onAppear {
-                    if pokemon.id == viewModel.pokemonList.count - 1 {
-                        viewModel.fetchPokedexPage()
-                    }
+                    .shadow(color: Color.black, radius: 5, x: 10, y: 10)
                 }
             }
-            .background(
-                NavigationLink(
-                    destination: PokemonDetailView(viewModel: self.viewModel),
-                    isActive: $viewModel.navigateDetail,
-                    label: { EmptyView() }
-                )
-                .hidden()
-            )
+            .padding(.horizontal)
         }
+        .background(
+            NavigationLink(
+                destination: PokemonDetailView(viewModel: self.viewModel),
+                isActive: $viewModel.navigateDetail,
+                label: { EmptyView() }
+            )
+            .hidden()
+        )
     }
     var titleHeader: some View {
         HStack {
-            Text("Pokémon API v2")
+            Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+            }, label: {
+                Image(systemName: "chevron.backward")
+                    .foregroundColor(.primary)
+                    .font(.system(size: 24))
+                    .fontWeight(.bold)
+            })
+            .padding(.leading)
+            Spacer()
+            Text("Pokémon API.v2")
                 .setTitle3D()
+            Spacer()
+            Button(action: {
+                withAnimation {
+                    if self.backgroundMusic {
+                        audioManager.stop()
+                        self.backgroundMusic = false
+                    } else {
+                        self.backgroundMusic = audioManager.playBackgroundMusic(named: backgrounMusicName)
+                    }
+                }
+            }, label: {
+                Image(systemName: (self.backgroundMusic ? "speaker.wave.2.circle.fill":"speaker.slash.circle.fill"))
+                    .font(.system(size: 30))
+                    .foregroundStyle(.white)
+            })
+            .padding(.trailing)
         }
     }
     var errorView: some View {
