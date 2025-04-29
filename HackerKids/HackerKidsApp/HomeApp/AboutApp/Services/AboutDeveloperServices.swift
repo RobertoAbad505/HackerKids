@@ -18,6 +18,6 @@ class AboutDeveloperServices {
     }
     
     func fetchQuery(url: URL) -> AnyPublisher<GitHubUser, NetworkError> {
-        return network.fetch<GitHubUser>(url, .convertFromSnakeCase)
+        return NetworkManagerMock().fetch<GitHubUser>(url, .convertFromSnakeCase)
     }
 }

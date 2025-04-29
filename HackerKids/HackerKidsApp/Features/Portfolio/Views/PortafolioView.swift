@@ -97,9 +97,10 @@ struct PortafolioView: View {
                 .fontDesign(.monospaced)
                 .padding(.bottom, 50)
                 .padding(.horizontal)
-                .padding(.top, 60)
+                .padding(.top, 30)
             Spacer()
         }
+        .padding(.top, 30)
     }
     var description: some View {
         VStack {

@@ -12,10 +12,21 @@ class SoupGridViewModel: ObservableObject {
     @Published var gridSize: Int = 0
     @Published var difficultyLevel: DifficultyLevel = .easy
     @Published var grid: [[Character]] = []
-    @Published var challengeWords: [String] = ["GREEN", "OSO", "ROBERTO", "RAMIREZ", "SATURNO", "APOLLO", "ZEBRA", "STAR", "CALIFORNIA", "ICEBERG"]
+    @Published var challengeWords: [WordChallenge] = [
+        WordChallenge(word: "GREEN"),
+        WordChallenge(word:"OSO"),
+        WordChallenge(word:"ROBERTO"),
+        WordChallenge(word:"RAMIREZ"),
+        WordChallenge(word:"SATURNO"),
+        WordChallenge(word:"APOLLO"),
+        WordChallenge(word:"ZEBRA"),
+        WordChallenge(word:"STAR"),
+        WordChallenge(word:"CALIFORNIA"),
+        WordChallenge(word:"ICEBERG")
+    ]
     @Published var selectedPositions: [GridPosition] = [] // Posiciones seleccionadas temporalmente
     @Published var correctWordsPositions: Set<GridPosition> = [] // Palabras correctamente seleccionadas
-    @Published var foundWords: Set<String> = [] // Palabras encontradas
+    @Published var foundWords: [WordChallenge] = [] // Palabras encontradas
     @Published var win: Bool = false
     @Published var counter: Int = 0
     let isIPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
@@ -67,7 +78,7 @@ class SoupGridViewModel: ObservableObject {
             var placed = false
             while !placed {
                 //Si la palabra es muy larga no puede ser añadidda
-                if word.count > gridSize {
+                if word.word.count > gridSize {
                     placed = true
                 }
                 //Definimos la direccion de la palabra
@@ -76,9 +87,9 @@ class SoupGridViewModel: ObservableObject {
                 let startRow = Int.random(in: 0..<gridSize)
                 let startCol = Int.random(in: 0..<gridSize)
                 //Verificar si la palabra cabe we
-                if canPlaceWord(word, direction: direction, row: startRow, col: startCol) {
+                if canPlaceWord(word.word, direction: direction, row: startRow, col: startCol) {
                     //Insertar la palabra como la direccion lo marca
-                    placeWord(word, direction: direction, row: startRow, col: startCol)
+                    placeWord(word.word, direction: direction, row: startRow, col: startCol)
                     placed = true
                 }
             }
@@ -126,7 +137,10 @@ class SoupGridViewModel: ObservableObject {
         let selectedWord = selectedPositions.map { String(grid[$0.row][$0.col]) }.joined()
         
         //Obtener las palabras restantes
-        let remainingChallengeWords = challengeWords.filter { !foundWords.contains($0) }
+//        let remainingChallengeWords = challengeWords.filter { !foundWords.contains($0) }
+        let remainingChallengeWords = challengeWords.filter { word in
+            return !foundWords.contains(where: { $0.word == word.word})
+        }
         print("secuencia ingresada: \(selectedWord), POS: \(selectedPositions.last)")
         if selectedPositions.count > 1 {
             //validar click en columna o fila consecuente
@@ -139,13 +153,15 @@ class SoupGridViewModel: ObservableObject {
             }
         }
         // Verify if the selected word is in the list of valid words
-        let possibleWords = remainingChallengeWords.filter { $0.hasPrefix(selectedWord) }
-        if  possibleWords.count  == 1 && remainingChallengeWords.contains(selectedWord) {
+        let possibleWords = remainingChallengeWords.filter { $0.word.hasPrefix(selectedWord) }
+        if  possibleWords.count  == 1, let _ = remainingChallengeWords.first(where: { challenge in
+            return challenge.word == selectedWord
+        }) {
             // Mark all selected positions as correct
             for position in selectedPositions {
                 correctWordsPositions.insert(position) // Store individual positions as (row, col)
             }
-            foundWords.insert(selectedWord)
+            foundWords.append(WordChallenge(word: selectedWord, found: true))
             // Limpiar las posiciones seleccionadas después de validar
             clearCurrentSelection()
             wordDirection = nil
@@ -154,6 +170,15 @@ class SoupGridViewModel: ObservableObject {
                 counter += 1
                 detenerTimer()
             }
+            self.challengeWords = challengeWords.sorted { first, second in
+                let firstIsFound = foundWords.contains(where: { $0.word == first.word })
+                let secondIsFound = foundWords.contains(where: { $0.word == second.word })
+
+                // Si first no está y second sí está → first va primero (return true)
+                // Si first sí está y second no → second va primero (return false)
+                // Si ambos están o ambos no están → orden original
+                return firstIsFound == false && secondIsFound == true
+            }
             playSelectionSound()
         } else {
             //La palabra correcta no es la misma, validar inicio de secuencia entonces
@@ -161,7 +186,7 @@ class SoupGridViewModel: ObservableObject {
             let prefix = selectedPositions.prefix(selectedPositions.count).map { String(grid[$0.row][$0.col]) }.joined()
             
             // Verificar si alguna palabra esperada comienza con ese prefijo
-            if !remainingChallengeWords.contains(where: { $0.hasPrefix(prefix) }) {
+            if !remainingChallengeWords.contains(where: { $0.word.hasPrefix(prefix) }) {
                 //se han seleccionado solo errores
                 print("No existe esta secuencia: \(selectedWord)")
                 wordDirection = nil
@@ -242,8 +267,8 @@ class SoupGridViewModel: ObservableObject {
         self.wordDirection
     }
     // Comprobar si una palabra ya ha sido encontrada
-    func isWordFound(_ word: String) -> Bool {
-        return foundWords.contains(word)
+    func isWordFound(_ word: WordChallenge) -> Bool {
+        return foundWords.first(where: { $0.word == word.word}) != nil
     }
     // Inicia el temporizador
     func iniciarTimer() {
@@ -261,7 +286,9 @@ class SoupGridViewModel: ObservableObject {
     func addChallenge(challenge: ChallengeModel?) {
         if let challenge {
             self.difficultyLevel = challenge.diffuculty
-            self.challengeWords = challenge.challengeWords
+            self.challengeWords = challenge.challengeWords.map({
+                return WordChallenge(word: $0)
+            })
         }
         startGame()
     }

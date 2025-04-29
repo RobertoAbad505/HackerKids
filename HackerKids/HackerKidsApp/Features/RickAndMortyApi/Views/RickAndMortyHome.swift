@@ -39,7 +39,11 @@ struct RickAndMortyHome: View {
     var body: some View {
         NavigationView {
             VStack {
-                scrollView
+                if !viewModel.errorLoading {
+                    scrollView
+                } else {
+                    errorView
+                }
             }
             .onAppear {
                 viewModel.fetchData()
@@ -50,8 +54,27 @@ struct RickAndMortyHome: View {
                 updateOrientation()
             }
         }
+        .background(Image("seaBluebacground").edgesIgnoringSafeArea(.all))
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
+    }
+    var errorView: some View {
+        VStack(alignment: .center, spacing: 20) {
+            header
+            Spacer()
+            VStack {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 72, weight: .bold))
+                Text("Error loading our page!")
+                    .font(.headline)
+                    .fontWeight(.bold)
+            }
+            .padding(30)
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            Spacer()
+        }
+        .padding()
     }
     var catalogPicker: some View {
         Picker("Select catalog",
@@ -68,10 +91,11 @@ struct RickAndMortyHome: View {
             VStack {
                 header
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(viewModel.charactersCatalog.indices, id: \.self) { index in
-                        CharacterCardView(character: viewModel.charactersCatalog[index])
+                    ForEach(Array(viewModel.charactersCatalog.enumerated()), id: \.element) { index, character in
+                        CharacterCardView(character: character)
                         .onAppear {
                             if index == viewModel.charactersCatalog.count - 1 {
+                                print("Fetching next page . . .")
                                 viewModel.fetchData(true)
                             }
                         }
@@ -79,7 +103,7 @@ struct RickAndMortyHome: View {
                 }
                 .padding()
             }
-        }.background(Image("seaBluebacground").edgesIgnoringSafeArea(.all))
+        }
     }
     var header: some View {
         HStack(alignment: .firstTextBaseline) {

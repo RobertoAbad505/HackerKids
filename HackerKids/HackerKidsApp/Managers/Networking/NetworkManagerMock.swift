@@ -23,6 +23,7 @@ class NetworkManagerMock: NetworkManagerProtocol {
                     let decoded = try decoder.decode(T.self, from: data)
                     promise(.success(decoded))
                 } catch let error {
+                    promise(.failure(.decodingError(underlying: NetworkError.badResponse(statusCode: 6969))))
                     print(error)
                 }
             }

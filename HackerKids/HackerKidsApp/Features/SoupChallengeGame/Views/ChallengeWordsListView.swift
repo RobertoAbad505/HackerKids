@@ -10,6 +10,7 @@ import SwiftUI
 struct ChallengeWordsListView: View {
     private let columns = [GridItem(.flexible())] // Una columna con palabras apiladas verticalmente
     @ObservedObject var viewModel: SoupGridViewModel
+    @State var challengeWords: [String] = []
     init(viewModel: SoupGridViewModel) {
         self.viewModel = viewModel
     }
@@ -22,7 +23,7 @@ struct ChallengeWordsListView: View {
                         HStack {
                             Image(systemName: found ? "checkmark.circle":"questionmark.diamond")
                                 .foregroundStyle(found ? .white:.black)
-                            Text(word)
+                            Text(word.word)
                                 .foregroundStyle(.white)
                                 .fixedSize()
                                 .font(.headline)
@@ -44,6 +45,13 @@ struct ChallengeWordsListView: View {
             }
         })
         .padding(.leading, 10)
+    }
+}
+struct WordChallenge: Hashable {
+    var word: String
+    var found: Bool = false
+    init(word: String, found: Bool = false) {
+        self.word = word
     }
 }
 

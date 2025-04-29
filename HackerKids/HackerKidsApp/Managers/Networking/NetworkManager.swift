@@ -20,7 +20,7 @@ class NetworkManager: NetworkManagerProtocol {
         }
         // Verifica cache primero
         if let cachedData = ResponseCacheManager.shared.get(forKey: cacheKey) {
-            print("Response from cache for \(url.absoluteString)")
+            print("Response from cache $$$ for \(url.absoluteString)")
             return Just(cachedData)
                 .decode(type: T.self, decoder: decoder)
                 .mapError { NetworkError.decodingError(underlying: $0) }

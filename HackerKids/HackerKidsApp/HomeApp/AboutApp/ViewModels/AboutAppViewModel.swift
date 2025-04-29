@@ -14,7 +14,7 @@ class AboutAppViewModel: ObservableObject {
     @Published var gitHubUser: GitHubUser?
     @Published var errorMessage: String?
     @Published var isShowingMailView: Bool = false
-    let services: AboutDeveloperServices = AboutDeveloperServices()
+    private let services: AboutDeveloperServices = AboutDeveloperServices()
     let developerEmailAddress = "roberto.rmzabad@gmail.com"
     private var cancellables = Set<AnyCancellable>()
     @Published var isLoading = false
@@ -27,19 +27,20 @@ class AboutAppViewModel: ObservableObject {
             errorMessage = "URL inválida"
             return
         }
+        isLoading = true
         print("Fetching GIT contact card . . . ")
         services.fetchQuery(url: url)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .failure(let error):
-                        self?.errorMessage = error.localizedDescription
+                    self?.errorMessage = error.localizedDescription
                 case .finished:
                     print("GIT card fetched successfully . . . ")
-                    return
                 }
             }, receiveValue: { [weak self] response in
                 self?.gitHubUser = response
+                self?.isLoading = false
             })
             .store(in: &cancellables)
     }

@@ -18,6 +18,7 @@ struct StartView: View {
     //SHEET PRESENTATION FLAGS
     @State var infoView: Bool = false
     @State var loginView: Bool = false
+    @State var gitHubUser: GitHubUser?
     @State private var result: Result<MessageComposeResult, Error>? = nil
     
     @State var contactView: Bool = false
@@ -73,6 +74,9 @@ struct StartView: View {
                 aboutViewModel.fetchGitHubUser()
                 SessionManager.shared.fetchLastSession(modelContext)
             }
+            .onChange(of: aboutViewModel.isLoading) { user in
+                self.gitHubUser = aboutViewModel.gitHubUser
+            }
             .sheet(isPresented: $aboutViewModel.showMailView) {
                 MailView(
                     recipients: [aboutViewModel.developerEmailAddress],
@@ -119,13 +123,10 @@ struct StartView: View {
         }
         .padding()
         .padding(.bottom, 50)
-        .onTapGesture {
-//            loginView.toggle()
-        }
     }
     
     var gitHubPicture: some View {
-        KFImage(URL(string: aboutViewModel.gitHubUser?.avatarUrl ?? ""))
+        KFImage(URL(string: self.gitHubUser?.avatarUrl ?? ""))
             .placeholder {
                 ProgressView()
             }
@@ -163,22 +164,26 @@ struct StartView: View {
     }
     var mainDescription: some View {
         VStack(alignment: .center, spacing: 10) {
-            Text("Roberto Ramirez")
-                .font(.title)
-                .bold()
+            HStack {
+                Spacer()
+                Text("Roberto Ramirez")
+                    .font(.title)
+                    .bold()
+                Spacer()
+            }
             Text("iOS Dev • SwiftUI • GraphQL • APIs integrations • Clean Architecture")
                 .multilineTextAlignment(.center)
                 .font(.title3)
                 .foregroundColor(.secondary)
                 .fontWeight(.bold)
-            if let location = aboutViewModel.gitHubUser?.location {
+            if let location = self.gitHubUser?.location {
                 Text("📍\(location) | Always on the move ✈️")
                     .multilineTextAlignment(.center)
                     .font(.headline)
                     .fontWeight(.bold)
                 .foregroundColor(.secondary)
             }
-            Text(aboutViewModel.gitHubUser?.bio ?? "")
+            Text(self.gitHubUser?.bio ?? "")
                 .multilineTextAlignment(.center)
                 .font(.headline)
         }

@@ -10,10 +10,11 @@ import Foundation
 
 class RickAndMortyViewModel: ObservableObject {
     @Published var queryObject: RickAndMortyQueryObject = .character
-    @Published var charactersData: CharactersResponse?
-    
+//    @Published var charactersData: CharactersResponse?
+    private var pageIndex: Int = 1
     @Published var paginationInfo: PagingInfoModel?
     @Published var charactersCatalog: [RnMCharacter] = []
+    @Published var errorLoading: Bool = false
     var requestedPages: [String] = []
     
     private var service: RickAndMortyServiceAPI = RickAndMortyServiceAPI()
@@ -40,19 +41,22 @@ class RickAndMortyViewModel: ObservableObject {
         //success = fill the result objects
         service.fetchQuery(url: url)
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .finished:
                     return
                 case .failure(let failure):
                     print("Error: \(failure)")
+                    self?.errorLoading = true
                 }
-            }, receiveValue: { [weak self] dataReceived in
-                self?.charactersData = dataReceived
-                self?.paginationInfo = dataReceived.info
-                self?.charactersCatalog.append(contentsOf: dataReceived.results ?? [])
+            }, receiveValue: { [weak self] response in
+                self?.handleResponse(response)
             })
             .store(in: &cancellables)
+    }
+    func handleResponse(_ response: CharactersResponse) {
+        self.paginationInfo = response.info
+        self.charactersCatalog.append(contentsOf: response.results ?? [])
     }
     //FUNCTIONS
     private func buildQuery(_ nextPage: Bool = false) -> String {
@@ -68,7 +72,9 @@ class RickAndMortyViewModel: ObservableObject {
         case .location:
             querySearch = "location"
         }
-        return baseUrl + querySearch
+        let query = baseUrl + querySearch + "/?page=\(pageIndex)"
+        pageIndex += 1
+        return query
     }
     private func expectedResultObject() -> Any.Type {
         switch queryObject {

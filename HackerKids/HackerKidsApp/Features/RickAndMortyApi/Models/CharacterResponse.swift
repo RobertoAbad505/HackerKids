@@ -7,17 +7,17 @@
 
 import Foundation
 
-struct CharactersResponse: Decodable {
+struct CharactersResponse: Codable, Hashable {
     let info: PagingInfoModel?
     let results: [RnMCharacter]?
 }
-struct PagingInfo: Codable {
+struct PagingInfo: Codable, Hashable {
     let count: Int?
     let pages: Int?
     let next: String?
     let prev: String?
 }
-struct RnMCharacter: Codable {
+struct RnMCharacter: Codable, Hashable {
     let id: Int?
     let name: String?
     let status: String?
@@ -31,11 +31,11 @@ struct RnMCharacter: Codable {
     let origin: CharacterOrigin?
     let location: CharacterLocation?
 }
-struct CharacterOrigin: Codable {
+struct CharacterOrigin: Codable, Hashable {
     let name: String?
     let url: String?
 }
-struct CharacterLocation: Codable {
+struct CharacterLocation: Codable, Hashable {
     let name: String?
     let url: String?
 }

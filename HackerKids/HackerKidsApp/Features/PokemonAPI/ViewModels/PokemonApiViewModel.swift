@@ -15,6 +15,7 @@ class PokemonApiViewModel: ObservableObject {
     @Published var pokemonList: [PokedexItem] = []
     @Published var selectedPokemon: PokedexItem = PokedexItem(id: 1, pokemon: PokemonItem(name: "unkonwn", url: ""))
     @Published var errorFetch: Bool = false
+    @Published var isLoading: Bool = false
     @Environment(\.modelContext) private var modelContext
     @Published var pokemonsDetail: [PokedexDetail] = []
     
@@ -27,10 +28,14 @@ class PokemonApiViewModel: ObservableObject {
     }
 
     func fetchPokedexPage() {
+        if isLoading {
+            return
+        }
+        isLoading = true
         if pokemonList.count == 0 {
-            print("Fetch first pokedex page")
+            print("Fetching first pokedex page; total 0;")
         } else {
-            print("Fetching next 151 pokedex page after \(pokemonList.count)")
+            print("Fetching next 151 pokedex page after total: \(pokemonList.count)")
         }
         guard let url = URL(string: "\(baseUrl)\(pokemonList.count)") else {
             return
@@ -48,6 +53,7 @@ class PokemonApiViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] response in
                 self?.processResponse(response)
+                self?.isLoading = false
             })
             .store(in: &cancellables)
     }

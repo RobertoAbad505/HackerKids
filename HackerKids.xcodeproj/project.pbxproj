@@ -73,6 +73,7 @@
 		6F98B70E2DAC547500E3E7EB /* Exceptions for "HackerKidsTests" folder in "HackerKids" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				MockData/GitHub/GitHubCard.json,
 				MockData/urlMapping.json,
 			);
 			target = 6FD516E22CA5131D0052F1D3 /* HackerKids */;

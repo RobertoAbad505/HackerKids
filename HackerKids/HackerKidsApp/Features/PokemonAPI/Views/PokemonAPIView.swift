@@ -12,7 +12,7 @@ struct PokemonAPIView: View {
     @StateObject var audioManager = AudioManager()
     @ObservedObject var viewModel: PokemonApiViewModel
     @State var backgroundMusic: Bool = true
-    let backgrounMusicName: String = "pokemonAudioo"
+    let backgrounMusicName: String = "pokemonAudio"
     
     init(viewModel: PokemonApiViewModel) {
         self.viewModel = viewModel
@@ -28,13 +28,15 @@ struct PokemonAPIView: View {
                 }
             }
             .background(Image("pokemonBg").edgesIgnoringSafeArea(.all))
-            .onAppear {
+            .task {
+                print("🚀Initial task launched . . . !")
                 if self.backgroundMusic {
                     self.backgroundMusic = audioManager.playBackgroundMusic(named: backgrounMusicName)
                 }
                 if viewModel.pokemonList.isEmpty {
                     viewModel.fetchPokedexPage()
                 }
+                print("✅Initial task finished . . . !")
             }
             .onDisappear {
                 if !viewModel.navigateDetail {
@@ -49,24 +51,26 @@ struct PokemonAPIView: View {
         ScrollView {
             VStack {
                 titleHeader
-                ForEach(Array(viewModel.pokemonList.enumerated()), id: \.element.id) { index, pokemon in
-                    PokedexItemView(viewModel: viewModel,item: pokemon, onSelected: {
-                        //play selected pokemon sound
-                        audioManager.playSoundEffect(named: "coinFx")
-                        viewModel.selectedPokemon = pokemon
-                        // Delay para permitir que el sonido suene antes de navegar
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            viewModel.navigateDetail = true
-                            viewModel.fetchPokemonDetail()
+                LazyVGrid(columns: [GridItem.init(.flexible())]) {
+                    ForEach(Array(viewModel.pokemonList.enumerated()), id: \.element.id) { index, pokemon in
+                        PokedexItemView(viewModel: viewModel,item: pokemon, onSelected: {
+                            //play selected pokemon sound
+                            audioManager.playSoundEffect(named: "coinFx")
+                            viewModel.selectedPokemon = pokemon
+                            // Delay para permitir que el sonido suene antes de navegar
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                viewModel.navigateDetail = true
+                                viewModel.fetchPokemonDetail()
+                            }
+                        })
+                        .onAppear {
+                            if index == viewModel.pokemonList.count - 1 && !viewModel.isLoading {
+                                print("Fetch next page . . .")
+                                viewModel.fetchPokedexPage()
+                            }
                         }
-                    })
-                    .onAppear {
-                        if index == viewModel.pokemonList.count - 1 {
-                            print("Seen pokemonId \(index) last of the list \(viewModel.pokemonList.count)")
-                            viewModel.fetchPokedexPage()
-                        }
+                        .shadow(color: Color.black, radius: 5, x: 10, y: 10)
                     }
-                    .shadow(color: Color.black, radius: 5, x: 10, y: 10)
                 }
             }
             .padding(.horizontal)
