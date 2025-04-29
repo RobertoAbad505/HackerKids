@@ -20,7 +20,7 @@ struct SoupGridView: View {
                 loadingGridBody
             }
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 5)
         .onAppear(perform: viewModel.iniciarTimer)
         .onDisappear(perform: viewModel.detenerTimer)
     }
@@ -28,10 +28,11 @@ struct SoupGridView: View {
         let columns = Array(repeating: GridItem(.flexible()), count: viewModel.gridSize)
         return VStack {
             VStack {
-                LazyVGrid(columns: columns, spacing: 5) {
+                LazyVGrid(columns: columns, spacing: 0) {
                     ForEach(0..<viewModel.gridSize, id: \.self) { row in
                         ForEach(0..<viewModel.gridSize, id: \.self) { col in
                             Button(action: {
+                                viewModel.playSelectionSound()
                                 // Agregar la letra seleccionada a la lista temporal
                                 viewModel.selectedPositions.append(GridPosition(row: row, col: col))
                                 
@@ -44,15 +45,12 @@ struct SoupGridView: View {
                             })
                             .id("\(row)-\(col)")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .clipShape(Circle())
                         }
                     }
                 }
                 .padding(5)
                 .cornerRadius(15)
             }
-            .background(Color.white)
-            .padding(.top)
             ChallengeTimerView(viewModel: self.viewModel)
         }
         .background(.ultraThinMaterial)

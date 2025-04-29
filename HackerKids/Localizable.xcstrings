@@ -1,0 +1,351 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    " Map not available ... ⁉️ \n \t>> Bug reported!" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mapa no disponible …  ⁉️ \n \t>> Bug reported!"
+          }
+        }
+      }
+    },
+    "¿Deseas salir del juego?" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@"
+          }
+        }
+      }
+    },
+    "%lf" : {
+
+    },
+    "%lld" : {
+
+    },
+    "%lld lbs" : {
+
+    },
+    "%lld\"" : {
+
+    },
+    "%lld/%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld/%2$lld"
+          }
+        }
+      }
+    },
+    "⏱️   Your time:" : {
+
+    },
+    "⚔ %@" : {
+
+    },
+    "⚖️Weight" : {
+
+    },
+    "⚛️Species" : {
+
+    },
+    "✅   You won!!  🏆" : {
+
+    },
+    "✅ Okay!" : {
+
+    },
+    "✅ Start!" : {
+
+    },
+    "✅Salir" : {
+
+    },
+    "❌Cancelar" : {
+
+    },
+    "🌐 Latitud" : {
+
+    },
+    "🌐 Longitude" : {
+
+    },
+    "🍎💼 iOS Portafolio" : {
+
+    },
+    "🍎📱 Apps y prototipos" : {
+
+    },
+    "👾 %@" : {
+
+    },
+    "📊 Base stats" : {
+
+    },
+    "📍%@ | Always on the move ✈️" : {
+
+    },
+    "📍GPS Coordinates" : {
+
+    },
+    "📏Height" : {
+
+    },
+    "📲 About me . . ." : {
+
+    },
+    "📲 Leave a message! ;)" : {
+
+    },
+    "📲 Portafolio" : {
+
+    },
+    "📸 Sprites" : {
+
+    },
+    "🔎👀 Inspeccionar JSON response" : {
+
+    },
+    "🕹️ Interact with this view!" : {
+
+    },
+    "🗡️ Pokemon moves" : {
+
+    },
+    "🗺️ Weather Map" : {
+
+    },
+    "about the app" : {
+
+    },
+    "account email:" : {
+
+    },
+    "Add Item" : {
+
+    },
+    "APIs DEMOs" : {
+
+    },
+    "Bluetooth Chat!" : {
+
+    },
+    "by " : {
+
+    },
+    "by RobertSoft" : {
+
+    },
+    "Cargando..." : {
+
+    },
+    "Cerrar" : {
+
+    },
+    "Challenge your friends!" : {
+
+    },
+    "Challenger" : {
+
+    },
+    "Contact me:" : {
+
+    },
+    "Create user account!" : {
+
+    },
+    "Current location: \n%@" : {
+
+    },
+    "Current weather" : {
+
+    },
+    "email" : {
+
+    },
+    "Enter your email" : {
+
+    },
+    "Enter your name . . ." : {
+
+    },
+    "Enter your name:" : {
+
+    },
+    "Error loading data!" : {
+
+    },
+    "Error loading our page!" : {
+
+    },
+    "Escriba un mensaje" : {
+
+    },
+    "Esta es una pequeña integracion de modulos hechos con SwiftUI, con uso de multiples tecnicas y frameworks. Estare actualizando este portafolio con mas proyectos en el futuro, disfruta de explorarlos!. Puedes encontrar el resto de mis proyectos para iOS en GitHub." : {
+
+    },
+    "Este es un mensaje breve" : {
+
+    },
+    "Exit game!" : {
+
+    },
+    "Gender: %@" : {
+
+    },
+    "Hacker Kids" : {
+
+    },
+    "Hi! %@" : {
+
+    },
+    "High scores" : {
+
+    },
+    "Inicie la app para permitir el acceso a su ubicación." : {
+
+    },
+    "iOS Dev • SwiftUI • GraphQL • APIs integrations • Clean Architecture" : {
+
+    },
+    "Item at %@" : {
+
+    },
+    "Más de mis proyectos en GitHub:" : {
+
+    },
+    "Navegar!" : {
+
+    },
+    "New game!" : {
+
+    },
+    "New Word" : {
+
+    },
+    "Obteniendo su ubicación . . ." : {
+
+    },
+    "Or get login by using one of these" : {
+
+    },
+    "Origin location: \n%@" : {
+
+    },
+    "Permiso de ubicación denegado" : {
+
+    },
+    "Player 1 name" : {
+
+    },
+    "Player name:" : {
+
+    },
+    "Pokedex #%lld" : {
+
+    },
+    "Pokémon API.v2" : {
+
+    },
+    "Por favor activa la ubicación en configuración para usar esta funcionalidad." : {
+
+    },
+    "Refresh weather" : {
+
+    },
+    "release v0.1" : {
+
+    },
+    "Reset!" : {
+
+    },
+    "Retake picture!" : {
+
+    },
+    "Rick and Morty API" : {
+
+    },
+    "Roberto Ramirez" : {
+
+    },
+    "Select an item" : {
+
+    },
+    "Select catalog" : {
+
+    },
+    "Select difficulty" : {
+
+    },
+    "Shiny" : {
+
+    },
+    "Sign Off" : {
+
+    },
+    "Software Engineer with 7+ years of experience in the tech industry, collaborating across different sectors and business complexities.\n\nSpecialized in developing and enhancing iOS applications, with strong expertise in software architecture, performance optimization, and accessibility. I have had the opportunity to work with companies in both Mexico and the United States, including my last two-year project as a Senior iOS Engineer for Wells Fargo, contributing to large-scale digital banking solutions.\n\nCurrently open to new opportunities where to collaborate and keep learning." : {
+
+    },
+    "Species: %@" : {
+
+    },
+    "Start presence!" : {
+
+    },
+    "Status: %@" : {
+
+    },
+    "Stop presence!" : {
+
+    },
+    "Swift Skills" : {
+
+    },
+    "Take a picture!" : {
+
+    },
+    "Tiempo:" : {
+
+    },
+    "Today" : {
+
+    },
+    "Toma una foto del jugador" : {
+
+    },
+    "Type challengers name" : {
+
+    },
+    "Type your words here" : {
+
+    },
+    "Types" : {
+
+    },
+    "Una pequeña muestra de los proyectos que he desarrollado personalmente con SwiftUI. En estos prototipos encontrarás distintas técnicas, componentes personalizados, integración con APIs, llamadas HTTP, diseño de interfaces y más." : {
+
+    },
+    "Usuario creado con exito!✔️" : {
+
+    },
+    "Ver el clima desde su ubicación actual." : {
+
+    },
+    "Who is player 1?" : {
+
+    }
+  },
+  "version" : "1.0"
+}

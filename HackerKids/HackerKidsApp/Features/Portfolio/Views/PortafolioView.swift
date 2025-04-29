@@ -117,7 +117,7 @@ struct PortafolioView: View {
             ForEach(Array(viewModel.features.enumerated()), id: \.offset) { index, feature in
                 PortafolioCardView(feature: feature, index % 2 == 0)
                 .onTapGesture(perform: {
-                    audioManager.playSoundEffect(named: "coinFx")
+                    audioManager.playSelectionSound()
                     // Delay para permitir que el sonido suene antes de navegar
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         selectedFeature = feature

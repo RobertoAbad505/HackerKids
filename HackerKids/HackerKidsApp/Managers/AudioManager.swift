@@ -50,4 +50,7 @@ class AudioManager: ObservableObject {
         player?.stop()
         player = nil
     }
+    func playSelectionSound() {
+        AudioServicesPlaySystemSound(1104) // "Tock" como el de los botones del teclado
+    }
 }

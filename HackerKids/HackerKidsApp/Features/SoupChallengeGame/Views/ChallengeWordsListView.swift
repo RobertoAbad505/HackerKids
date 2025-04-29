@@ -19,32 +19,23 @@ struct ChallengeWordsListView: View {
             LazyHGrid(rows: columns) {
                 ForEach(viewModel.challengeWords, id: \.self) { word in
                     let found = viewModel.isWordFound(word)
-                    ZStack {
-                        HStack {
-                            Image(systemName: found ? "checkmark.circle":"questionmark.diamond")
-                                .foregroundStyle(found ? .white:.black)
-                            Text(word.word)
-                                .foregroundStyle(.white)
-                                .fixedSize()
-                                .font(.headline)
-                            Spacer()
-                        }
-                        .background(
-                            ZStack {
-                                Spacer()
-                            }
-                            .edgesIgnoringSafeArea(.all)
-                            .background(found ? Color.green : Color.clear)// Marcar palabras encontradas
-                            .blur(radius: 20)
-                        )
-                        .padding(10)
+                    HStack {
+                        Image(systemName: found ? "checkmark.circle":"questionmark.diamond")
+                            .foregroundStyle(.white)
+                        Text(word.word)
+                            .foregroundStyle(.white)
+                            .fixedSize()
+                            .font(.headline)
+                        Spacer()
                     }
+                    .padding(10)
                     .background(.ultraThinMaterial)
-                    .cornerRadius(30)
+                    .background((found ? Color.green : Color.clear).edgesIgnoringSafeArea(.all))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
         })
-        .padding(.leading, 10)
+        .padding(.leading, 5)
     }
 }
 struct WordChallenge: Hashable {

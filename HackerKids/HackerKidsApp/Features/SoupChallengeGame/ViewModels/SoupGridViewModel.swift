@@ -9,21 +9,31 @@ import Foundation
 import UIKit
 
 class SoupGridViewModel: ObservableObject {
+    var audioManager = AudioManager()
     @Published var gridSize: Int = 0
     @Published var difficultyLevel: DifficultyLevel = .easy
     @Published var grid: [[Character]] = []
-    @Published var challengeWords: [WordChallenge] = [
-        WordChallenge(word: "GREEN"),
-        WordChallenge(word:"OSO"),
+    @Published var wordsSource: [WordChallenge] = [
+        WordChallenge(word: "SWIFT"),
+        WordChallenge(word:"KAHELI"),
         WordChallenge(word:"ROBERTO"),
-        WordChallenge(word:"RAMIREZ"),
+        WordChallenge(word:"ABAD"),
+        WordChallenge(word:"UNIVERSE"),
         WordChallenge(word:"SATURNO"),
         WordChallenge(word:"APOLLO"),
         WordChallenge(word:"ZEBRA"),
         WordChallenge(word:"STAR"),
         WordChallenge(word:"CALIFORNIA"),
-        WordChallenge(word:"ICEBERG")
+        WordChallenge(word:"NEWARK"),
+        WordChallenge(word:"ICEBERG"),
+        WordChallenge(word:"QUERETARO"),
+        WordChallenge(word:"PINKFLOYD"),
+        WordChallenge(word:"METALLICA"),
+        WordChallenge(word:"BEATLES"),
+        WordChallenge(word:"RADIOHEAD"),
+        WordChallenge(word:"DEVELOPER")
     ]
+    @Published var challengeWords: [WordChallenge] = []
     @Published var selectedPositions: [GridPosition] = [] // Posiciones seleccionadas temporalmente
     @Published var correctWordsPositions: Set<GridPosition> = [] // Palabras correctamente seleccionadas
     @Published var foundWords: [WordChallenge] = [] // Palabras encontradas
@@ -74,6 +84,7 @@ class SoupGridViewModel: ObservableObject {
         }
     }
     func placeWordsInGrid() {
+        challengeWords = Array(wordsSource.shuffled().prefix(10))
         for word in challengeWords {
             var placed = false
             while !placed {
@@ -162,6 +173,7 @@ class SoupGridViewModel: ObservableObject {
                 correctWordsPositions.insert(position) // Store individual positions as (row, col)
             }
             foundWords.append(WordChallenge(word: selectedWord, found: true))
+            audioManager.playSoundEffect(named: "coinFx")
             // Limpiar las posiciones seleccionadas después de validar
             clearCurrentSelection()
             wordDirection = nil
@@ -179,7 +191,6 @@ class SoupGridViewModel: ObservableObject {
                 // Si ambos están o ambos no están → orden original
                 return firstIsFound == false && secondIsFound == true
             }
-            playSelectionSound()
         } else {
             //La palabra correcta no es la misma, validar inicio de secuencia entonces
             // Obtener las primeras letras seleccionadas
@@ -295,6 +306,9 @@ class SoupGridViewModel: ObservableObject {
 
     func playSelectionSound() {
         AudioServicesPlaySystemSound(1104) // "Tock" como el de los botones del teclado
+    }
+    func playFoundSound() {
+        audioManager.playSoundEffect(named: "coinFx")
     }
 }
 enum DifficultyLevel: String, Identifiable, CaseIterable {

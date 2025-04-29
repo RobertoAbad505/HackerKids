@@ -36,26 +36,13 @@ struct SoupChallengeView: View {
             viewModel.addChallenge(challenge: challenge)
         }
         .popover(isPresented: $viewModel.win) {
-            VStack {
-                Text("")
-                Text("You won!")
-                // Marcador de tiempo
-                HStack {
-                    Text("Tiempo:")
-                        .font(.headline)
-                    Text(viewModel.tiempoFormateado)
-                        .font(.body)
-                        .monospacedDigit()
-                }
-                .padding()
-                .background(Color.blue.opacity(0.1))
-                .cornerRadius(10)
-                controls
-            }
+            SoupChallengeWin(viewModel: self.viewModel, onEndGame: {
+                self.presentationMode.wrappedValue.dismiss()
+            })
         }
         .alert("¿Deseas salir del juego?", isPresented: $showExitConfirmation) {
-            Button("Cancelar", role: .cancel) {}
-            Button("Salir", role: .destructive, action: {
+            Button("❌Cancelar", role: .cancel) {}
+            Button("✅Salir", role: .destructive, action: {
                 self.presentationMode.wrappedValue.dismiss()
                 onExit()
             })
@@ -68,11 +55,13 @@ struct SoupChallengeView: View {
                     showExitConfirmation.toggle()
                 }, label: {
                     Image(systemName: "chevron.compact.backward")
-                        .font(.system(size: 25))
+                        .resizable()
+                        .frame(width: 20, height: 25)
                         .foregroundStyle(Color.white)
                 })
                 Spacer()
             }
+            .padding(.leading)
             Spacer()
             VStack(alignment: .center, spacing: 25) {
                 Text("Who is player 1?")
@@ -102,7 +91,7 @@ struct SoupChallengeView: View {
                     HStack {
                         Spacer()
                         Text("✅ Start!")
-                            .font(.callout)
+                            .font(.title)
                             .fontWeight(.bold)
                             .fontDesign(.monospaced)
                             .foregroundStyle(.white) // Color dinámico
@@ -115,7 +104,6 @@ struct SoupChallengeView: View {
                         RoundedRectangle(cornerRadius: 20)
                             .stroke((.white), lineWidth: 3)
                     )
-                    .padding(.horizontal)
                 })
             }
             .padding()
@@ -128,16 +116,13 @@ struct SoupChallengeView: View {
     var startedGame: some View {
         VStack {
             ScrollView {
-                VStack {
-                    Spacer()
+                VStack(alignment: .center, spacing: 15) {
                     title
                     gameView
                     wordsListView
                     controls
-                    Spacer()
                 }
-                .padding(.bottom, 30)
-                .frame(maxWidth: .infinity, alignment: .init(horizontal: .center, vertical: .top))
+                .padding(.vertical)
             }
         }
     }
@@ -147,9 +132,12 @@ struct SoupChallengeView: View {
                 showExitConfirmation.toggle()
             }, label: {
                 Image(systemName: "chevron.compact.backward")
-                    .font(.system(size: 28))
+                    .resizable()
+                    .frame(width: 18, height: 25)
                     .foregroundStyle(Color.white)
             })
+            .padding(.leading)
+            .padding(.vertical, 5)
             Spacer()
             VStack {
                 Text("👾 \(playerName)")
@@ -158,15 +146,31 @@ struct SoupChallengeView: View {
             }
             Spacer()
         }
-        .padding()
+        .padding(5)
         .background(.ultraThinMaterial)
+        .padding(.bottom, 5)
     }
     var gameView: some View {
         SoupGridView(viewModel: viewModel)
     }
     var controls: some View {
         VStack {
-            HStack {
+            HStack(alignment: .center, spacing: 20) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }, label: {
+                    HStack {
+                        Image(systemName: "clear")
+                            .foregroundColor(.white)
+                            .frame(width: 25, height: 27)
+                        Text("Exit game!")
+                            .font(.headline)
+                    }
+                })
+                .foregroundStyle(Color.white)
+                .padding()
+                .background(.ultraThinMaterial)
+                .cornerRadius(20)
                 Button(action: {
                     viewModel.counter += 1
                     viewModel.startGame()
@@ -175,14 +179,21 @@ struct SoupChallengeView: View {
                         Image(systemName: "arrow.clockwise")
                             .resizable()
                             .frame(width: 20, height: 25)
-                        Text(viewModel.counter > 0 ? "Nuevo juego!":"Reset turn")
+                        Text(viewModel.counter > 0 ? "New game!":"Reset!")
+                            .font(.headline)
                     }
                 })
-                .foregroundStyle(Color.black)
-                .padding(.horizontal)
-                .padding(.vertical, 7)
+                .foregroundStyle(Color.white)
+                .padding()
                 .background(.ultraThinMaterial)
                 .cornerRadius(20)
+            }
+            .padding(5)
+            .overlay{
+                if viewModel.win {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.white, lineWidth: 4)
+                }
             }
         }
     }

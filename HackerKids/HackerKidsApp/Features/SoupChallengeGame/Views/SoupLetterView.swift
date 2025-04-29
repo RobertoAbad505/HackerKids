@@ -21,20 +21,21 @@ struct SoupLetterView: View {
     var body: some View {
         VStack(alignment: .center, content: {
             Text(soupLetter)
-                .foregroundStyle(Color.black)
+                .foregroundStyle(Color.white)
                 .font(.system(size: 20))
                 .bold()
                 .fixedSize(horizontal: true, vertical: true)
                 .padding(.horizontal, soupLetter == "I" ? 5:0)
         })
-        .padding(5)
+        .padding(8)
         .background(setColor())// Marcar palabras encontradas
+        .clipShape(Circle())
     }
     func setColor() -> Color {
         if viewModel.selectedPositions.contains(GridPosition(row: row, col: col)) {
             return .orange
         } else {
-            return viewModel.isCorrectPosition(row: row, col: col) ? Color.green : Color.white
+            return viewModel.isCorrectPosition(row: row, col: col) ? Color.green : Color.clear
         }
     }
 }
