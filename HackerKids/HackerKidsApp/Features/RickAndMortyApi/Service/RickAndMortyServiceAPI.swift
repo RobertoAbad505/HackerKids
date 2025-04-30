@@ -19,6 +19,9 @@ class RickAndMortyServiceAPI {
     }
     
     func fetchQuery(url: URL) -> AnyPublisher<CharactersResponse, NetworkError> {
+        if url.absoluteString.contains("page=1") {
+            return NetworkManagerMock().fetch<CharactersResponse>(url)
+        }
         return network.fetch<CharactersResponse>(url)
     }
 }

@@ -18,7 +18,11 @@ class PokemonServices {
     }
     
     func fetchPokedexPage(_ url: URL) -> AnyPublisher<PokedexResponse, NetworkError> {
-        return network.fetch<PokedexResponse>(url)
+        if url.absoluteString.contains("offset=0") {
+            return NetworkManagerMock().fetch<PokedexResponse>(url)
+        } else {
+            return network.fetch<PokedexResponse>(url)
+        }
     }
     func fetchPokedexDetail(_ url: URL) -> AnyPublisher<PokedexDetail, NetworkError> {
         return network.fetch<PokedexDetail>(url)

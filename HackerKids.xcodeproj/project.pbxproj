@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6F059D4B2DA9DB70008C5718 /* pokemonAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */; };
 		6F059D932DA9DECC008C5718 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 6F059D922DA9DECC008C5718 /* AsyncAlgorithms */; };
 		6F059D952DA9DEF2008C5718 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 6F059D942DA9DEF2008C5718 /* AsyncAlgorithms */; };
 		6F059D972DA9DF73008C5718 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 6F059D962DA9DF73008C5718 /* AsyncAlgorithms */; };
@@ -15,9 +14,8 @@
 		6F059D9C2DA9E046008C5718 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6F059D9B2DA9E046008C5718 /* GoogleSignInSwift */; };
 		6F08AA282D55CC1500E60163 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 6F08AA272D55CC1500E60163 /* GoogleSignIn */; };
 		6F08AA2A2D55CC1500E60163 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6F08AA292D55CC1500E60163 /* GoogleSignInSwift */; };
-		6F617EC62DAA561500753DF7 /* coinFx.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F617EC52DAA561500753DF7 /* coinFx.mp3 */; };
-		6F617EC72DAA561500753DF7 /* coinFx.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F617EC52DAA561500753DF7 /* coinFx.mp3 */; };
-		6FB0209E2DA47D4D00B66A9B /* pokemonAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */; };
+		6F67CC512DC1887500535260 /* coinFx.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F67CC502DC1887500535260 /* coinFx.mp3 */; };
+		6F67CC522DC1887500535260 /* coinFx.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F67CC502DC1887500535260 /* coinFx.mp3 */; };
 		6FC283D02DB4264400356661 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6FC283CF2DB4264400356661 /* Kingfisher */; };
 		6FC283D32DB4267600356661 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6FC283D22DB4267600356661 /* Kingfisher */; };
 /* End PBXBuildFile section */
@@ -41,8 +39,7 @@
 
 /* Begin PBXFileReference section */
 		6F059D222DA9D86C008C5718 /* HackerKids_DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerKids_DEV.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6F617EC52DAA561500753DF7 /* coinFx.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = coinFx.mp3; sourceTree = "<group>"; };
-		6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pokemonAudio.mp3; sourceTree = "<group>"; };
+		6F67CC502DC1887500535260 /* coinFx.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = coinFx.mp3; sourceTree = "<group>"; };
 		6FD516E32CA5131D0052F1D3 /* HackerKids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerKids.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD516F72CA5131F0052F1D3 /* HackerKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HackerKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD517012CA5131F0052F1D3 /* HackerKidsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HackerKidsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,6 +71,9 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				MockData/GitHub/GitHubCard.json,
+				MockData/PokemonAPI/responses/PokedexDetails.json,
+				MockData/PokemonAPI/responses/Pokemons.json,
+				MockData/RickAndMortyAPI/responses/Characters.json,
 				MockData/urlMapping.json,
 			);
 			target = 6FD516E22CA5131D0052F1D3 /* HackerKids */;
@@ -96,6 +96,7 @@
 				HackerKidsApp/Features/Portfolio/ViewModels/PortfolioViewModel.swift,
 				HackerKidsApp/Features/Portfolio/Views/PortafolioCardView.swift,
 				HackerKidsApp/Features/Portfolio/Views/PortafolioView.swift,
+				HackerKidsApp/Features/WeatherApp/helper/WeatherLocalizedStrings.swift,
 				HackerKidsApp/Features/WeatherApp/Models/WeatherModel.swift,
 				HackerKidsApp/Features/WeatherApp/services/WeatherServices.swift,
 				HackerKidsApp/Features/WeatherApp/ViewModel/WeatherViewModel.swift,
@@ -179,8 +180,7 @@
 		6FB0209C2DA47D3100B66A9B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				6F617EC52DAA561500753DF7 /* coinFx.mp3 */,
-				6FB0209D2DA47D4D00B66A9B /* pokemonAudio.mp3 */,
+				6F67CC502DC1887500535260 /* coinFx.mp3 */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -376,8 +376,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F617EC72DAA561500753DF7 /* coinFx.mp3 in Resources */,
-				6F059D4B2DA9DB70008C5718 /* pokemonAudio.mp3 in Resources */,
+				6F67CC522DC1887500535260 /* coinFx.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,8 +384,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F617EC62DAA561500753DF7 /* coinFx.mp3 in Resources */,
-				6FB0209E2DA47D4D00B66A9B /* pokemonAudio.mp3 in Resources */,
+				6F67CC512DC1887500535260 /* coinFx.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,6 +460,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "HackerKids-DEV-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = MeetMeApp_DEV;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -494,6 +494,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "HackerKids-DEV-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = MeetMeApp_DEV;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -530,8 +532,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HackerKids/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = HackerKids;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.educational-games";
+				INFOPLIST_KEY_CFBundleDisplayName = MeetMeApp;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app requires access to your location.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to the photo library.";
@@ -571,8 +573,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HackerKids/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = HackerKids;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.educational-games";
+				INFOPLIST_KEY_CFBundleDisplayName = MeetMeApp;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app requires access to your location.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to the photo library.";

@@ -12,7 +12,7 @@ struct PokemonAPIView: View {
     @StateObject var audioManager = AudioManager()
     @ObservedObject var viewModel: PokemonApiViewModel
     @State var backgroundMusic: Bool = true
-    let backgrounMusicName: String = "pokemonAudio"
+    let backgrounMusicName: String = "pokeaudio"
     
     init(viewModel: PokemonApiViewModel) {
         self.viewModel = viewModel
@@ -31,7 +31,7 @@ struct PokemonAPIView: View {
             .task {
                 print("🚀Initial task launched . . . !")
                 if self.backgroundMusic {
-                    self.backgroundMusic = audioManager.playBackgroundMusic(named: backgrounMusicName)
+//                    self.backgroundMusic = audioManager.playBackgroundMusic(named: backgrounMusicName)
                 }
                 if viewModel.pokemonList.isEmpty {
                     viewModel.fetchPokedexPage()
@@ -44,45 +44,60 @@ struct PokemonAPIView: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
     }
     var pokedexScrollView: some View {
-        ScrollView {
-            VStack {
-                titleHeader
-                LazyVGrid(columns: [GridItem.init(.flexible())]) {
-                    ForEach(Array(viewModel.pokemonList.enumerated()), id: \.element.id) { index, pokemon in
-                        PokedexItemView(viewModel: viewModel,item: pokemon, onSelected: {
-                            //play selected pokemon sound
-                            audioManager.playSoundEffect(named: "coinFx")
-                            viewModel.selectedPokemon = pokemon
-                            // Delay para permitir que el sonido suene antes de navegar
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                viewModel.navigateDetail = true
-                                viewModel.fetchPokemonDetail()
-                            }
-                        })
-                        .onAppear {
-                            if index == viewModel.pokemonList.count - 1 && !viewModel.isLoading {
-                                print("Fetch next page . . .")
-                                viewModel.fetchPokedexPage()
+        VStack {
+            ZStack {
+                ScrollView {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Text("Pokémon API.v2")
+                                .setTitle3D()
+                            Spacer()
+                        }
+                        LazyVGrid(columns: [GridItem.init(.flexible())]) {
+                            ForEach(Array(viewModel.pokemonList.enumerated()), id: \.element.id) { index, pokemon in
+                                PokedexItemView(viewModel: viewModel,item: pokemon, onSelected: {
+                                    //play selected pokemon sound
+                                    audioManager.playSoundEffect(named: "coinFx")
+                                    viewModel.selectedPokemon = pokemon
+                                    // Delay para permitir que el sonido suene antes de navegar
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        viewModel.navigateDetail = true
+                                        viewModel.fetchPokemonDetail()
+                                    }
+                                })
+                                .onAppear {
+                                    if index == viewModel.pokemonList.count - 1 && !viewModel.isLoading {
+                                        print("Fetch next page . . .")
+                                        viewModel.fetchPokedexPage()
+                                    }
+                                }
+                                .shadow(color: Color.black, radius: 5, x: 10, y: 10)
                             }
                         }
-                        .shadow(color: Color.black, radius: 5, x: 10, y: 10)
                     }
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+                }
+                .background(
+                    NavigationLink(
+                        destination: PokemonDetailView(viewModel: self.viewModel),
+                        isActive: $viewModel.navigateDetail,
+                        label: { EmptyView() }
+                    )
+                    .hidden()
+                )
+                VStack {
+                    titleHeader
+                    Spacer()
                 }
             }
-            .padding(.horizontal)
         }
-        .background(
-            NavigationLink(
-                destination: PokemonDetailView(viewModel: self.viewModel),
-                isActive: $viewModel.navigateDetail,
-                label: { EmptyView() }
-            )
-            .hidden()
-        )
     }
     var titleHeader: some View {
         HStack {
@@ -94,10 +109,6 @@ struct PokemonAPIView: View {
                     .font(.system(size: 24))
                     .fontWeight(.bold)
             })
-            .padding(.leading)
-            Spacer()
-            Text("Pokémon API.v2")
-                .setTitle3D()
             Spacer()
             Button(action: {
                 withAnimation {
@@ -113,8 +124,9 @@ struct PokemonAPIView: View {
                     .font(.system(size: 30))
                     .foregroundStyle(.white)
             })
-            .padding(.trailing)
+            .hidden()
         }
+        .padding(.horizontal)
     }
     var errorView: some View {
         VStack {

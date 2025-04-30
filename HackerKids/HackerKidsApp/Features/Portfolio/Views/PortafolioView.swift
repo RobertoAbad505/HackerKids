@@ -51,6 +51,21 @@ struct PortafolioView: View {
             )
         }
         .navigationBarBackButtonHidden(true)
+        .navigationViewStyle(StackNavigationViewStyle())
+    }
+    var apisResources: some View {
+        VStack {
+            HStack {
+                Text("Recursos y datos obtenidos a traves de APIs publicas sin autenticación.")
+            }
+            .foregroundStyle(.white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke((.white), lineWidth: 3)
+            )
+            .padding(.top)
+        }
+        .padding()
     }
     var gitButton: some View {
         VStack(alignment: .center, spacing: 10) {
@@ -104,7 +119,7 @@ struct PortafolioView: View {
     }
     var description: some View {
         VStack {
-            Text("Esta es una pequeña integracion de modulos hechos con SwiftUI, con uso de multiples tecnicas y frameworks. Estare actualizando este portafolio con mas proyectos en el futuro, disfruta de explorarlos!. Puedes encontrar el resto de mis proyectos para iOS en GitHub.")
+            Text(LocalizedStringKey("portfolioDescriptionKey"))
                 .font(.body)
                 .foregroundColor(.white)
                 .padding(.horizontal)

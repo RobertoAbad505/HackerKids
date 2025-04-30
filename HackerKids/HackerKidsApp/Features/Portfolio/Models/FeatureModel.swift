@@ -11,6 +11,7 @@ struct FeatureModel: Identifiable {
     let id: Int
     let name: String
     let description: String
+    let lclstring: LocalizedStringResource
     let type: Feature
 }
 enum Feature: String, CaseIterable {

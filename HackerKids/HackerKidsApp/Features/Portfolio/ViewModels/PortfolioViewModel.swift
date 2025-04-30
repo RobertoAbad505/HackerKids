@@ -12,25 +12,29 @@ class PortfolioViewModel: ObservableObject {
         FeatureModel(
             id: 0,
             name: "Rick and Morty API",
-            description: "Populate a view with Rick and Morty characters by making an API call, MVVVM architecture, Infinite scroll technique and pagination.",
+            description: "Display a list of Rick and Morty characters by fetching data from the public open API (https://rickandmortyapi.com). Built with MVVM architecture, infinite scrolling, and pagination.",
+            lclstring: LocalizedStringResource("portfolio.rickAndMorty.description"),
             type: .rickAndMorty
         ),
         FeatureModel(
             id: 1,
             name: "Pokémon API",
-            description: "A pokedex tool made with SwiftUI. API call, Infinite scroll, search, and pagination. Navigate to each Pokémon detail page to see its stats, abilities, and types.",
+            description: "A Pokédex tool built with SwiftUI. Includes public open API (https://pokeapi.co/docs/v2/) integration, infinite scrolling, search functionality, and pagination. Explore detailed stats, abilities, and types for each Pokémon.",
+            lclstring: LocalizedStringResource("portfolio.pokemon.description"),
             type: .pokemon
         ),
         FeatureModel(
             id: 2,
-            name: "SoupChallenge game!",
-            description: "Letter soup game created with SwiftUI. Go as fast as you can to fill the soup with all the letters!",
+            name: "SoupChallenge Game!",
+            description: "A word search game built with SwiftUI. Find all the words as quickly as you can to win the challenge!",
+            lclstring: LocalizedStringResource("portfolio.soupgame.description"),
             type: .soupChallenge
         ),
         FeatureModel(
             id: 3,
             name: "WeatherApp",
-            description: "All weather info from your current location. Using your device GPS, you can see the current weather, forecast, and more.",
+            description: "Get real-time weather updates based on your current location and integrate with the OpenWeatherMap API(https://openweathermap.org/api/). Uses GPS to display current conditions, forecasts, and more.",
+            lclstring: LocalizedStringResource("portfolio.weather.description"),
             type: .weather
         )
     ]

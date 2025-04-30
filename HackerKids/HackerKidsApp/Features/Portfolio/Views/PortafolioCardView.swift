@@ -29,6 +29,7 @@ struct PortafolioCardView: View {
         .padding(.leading)
         .padding(.trailing, 4)
         .rotation3DEffect(.degrees(10),axis: (x: 0, y: isPair ? 0.5:-0.5, z: 0))
+        .shadow(color: Color.white, radius: 2, x: isPair ? -2:2, y: 2)
     }
     var textDescription: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -38,7 +39,7 @@ struct PortafolioCardView: View {
                     .fontWeight(.bold)
                 Spacer()
             }
-            Text(feature.description)
+            Text(feature.lclstring)
                 .font(.callout)
                 .multilineTextAlignment(.leading)
             Spacer()
@@ -86,5 +87,5 @@ struct PortafolioCardView: View {
 }
 
 #Preview {
-    PortafolioCardView(feature: .init(id: 1, name: "Prueba", description: "Prueba", type: .pokemon))
+    PortafolioCardView(feature: .init(id: 1, name: "Prueba", description: "Prueba", lclstring: LocalizedStringResource("Prueba"), type: .pokemon))
 }

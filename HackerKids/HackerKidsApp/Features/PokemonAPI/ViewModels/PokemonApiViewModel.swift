@@ -105,4 +105,7 @@ class PokemonApiViewModel: ObservableObject {
     func setFavorites(pokemon: PokedexItem) {
         return
     }
+    func readResponse() -> String {
+        return self.selectedPokemon.toJSON()
+    }
 }

@@ -7,17 +7,17 @@
 
 import Foundation
 
-struct PokedexResponse: Decodable {
+struct PokedexResponse: Codable {
     let count: Int?
     let next: String?
     let previous: String?
     let results: [PokemonItem]?
 }
-struct PokemonItem: Decodable, Hashable {
+struct PokemonItem: Codable, Hashable {
     let name: String?
     let url: String?
 }
-struct PokedexItem: Identifiable, Hashable {
+struct PokedexItem: Codable, Identifiable, Hashable {
     let id: Int
     let pokemon: PokemonItem
     var pokedexDetail: PokedexDetail? = nil
@@ -31,7 +31,7 @@ struct PokedexItem: Identifiable, Hashable {
     }
 }
 
-struct PokedexDetail: Decodable, Identifiable, Hashable {
+struct PokedexDetail: Codable, Identifiable, Hashable {
     let id: Int?
     let name: String?
     let height: Int?
@@ -42,35 +42,35 @@ struct PokedexDetail: Decodable, Identifiable, Hashable {
     let moves: [PokemonMove]?
     let weight: Int?
 }
-struct PokemonMove: Decodable, Hashable {
+struct PokemonMove: Codable, Hashable {
     let move: PokeMove?
-    struct PokeMove: Decodable, Hashable {
+    struct PokeMove: Codable, Hashable {
         let name: String?
         let url: String?
     }
 }
-struct PokemonType: Decodable, Hashable {
+struct PokemonType: Codable, Hashable {
     let slot: Int?
     let type: PokeType?
-    struct PokeType: Decodable, Hashable {
+    struct PokeType: Codable, Hashable {
         let name: String?
         let url: String?
     }
 }
-struct PokemonSpecies: Decodable, Hashable {
+struct PokemonSpecies: Codable, Hashable {
     let name: String?
     let url: String?
 }
-struct PokemonBaseStats: Decodable, Hashable {
+struct PokemonBaseStats: Codable, Hashable {
     let base_stat: Int?
     let effort: Int?
     let stat: PokeStat?
-    struct PokeStat: Decodable, Hashable {
+    struct PokeStat: Codable, Hashable {
         let name: String?
         let url: String?
     }
 }
-struct PokemonSprites: Decodable, Hashable {
+struct PokemonSprites: Codable, Hashable {
     let back_default: String?
     let back_female: String?
     let back_shiny: String?
@@ -81,7 +81,7 @@ struct PokemonSprites: Decodable, Hashable {
     let front_shiny_female: String?
     let other: OtherSprites?
 }
-struct OtherSprites: Decodable, Hashable {
+struct OtherSprites: Codable, Hashable {
     let dream_world: DreamWorld?
     let home: Home?
     let official_artwork: OfficialArtwork?
@@ -95,23 +95,23 @@ struct OtherSprites: Decodable, Hashable {
         ]
     }
 }
-struct DreamWorld: Decodable, Hashable {
+struct DreamWorld: Codable, Hashable {
     let front_default: String?
     let front_female: String?
 }
 
-struct Home: Decodable, Hashable {
+struct Home: Codable, Hashable {
     let front_default: String?
     let front_female: String?
     let front_shiny: String?
     let front_shiny_female: String?
 }
 
-struct OfficialArtwork: Decodable, Hashable {
+struct OfficialArtwork: Codable, Hashable {
     let front_default: String?
     let front_shiny: String?
 }
-struct PokemonSpritesShowdown: Decodable, Hashable {
+struct PokemonSpritesShowdown: Codable, Hashable {
     let back_default: String?
     let back_female: String?
     let back_shiny: String?

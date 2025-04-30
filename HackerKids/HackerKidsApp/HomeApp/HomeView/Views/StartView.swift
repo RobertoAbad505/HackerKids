@@ -72,7 +72,7 @@ struct StartView: View {
             .navigationBarHidden(true)
             .onAppear {
                 aboutViewModel.fetchGitHubUser()
-                SessionManager.shared.fetchLastSession(modelContext)
+//                SessionManager.shared.fetchLastSession(modelContext)
             }
             .onChange(of: aboutViewModel.isLoading) { user in
                 self.gitHubUser = aboutViewModel.gitHubUser
@@ -92,6 +92,7 @@ struct StartView: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     var activeProfile: some View {
         HStack {
@@ -123,6 +124,9 @@ struct StartView: View {
         }
         .padding()
         .padding(.bottom, 50)
+    }
+    func getLanguageID() -> String {
+        return "Lang \(Locale.current.languageCode?.uppercased() ?? "EN")"
     }
     
     var gitHubPicture: some View {
@@ -238,17 +242,19 @@ struct StartView: View {
                     .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
                     .padding(.top, 5)
             }
-            Text("Una pequeña muestra de los proyectos que he desarrollado personalmente con SwiftUI. En estos prototipos encontrarás distintas técnicas, componentes personalizados, integración con APIs, llamadas HTTP, diseño de interfaces y más.")
+            Text(LocalizedStringResource("startview.portfolio.description"))
                 .font(.body)
             NavigationLink(destination: PortafolioView(onNavigate: {
                 aboutViewModel.openUrl(.github)
             }), label: {
                 HStack {
+                    Spacer()
                     Text("🍎📱 Apps y prototipos")
                         .font(.callout)
                         .fontWeight(.bold)
                         .fontDesign(.monospaced)
                         .foregroundStyle(.white) // Color dinámico
+                    Spacer()
                 }
                 .padding()
                 .background(Color.clear)
@@ -286,6 +292,12 @@ struct StartView: View {
     }
     var versionView: some View {
         HStack {
+            Text(getLanguageID())
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .monospaced()
+                .fontWeight(.bold)
+                .shadow(color: Color.white, radius: 0.5, x: 1, y: 1)
             Spacer()
             Text("release v0.1")
                 .font(.body)

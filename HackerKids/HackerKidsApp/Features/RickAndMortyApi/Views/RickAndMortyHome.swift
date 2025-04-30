@@ -54,6 +54,7 @@ struct RickAndMortyHome: View {
                 updateOrientation()
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .background(Image("seaBluebacground").edgesIgnoringSafeArea(.all))
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)

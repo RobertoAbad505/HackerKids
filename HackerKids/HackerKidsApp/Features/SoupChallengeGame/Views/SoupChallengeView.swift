@@ -40,7 +40,7 @@ struct SoupChallengeView: View {
                 self.presentationMode.wrappedValue.dismiss()
             })
         }
-        .alert("¿Deseas salir del juego?", isPresented: $showExitConfirmation) {
+        .alert(LocalizedStringKey("exitConfirmationTitle"), isPresented: $showExitConfirmation) {
             Button("❌Cancelar", role: .cancel) {}
             Button("✅Salir", role: .destructive, action: {
                 self.presentationMode.wrappedValue.dismiss()

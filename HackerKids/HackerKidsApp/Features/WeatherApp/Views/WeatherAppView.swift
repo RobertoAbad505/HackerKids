@@ -319,7 +319,7 @@ struct WeatherAppView: View {
                     }
                 }
             } else {
-                Text(" Map not available ... ⁉️ \n \t>> Bug reported!")
+                Text("Map not available ... ⁉️ \n \t>> 🪲Bug reported!")
                     .font(.title2)
                     .fontWeight(.bold)
             }

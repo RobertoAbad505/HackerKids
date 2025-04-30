@@ -20,6 +20,7 @@ struct PokemonDetailView: View {
      ], startPoint: .bottom, endPoint: .topTrailing)
     }
     @State var pokemonColorsBYType: [Color] = []
+    @State var inspectResponse: Bool = false
     let range: ClosedRange<Double>
     var attakColumns: [GridItem] {
         return [GridItem(.flexible()), GridItem(.flexible()),GridItem(.flexible())]
@@ -38,6 +39,7 @@ struct PokemonDetailView: View {
                     spritesScrollView
                     pokemonStats
                     pokemonMoves
+                    disclosureText
                 }
                 .edgesIgnoringSafeArea(.top)
                 .background(getBackgroundGradient())
@@ -48,6 +50,28 @@ struct PokemonDetailView: View {
         .fontDesign(.monospaced)
         .toolbarBackground(.ultraThinMaterial, for: .automatic)
         .navigationBarBackButtonHidden()
+    }
+    var disclosureText: some View {
+        HStack(alignment: .bottom, spacing: 2) {
+            Text("All data is fetched from an open source API provided by")
+                .font(.footnote)
+                .foregroundColor(.white)
+                .fontWeight(.bold)
+            Button(action: {
+                guard let pokemonDocs = URL(string: "https://pokeapi.co/docs/v2") else { return }
+                // Verificar si el dispositivo puede abrir la URL
+                if UIApplication.shared.canOpenURL(pokemonDocs) {
+                    UIApplication.shared.open(pokemonDocs, options: [:], completionHandler: nil)
+                }
+            }, label: {
+                Text("PokeAPI.co")
+                    .font(.footnote)
+                    .foregroundColor(.blue)
+                    .fontWeight(.bold)
+            })
+            Spacer()
+        }
+        .padding()
     }
     var exitButton: some View {
         VStack {
@@ -305,6 +329,36 @@ struct PokemonDetailView: View {
             }
         }
         .padding()
+    }
+    var inspectResponseView: some View {
+        VStack(alignment: .center, spacing: 20) {
+            Button(action: {
+                withAnimation {
+                    inspectResponse.toggle()
+                }
+            }, label: {
+                HStack {
+                    Spacer()
+                    Text(inspectResponse ? "✅ Okay!" :"🔎👀 Inspeccionar JSON response")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                        .fontDesign(.monospaced)
+                        .foregroundStyle(.white) // Color dinámico
+                    Spacer()
+                }
+                .padding()
+                .background(Color.clear)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke((.white), lineWidth: 3)
+                )
+            })
+            .padding(.vertical, 20)
+            .padding(.horizontal)
+            if inspectResponse {
+                CodeBlockView(code: viewModel.readResponse())
+            }
+        }
     }
     func getReverseThemeForeground() -> Color {
         return colorScheme == .dark ? .white : .black
