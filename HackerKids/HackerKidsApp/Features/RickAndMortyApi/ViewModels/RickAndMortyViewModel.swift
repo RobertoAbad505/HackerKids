@@ -15,6 +15,8 @@ class RickAndMortyViewModel: ObservableObject {
     @Published var paginationInfo: PagingInfoModel?
     @Published var charactersCatalog: [RnMCharacter] = []
     @Published var errorLoading: Bool = false
+    @Published var totalPages: Int = 0
+    @Published var isNavigating: Bool = false
     var requestedPages: [String] = []
     
     private var service: RickAndMortyServiceAPI = RickAndMortyServiceAPI()
@@ -47,7 +49,9 @@ class RickAndMortyViewModel: ObservableObject {
                     return
                 case .failure(let failure):
                     print("Error: \(failure)")
-                    self?.errorLoading = true
+                    if self?.charactersCatalog.isEmpty ?? true {
+                        self?.errorLoading = true
+                    }
                 }
             }, receiveValue: { [weak self] response in
                 self?.handleResponse(response)
@@ -57,6 +61,7 @@ class RickAndMortyViewModel: ObservableObject {
     func handleResponse(_ response: CharactersResponse) {
         self.paginationInfo = response.info
         self.charactersCatalog.append(contentsOf: response.results ?? [])
+        self.totalPages += 1
     }
     //FUNCTIONS
     private func buildQuery(_ nextPage: Bool = false) -> String {

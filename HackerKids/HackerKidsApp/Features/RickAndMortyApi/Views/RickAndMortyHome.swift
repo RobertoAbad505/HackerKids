@@ -14,6 +14,8 @@ struct RickAndMortyHome: View {
     //view orientation and design
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @State private var isLandscape: Bool = false
+    @State private var isScrolling: Bool = false
+    @State private var currentPage: String = "1"
     
     var backgroundColor: LinearGradient {
         LinearGradient(stops: [.init(color: .black, location: 0.25),
@@ -40,24 +42,60 @@ struct RickAndMortyHome: View {
         NavigationView {
             VStack {
                 if !viewModel.errorLoading {
-                    scrollView
+                    scrollViewCurrentVersion
                 } else {
                     errorView
                 }
             }
+            .background(Image("seaBluebackground").resizable().edgesIgnoringSafeArea(.all))
             .onAppear {
-                viewModel.fetchData()
-                updateOrientation()
+                if viewModel.charactersCatalog.isEmpty {
+                    viewModel.fetchData()
+                    updateOrientation()
+                }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
                 print("orientation changed!")
                 updateOrientation()
             }
+            .modifier(ToolbarVisibilityModifier(isScrolling: isScrolling))
+            .navigationBarTitle(
+                !viewModel.isNavigating ? Text("Catalog: page \(currentPage) of \(viewModel.totalPages)"):Text("")
+            )
+            .toolbar {
+                if viewModel.isNavigating {
+                    ToolbarItem(placement: .topBarLeading, content: {
+                        Button(action: {
+                            withAnimation(.bouncy(duration: 1, extraBounce: 0.5)) {
+                                self.viewModel.isNavigating = false
+                            }
+                        }, label: {
+                            Image(systemName: "chevron.backward")
+                                .foregroundColor(.white)
+                                .frame(width: 15, height: 25)
+                                .fontWeight(.bold)
+                        })
+                        .padding(.leading)
+                    })
+                }
+                if !viewModel.isNavigating {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            withAnimation(.bouncy(duration: 1, extraBounce: 0.5)) {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }
+                        }, label: {
+                            Image(systemName: "clear")
+                                .foregroundStyle(.white)
+                                .font(.system(size: 20))
+                        })
+                    }
+                }
+            }
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
-        .background(Image("seaBluebacground").edgesIgnoringSafeArea(.all))
         .navigationBarBackButtonHidden(true)
-        .navigationBarHidden(true)
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     var errorView: some View {
         VStack(alignment: .center, spacing: 20) {
@@ -87,15 +125,36 @@ struct RickAndMortyHome: View {
         })
         .pickerStyle(SegmentedPickerStyle())
     }
+    var scrollViewCurrentVersion: some View {
+        VStack {
+            if #available(iOS 18.0, *) {
+                scrollView
+                        .onScrollPhaseChange({ _, phase in
+                            withAnimation(.easeInOut(duration: 2.3)) {
+                                switch phase {
+                                    case .idle:
+                                    isScrolling = false
+                                case .tracking, .animating, .decelerating:
+                                    isScrolling = true
+                                default:
+                                    break
+                                }
+                            }
+                        })
+            } else {
+                scrollView
+            }
+        }
+    }
     var scrollView: some View {
         ScrollView {
             VStack {
-                header
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(Array(viewModel.charactersCatalog.enumerated()), id: \.element) { index, character in
-                        CharacterCardView(character: character)
+                        CharacterCardView(viewModel: viewModel,character: character)
                         .onAppear {
                             if index == viewModel.charactersCatalog.count - 1 {
+                                self.currentPage = "\(index / 20 + 1)"
                                 print("Fetching next page . . .")
                                 viewModel.fetchData(true)
                             }
@@ -113,15 +172,10 @@ struct RickAndMortyHome: View {
             }, label: {
                 Image(systemName: "chevron.backward")
                     .foregroundColor(.primary)
-                    .font(.system(size: 24))
+                    .frame(width: 15, height: 25)
                     .fontWeight(.bold)
             })
             .padding(.leading)
-            Spacer()
-            Text("Rick and Morty API")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .foregroundStyle(.white)
             Spacer()
         }
     }
@@ -130,6 +184,15 @@ struct RickAndMortyHome: View {
     }
 }
 
-#Preview {
-    RickAndMortyHome(viewModel: RickAndMortyViewModel())
+struct ToolbarVisibilityModifier: ViewModifier {
+    let isScrolling: Bool
+
+    func body(content: Content) -> some View {
+        if #available(iOS 18.0, *) {
+            content
+                .toolbarVisibility(isScrolling ? .hidden : .visible, for: .navigationBar)
+        } else {
+            content
+        }
+    }
 }

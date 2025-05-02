@@ -9,9 +9,11 @@ import SwiftUI
 
 struct CharacterDetailView: View {
     @Environment(\.presentationMode) private var presentationMode
+    @ObservedObject var viewModel: RickAndMortyViewModel
     let character: RnMCharacter
-    init(character: RnMCharacter) {
+    init(viewModel: RickAndMortyViewModel, character: RnMCharacter) {
         self.character = character
+        self.viewModel = viewModel
     }
     var body: some View {
         VStack {
@@ -78,8 +80,30 @@ struct CharacterDetailView: View {
                 .padding()
             }
         }
+        .toolbar {
+            if viewModel.isNavigating {
+                ToolbarItem(placement: .topBarLeading, content: {
+                    Button(action: {
+                        withAnimation(.bouncy(duration: 1, extraBounce: 0.5)) {
+                            self.viewModel.isNavigating = false
+                        }
+                    }, label: {
+                        Image(systemName: "chevron.backward")
+                            .foregroundColor(.white)
+                            .frame(width: 15, height: 25)
+                            .fontWeight(.bold)
+                    })
+                    .padding(.leading)
+                })
+            }
+        }
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
         .foregroundStyle(.white)
         .background(Color.blue.opacity(0.5).ignoresSafeArea(edges: .all))
+        .onAppear {
+            viewModel.isNavigating = true
+        }
     }
     var header: some View {
         ZStack {

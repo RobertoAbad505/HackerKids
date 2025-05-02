@@ -11,15 +11,15 @@ class PortfolioViewModel: ObservableObject {
     let features: [FeatureModel] = [
         FeatureModel(
             id: 0,
-            name: "Rick and Morty API",
-            description: "Display a list of Rick and Morty characters by fetching data from the public open API (https://rickandmortyapi.com). Built with MVVM architecture, infinite scrolling, and pagination.",
+            name: "Modern UI views",
+            description: "",
             lclstring: LocalizedStringResource("portfolio.rickAndMorty.description"),
             type: .rickAndMorty
         ),
         FeatureModel(
             id: 1,
-            name: "Pokémon API",
-            description: "A Pokédex tool built with SwiftUI. Includes public open API (https://pokeapi.co/docs/v2/) integration, infinite scrolling, search functionality, and pagination. Explore detailed stats, abilities, and types for each Pokémon.",
+            name: "ListUI dynamics",
+            description: "",
             lclstring: LocalizedStringResource("portfolio.pokemon.description"),
             type: .pokemon
         ),

@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "%@" : {
       "localizations" : {
         "es-419" : {
@@ -240,6 +243,9 @@
     "👾 %@" : {
 
     },
+    "👾SwiftUI Lists" : {
+
+    },
     "📊 Base stats" : {
 
     },
@@ -345,12 +351,16 @@
         }
       }
     },
+    "🗡️ Battle moves" : {
+
+    },
     "🗡️ Pokemon moves" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es-419" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "🗡️ Pokemon moves"
+            "value" : "🗡️ Battle moves"
           }
         }
       }
@@ -402,6 +412,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loading . . ."
+          }
+        }
+      }
+    },
+    "Catalog: page %@ of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Catalog: page %1$@ of %2$lld"
           }
         }
       }
@@ -599,10 +619,20 @@
 
     },
     "Pokedex #%lld" : {
-
-    },
-    "Pokémon API.v2" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "#%lld"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "#%lld"
+          }
+        }
+      }
     },
     "Por favor activa la ubicación en configuración para usar esta funcionalidad." : {
       "localizations" : {
@@ -619,13 +649,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A Pokédex tool built with SwiftUI. Includes API integration, infinite scrolling, search functionality, and pagination. Explore detailed stats, abilities, and types for each Pokémon."
+            "value" : "A modern prototype demonstrating list rendering using LazyLoad, reusable components, detail navigation and more features using a public API."
           }
         },
         "es-419" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Una herramienta Pokédex creada con SwiftUI. Incluye integración con API, scroll infinito, búsqueda y paginación. Explora las estadísticas, habilidades y tipos de cada Pokémon."
+            "value" : "Un prototipo moderno haciendo list rendering usando LazyLoad, componentes reusables, navegacion por detalles y más funcionalidades usando una API publica."
           }
         }
       }
@@ -635,13 +665,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Display a list of Rick and Morty characters by fetching data from an API. Built with MVVM architecture, infinite scrolling, pagination and more."
+            "value" : "Display a modern grid built with reusable components by fetching data from a public API. Built with MVVM architecture, infinite scrolling, pagination and more."
           }
         },
         "es-419" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Muestra una lista de personajes de Rick and Morty obtenidos desde una API. Desarrollado con arquitectura MVVM, scroll infinito y paginación."
+            "value" : "Muestra un grid moderno hecho con componentes reusables y modelados por data obtenida desde una API. Desarrollado con arquitectura MVVM, scroll infinito y paginación."
           }
         }
       }

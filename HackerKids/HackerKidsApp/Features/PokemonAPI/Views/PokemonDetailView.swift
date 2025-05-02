@@ -32,24 +32,39 @@ struct PokemonDetailView: View {
     }
     var body: some View {
         VStack {
-            ZStack {
-                ScrollView {
-                    imageTopHeader
-                    descriptionView
-                    spritesScrollView
-                    pokemonStats
-                    pokemonMoves
-                    disclosureText
-                }
-                .edgesIgnoringSafeArea(.top)
-                .background(getBackgroundGradient())
-                exitButton
+            ScrollView {
+                imageTopHeader
+                descriptionView
+                spritesScrollView
+                pokemonStats
+                pokemonMoves
+                disclosureText
             }
+            .edgesIgnoringSafeArea(.top)
+            .background(getBackgroundGradient())
         }
         .foregroundStyle(getReverseThemeForeground())
         .fontDesign(.monospaced)
-        .toolbarBackground(.ultraThinMaterial, for: .automatic)
-        .navigationBarBackButtonHidden()
+        .toolbar {
+            if viewModel.navigateDetail {
+                ToolbarItem(placement: .topBarLeading, content: {
+                    Button(action: {
+                        withAnimation(.bouncy(duration: 1, extraBounce: 1.5)) {
+                            self.viewModel.navigateDetail = false
+                        }
+                    }, label: {
+                        Image(systemName: "chevron.backward")
+                            .foregroundColor(.white)
+                            .frame(width: 15, height: 25)
+                            .fontWeight(.bold)
+                    })
+                    .padding(.leading)
+                })
+            }
+        }
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
+        .foregroundStyle(.white)
     }
     var disclosureText: some View {
         HStack(alignment: .bottom, spacing: 2) {
@@ -308,7 +323,7 @@ struct PokemonDetailView: View {
     }
     var pokemonMoves: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("🗡️ Pokemon moves")
+            Text("🗡️ Battle moves")
                 .font(.headline)
                 .fontWeight(.bold)
                 .padding(.bottom)

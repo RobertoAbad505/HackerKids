@@ -8,19 +8,21 @@ import Kingfisher
 import SwiftUI
 
 struct CharacterCardView: View {
+    @ObservedObject var viewModel: RickAndMortyViewModel
     let character: RnMCharacter
 
     var body: some View {
         VStack {
-            NavigationLink(destination: CharacterDetailView(character: character)) {
+            NavigationLink(destination: CharacterDetailView(viewModel: self.viewModel, character: character),
+                           isActive: $viewModel.isNavigating,
+            ) {
                 labelCard
             }
-            .navigationBarBackButtonHidden(true)
         }
         .navigationBarBackButtonHidden(true)
-        .navigationBarHidden(true)
         .background(.ultraThinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 25))
+        .shadow(radius: 1, x: 10, y: 15)
     }
     var labelCard: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -46,7 +48,7 @@ struct CharacterCardView: View {
 }
 
 #Preview {
-    CharacterCardView(character: .init(id: 1,
+    CharacterCardView(viewModel: .init(), character: .init(id: 1,
                                        name: "Test",
                                        status: "Alive",
                                        species: "Human",
