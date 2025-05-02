@@ -20,7 +20,7 @@ struct StartView: View {
     @State var loginView: Bool = false
     @State var gitHubUser: GitHubUser?
     @State private var result: Result<MessageComposeResult, Error>? = nil
-    
+    @StateObject var audioManager: AudioManager = AudioManager()
     @State var contactView: Bool = false
     
     //background variables
@@ -159,6 +159,7 @@ struct StartView: View {
             .gesture(
                 TapGesture()
                     .onEnded {
+                        audioManager.playSoundEffect(named: "coinFx")
                         // Animación para girar 3 veces (1080 grados) en 1.5 segundos
                         withAnimation(.bouncy(duration: 1.2)) {
                             rotationAngle = .degrees(rotationAngle.degrees + 1080)
@@ -299,10 +300,6 @@ struct StartView: View {
                 .fontWeight(.bold)
                 .shadow(color: Color.white, radius: 0.5, x: 1, y: 1)
             Spacer()
-            Text("release v0.1")
-                .font(.body)
-                .fontWeight(.bold)
-                .fontDesign(.monospaced)
         }
         .padding()
     }

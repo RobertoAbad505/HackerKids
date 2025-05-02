@@ -11,6 +11,8 @@ struct ChallengeWordsListView: View {
     private let columns = [GridItem(.flexible())] // Una columna con palabras apiladas verticalmente
     @ObservedObject var viewModel: SoupGridViewModel
     @State var challengeWords: [String] = []
+    let isIPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
+    
     init(viewModel: SoupGridViewModel) {
         self.viewModel = viewModel
     }
@@ -25,7 +27,7 @@ struct ChallengeWordsListView: View {
                         Text(word.word)
                             .foregroundStyle(.white)
                             .fixedSize()
-                            .font(.headline)
+                            .font(.system(size: isIPad ? 24 : 18))
                         Spacer()
                     }
                     .padding(10)

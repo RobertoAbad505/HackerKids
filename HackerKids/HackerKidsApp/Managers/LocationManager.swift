@@ -22,6 +22,10 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.allowsBackgroundLocationUpdates = false
     }
+    func askForpermission() {
+        manager.requestWhenInUseAuthorization()
+        manager.requestLocation()
+    }
     func startService() {
         manager.startUpdatingLocation()
     }
@@ -50,6 +54,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         print("Failed to find user's location: \(error.localizedDescription)")
     }
     func requestLocation() {
+        if self.authorizationStatus == .notDetermined {
+            manager.requestWhenInUseAuthorization()
+        }
         manager.requestLocation()
     }
 }

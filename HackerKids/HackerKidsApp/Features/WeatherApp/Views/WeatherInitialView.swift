@@ -37,9 +37,11 @@ struct WeatherInitialView: View {
             } else if locationManager.authorizationStatus == .notDetermined {
                 Text("Inicie la app para permitir el acceso a su ubicación.")
                     .font(.title2)
+                    .foregroundStyle(.white)
             } else {
                 Text("Ver el clima desde su ubicación actual.")
                     .font(.title2)
+                    .foregroundStyle(.white)
             }
             Spacer()
         }

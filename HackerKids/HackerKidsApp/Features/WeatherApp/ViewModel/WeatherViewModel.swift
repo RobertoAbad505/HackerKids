@@ -64,7 +64,10 @@ class WeatherViewModel: ObservableObject {
         case "clear": return "sun.max.fill"
         case "rain": return "cloud.rain.fill"
         case "wind": return "wind.circle.fill"
-        default: return main
+        case "sunny": return "wind.circle.fill"
+        case "rainy": return "cloud.rain.fill"
+        case "storm": return "cloud.bolt.rain"
+        default: return "sun.max.fill"
         }
     }
     func setCurrentDayTime() {

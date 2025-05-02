@@ -27,6 +27,7 @@ struct HackerKidsApp: App {
     var body: some Scene {
         WindowGroup {
             StartView(viewModel: userViewModel)
+                .preferredColorScheme(.dark)
 //                .onAppear {
 //                    #if ISDEBUG
 //                    print("🐛🐞🐜🦟🪲🪳🕷️ IS DEVELOPMENT TARGET")

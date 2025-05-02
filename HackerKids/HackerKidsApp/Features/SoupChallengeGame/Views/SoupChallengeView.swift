@@ -15,6 +15,7 @@ struct SoupChallengeView: View {
     @State private var playerName: String = ""
     @State private var register = false
     var challenge: ChallengeModel?
+    let isIPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     
     
     init(onExit: @escaping (() -> Void), _ challenge: ChallengeModel? = nil) {
@@ -35,10 +36,10 @@ struct SoupChallengeView: View {
         .onAppear {
             viewModel.addChallenge(challenge: challenge)
         }
-        .popover(isPresented: $viewModel.win) {
-            SoupChallengeWin(viewModel: self.viewModel, onEndGame: {
+        .sheet(isPresented: $viewModel.win) {
+            SoupChallengeWin(viewModel: self.viewModel) {
                 self.presentationMode.wrappedValue.dismiss()
-            })
+            }
         }
         .alert(LocalizedStringKey("exitConfirmationTitle"), isPresented: $showExitConfirmation) {
             Button("❌Cancelar", role: .cancel) {}
@@ -114,16 +115,15 @@ struct SoupChallengeView: View {
         }
     }
     var startedGame: some View {
-        VStack {
-            ScrollView {
-                VStack(alignment: .center, spacing: 15) {
-                    title
-                    gameView
-                    wordsListView
-                    controls
-                }
-                .padding(.vertical)
+        ScrollView {
+            VStack(alignment: .center, spacing: 15) {
+                title
+                gameView
+                wordsListView
+                controls
+                Spacer()
             }
+            .padding(.vertical)
         }
     }
     var title: some View {
@@ -189,6 +189,7 @@ struct SoupChallengeView: View {
                 .cornerRadius(20)
             }
             .padding(5)
+            .padding(.horizontal, isIPad ? 10:0)
             .overlay{
                 if viewModel.win {
                     RoundedRectangle(cornerRadius: 10)

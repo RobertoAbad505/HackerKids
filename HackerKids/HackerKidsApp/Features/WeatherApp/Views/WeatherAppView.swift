@@ -218,7 +218,7 @@ struct WeatherAppView: View {
                 Spacer()
                 WeatherDataView(icon: "wind.circle",
                                header: "Wind speed",
-                               value: "\(viewModel.weather?.main?.feels_like ?? 0) m/s")
+                                value: "\(viewModel.weather?.wind?.speed ?? 0) m/s")
                 
             }
             HStack {

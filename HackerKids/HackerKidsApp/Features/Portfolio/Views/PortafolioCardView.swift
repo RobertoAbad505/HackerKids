@@ -29,7 +29,7 @@ struct PortafolioCardView: View {
         .padding(.leading)
         .padding(.trailing, 4)
         .rotation3DEffect(.degrees(10),axis: (x: 0, y: isPair ? 0.5:-0.5, z: 0))
-        .shadow(color: Color.white, radius: 2, x: isPair ? -2:2, y: 2)
+        .shadow(color: Color.white, radius: 0.5, x: isPair ? -2.5:2.5, y: 2.5)
     }
     var textDescription: some View {
         VStack(alignment: .leading, spacing: 15) {

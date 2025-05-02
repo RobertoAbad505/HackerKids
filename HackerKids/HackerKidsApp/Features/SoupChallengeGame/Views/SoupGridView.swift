@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SoupGridView: View {
     @ObservedObject var viewModel: SoupGridViewModel
+    let isIPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
 
     var body: some View {
         VStack {
@@ -28,7 +29,7 @@ struct SoupGridView: View {
         let columns = Array(repeating: GridItem(.flexible()), count: viewModel.gridSize)
         return VStack {
             VStack {
-                LazyVGrid(columns: columns, spacing: 0) {
+                LazyVGrid(columns: columns, spacing: isIPad ? 20:0) {
                     ForEach(0..<viewModel.gridSize, id: \.self) { row in
                         ForEach(0..<viewModel.gridSize, id: \.self) { col in
                             Button(action: {
@@ -41,7 +42,7 @@ struct SoupGridView: View {
                                     viewModel.validateSelection()
                                 }
                             }, label: {
-                                SoupLetterView(viewModel: viewModel, row: row, col: col)
+                                SoupLetterView(viewModel: viewModel, row: row, col: col, isIpad: isIPad)
                             })
                             .id("\(row)-\(col)")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)

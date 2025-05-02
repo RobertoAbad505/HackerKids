@@ -23,7 +23,7 @@ class AudioManager: ObservableObject {
         do {
             player = try AVAudioPlayer(contentsOf: url)
             player?.numberOfLoops = -1 // Repetir indefinidamente
-            player?.volume = 0.2
+            player?.volume = 0.5
             player?.prepareToPlay()
             player?.play()
             return true
@@ -39,7 +39,7 @@ class AudioManager: ObservableObject {
         }
         do {
             soundEffectPlayer = try AVAudioPlayer(contentsOf: url)
-            soundEffectPlayer?.volume = 1.0
+            soundEffectPlayer?.volume = 1
             soundEffectPlayer?.play()
         } catch {
             print("❌Error playing sound effect: \(error)")
