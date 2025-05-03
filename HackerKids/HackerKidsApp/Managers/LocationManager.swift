@@ -23,11 +23,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         manager.allowsBackgroundLocationUpdates = false
     }
     func askForpermission() {
+        print("Asking for location permission . . .")
         manager.requestWhenInUseAuthorization()
-        manager.requestLocation()
-    }
-    func startService() {
-        manager.startUpdatingLocation()
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
@@ -35,11 +32,11 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         print("Testing location; authorization: \(authorizationStatus)")
         switch authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
-            print("location permission granted; authorization: \(authorizationStatus)")
+            print("✅location permission granted; authorization: \(authorizationStatus)")
             return
         case .denied, .restricted:
             permissionDenied = true
-            print("Location permission denied; authorization: \(authorizationStatus)")
+            print("❌Location permission denied; authorization: \(authorizationStatus)")
         default:
             break
         }
@@ -48,15 +45,13 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.last
         pinLocation = LocationPin(coordinate: location!.coordinate)
-        print("Localizacion obtenida: \(location!.coordinate)")
+        print("🌐Localizacion obtenida: \(location!.coordinate)")
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Failed to find user's location: \(error.localizedDescription)")
+        print("❌Failed to find user's location: \(error.localizedDescription)")
     }
     func requestLocation() {
-        if self.authorizationStatus == .notDetermined {
-            manager.requestWhenInUseAuthorization()
-        }
+        print("📍 Requesting location update...")
         manager.requestLocation()
     }
 }

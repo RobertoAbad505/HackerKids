@@ -22,10 +22,13 @@ struct PortafolioView: View {
     @ObservedObject var weatherViewModel: WeatherViewModel = .init()
     
     
+    @ObservedObject var localizationManager: LocationManager = .init()
+    
     //background variables
     @State private var scrollOffset: CGFloat = 0
     // Colores para la gradiente
     let colors: [Color] = [.indigo, .white, .orange, .red, .blue, .green]
+    let isIpad = UIDevice.current.userInterfaceIdiom == .pad
     let onNavigate: () -> Void
     
     var body: some View {
@@ -140,6 +143,7 @@ struct PortafolioView: View {
                     }
                 })
             }
+//            .padding(.horizontal, isIpad ? 60:0)
         }
         .background(
             NavigationLink(
@@ -170,7 +174,7 @@ struct PortafolioView: View {
         case .soupChallenge:
             SoupChallengeView(onExit: {})
         case .weather:
-            WeatherAppView(viewModel: .init(), locationManager: .init())
+            WeatherAppView(viewModel: self.weatherViewModel, locationManager: self.localizationManager)
         }
     }
     // Interpola colores según el offset
@@ -215,8 +219,3 @@ struct PortafolioView: View {
     }
 }
 
-#Preview {
-    PortafolioView(onNavigate: {
-        
-    })
-}

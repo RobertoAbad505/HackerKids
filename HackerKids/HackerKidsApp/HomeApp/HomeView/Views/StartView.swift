@@ -48,6 +48,7 @@ struct StartView: View {
                         contactoView
                         portfolioView
                         aboutMe
+                        resummeView
                         Spacer()
                         versionView
                     }
@@ -66,7 +67,7 @@ struct StartView: View {
                     .ignoresSafeArea()
                 )
             }
-            .padding(.vertical)
+            .padding()
             .background(colorScheme == .dark ? .black : .white)
             .edgesIgnoringSafeArea(.all)
             .navigationBarHidden(true)
@@ -151,7 +152,7 @@ struct StartView: View {
                 .ignoresSafeArea()
             )
             .clipShape(Circle())
-            .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
+            .shadow(color: Color.black.opacity(0.8), radius: 10, x: 5, y: 5)
             .rotation3DEffect(
                 rotationAngle,
                 axis: (x: 0, y: 1, z: 0) // Rotación en el eje Y para efecto de moneda
@@ -286,6 +287,37 @@ struct StartView: View {
         }
         .padding(20)
         .padding(.bottom, 20)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 45))
+        .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
+    }
+    var resummeView: some View {
+        VStack(alignment: .center) {
+            Text("start.resume.title")
+                .font(.title2)
+                .fontWeight(.bold)
+            Button(action: {
+                aboutViewModel.getResume()
+            }, label: {
+                HStack {
+                    Spacer()
+                    Image(systemName: "link").font(.system(size: 28))
+                    Text("start.resume.option")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .fontDesign(.monospaced)
+                    Spacer()
+                }
+                .foregroundStyle(.white) // Color dinámico
+                .padding()
+                .background(Color.clear)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke((.white), lineWidth: 3)
+                )
+            })
+        }
+        .padding(20)
         .background(.ultraThinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 45))
         .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)

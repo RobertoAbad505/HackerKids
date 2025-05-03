@@ -100,5 +100,17 @@ class AboutAppViewModel: ObservableObject {
             print("WhatsApp is not installed on this device.")
         }
     }
+    func getResume() {
+        // Convertir el string a una URL
+        guard let fileUrl = URL(string: "https://docs.google.com/document/d/1UiXzIkFCzOi9-d6vGOXefDG4-DCzOIRU1p3BCxaBy6M/edit?usp=sharing") else {
+            print("Invalid resume URL")
+            return
+        }
+
+        // Verificar si el dispositivo puede abrir la URL
+        if UIApplication.shared.canOpenURL(fileUrl) {
+            UIApplication.shared.open(fileUrl, options: [:], completionHandler: nil)
+        }
+    }
     
 }

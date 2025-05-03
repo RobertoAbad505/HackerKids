@@ -9,13 +9,14 @@ import SwiftUI
 
 struct CodeBlockView: View {
     var code: String = ""
+    var size: CGFloat = 14
     var body: some View {
         VStack {
             ZStack {
                 HStack {Spacer()}
                 Spacer()
                 Text(attributedString(for: code)) // Display the formatted code
-                    .font(.system(.body, design: .monospaced)) // Use monospaced font
+                    .font(.system(size: size, design: .monospaced)) // Use monospaced font
                     .padding()
                     .background(Color.black) // Dark background for the code block
                     .cornerRadius(8) // Rounded corners

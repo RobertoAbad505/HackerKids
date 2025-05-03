@@ -354,17 +354,6 @@
     "🗡️ Battle moves" : {
 
     },
-    "🗡️ Pokemon moves" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "🗡️ Battle moves"
-          }
-        }
-      }
-    },
     "🗺️ Weather Map" : {
       "localizations" : {
         "es-419" : {
@@ -426,21 +415,27 @@
         }
       }
     },
-    "Cerrar" : {
+    "Challenge your friends!" : {
+
+    },
+    "Challenger" : {
+
+    },
+    "close.label" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Close"
           }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Cerrar"
+          }
         }
       }
-    },
-    "Challenge your friends!" : {
-
-    },
-    "Challenger" : {
-
     },
     "Contact me:" : {
 
@@ -523,22 +518,6 @@
     "High scores" : {
 
     },
-    "Inicie la app para permitir el acceso a su ubicación." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start the app to allow GPS access."
-          }
-        },
-        "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inicie la app para permitir el acceso a su ubicación."
-          }
-        }
-      }
-    },
     "iOS Dev • SwiftUI • GraphQL • APIs integrations • Clean Architecture" : {
 
     },
@@ -606,9 +585,6 @@
     "Origin location: \n%@" : {
 
     },
-    "Permiso de ubicación denegado" : {
-
-    },
     "Player 1 name" : {
 
     },
@@ -630,16 +606,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "#%lld"
-          }
-        }
-      }
-    },
-    "Por favor activa la ubicación en configuración para usar esta funcionalidad." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please enable localization permission for this app from app settings to use this feature."
           }
         }
       }
@@ -751,6 +717,22 @@
     "Select difficulty" : {
 
     },
+    "settings.go.label" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to settings"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir a configuración"
+          }
+        }
+      }
+    },
     "Shiny" : {
 
     },
@@ -772,6 +754,38 @@
     },
     "Start presence!" : {
 
+    },
+    "start.resume.option" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open resume"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Mi currículum"
+          }
+        }
+      }
+    },
+    "start.resume.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "📄 My resume"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "ver currículum"
+          }
+        }
+      }
     },
     "startview.portfolio.description" : {
       "localizations" : {
@@ -835,6 +849,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search weather conditions from your current location."
+          }
+        }
+      }
+    },
+    "weather.alert.weather.permision.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enable localization permission for this app from app settings to use this feature."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor activa la ubicación en configuración para usar esta funcionalidad."
+          }
+        }
+      }
+    },
+    "weather.alert.weather.permision.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location permission was denied"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permiso de ubicación denegado."
+          }
+        }
+      }
+    },
+    "wheater.api.error.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error fetching from API"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Error intentando conectar con la API"
+          }
+        }
+      }
+    },
+    "wheater.api.error.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API Call error"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Error en la carga de datos"
           }
         }
       }

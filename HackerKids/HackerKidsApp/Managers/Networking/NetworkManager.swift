@@ -27,6 +27,7 @@ class NetworkManager: NetworkManagerProtocol {
                 .eraseToAnyPublisher()
         }
         return URLSession.shared.dataTaskPublisher(for: url)
+            .timeout(.seconds(10), scheduler: DispatchQueue.main, customError: { URLError(.timedOut) }) // ⏱ Timeout explícito
             .tryMap { data, response in
                 guard let httpResponse = response as? HTTPURLResponse else {
                     throw NetworkError.unknown(underlying: URLError(.badServerResponse))
@@ -40,14 +41,22 @@ class NetworkManager: NetworkManagerProtocol {
             }
             .decode(type: T.self, decoder: decoder)
             .mapError { error in
+                // 🎯 Manejo de errores URLError
                 if let urlError = error as? URLError {
-                    if urlError.code == .notConnectedToInternet {
+                    switch urlError.code {
+                    case .notConnectedToInternet:
                         return NetworkError.noInternetConnection
+                    case .timedOut:
+                        return NetworkError.timeout
+                    default:
+                        return NetworkError.unknown(underlying: urlError)
                     }
                 }
+                // 🎯 Errores de decodificación
                 if let decodingError = error as? DecodingError {
                     return NetworkError.decodingError(underlying: decodingError)
                 }
+                // 🎯 Otro error
                 return NetworkError.unknown(underlying: error)
             }
             .eraseToAnyPublisher()

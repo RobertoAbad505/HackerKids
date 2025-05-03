@@ -14,6 +14,7 @@ class WeatherViewModel: ObservableObject {
     private var services = WeatherServices()
     var cancellables: Set<AnyCancellable> = .init()
     @Published var weather: WeatherModel?
+    @Published var loading: Bool = false
     @Published var errorFetch: Bool = false
     @Published var iconName: String = ""
     @Published var weatherStatus: WeatherState = .dayTime
@@ -37,12 +38,12 @@ class WeatherViewModel: ObservableObject {
             .sink(receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .failure(let error):
-                    print("Error: \(error)")
+                    print("Error: \(error.errorDescription)")
                     self?.errorFetch = true
                 case .finished:
-                    self?.startedFeature = true
                     return
                 }
+                self?.loading = false
             }, receiveValue: { [weak self] model in
                 self?.processResponse(model)
             })
@@ -54,6 +55,8 @@ class WeatherViewModel: ObservableObject {
             self.lastReportDateTime = Date(timeIntervalSince1970: TimeInterval(intTime))
         }
         self.iconName = getIconName()
+        self.startedFeature = true
+        print("Started feature!")
     }
     func getIconName() -> String {
         guard let main = weather?.weather?.first?.main else {

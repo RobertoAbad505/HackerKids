@@ -38,6 +38,7 @@ struct PokemonDetailView: View {
                 spritesScrollView
                 pokemonStats
                 pokemonMoves
+                inspectResponseView
                 disclosureText
             }
             .edgesIgnoringSafeArea(.top)
@@ -67,7 +68,7 @@ struct PokemonDetailView: View {
         .foregroundStyle(.white)
     }
     var disclosureText: some View {
-        HStack(alignment: .bottom, spacing: 2) {
+        VStack(alignment: .leading, spacing: 2) {
             Text("All data is fetched from an open source API provided by")
                 .font(.footnote)
                 .foregroundColor(.white)
@@ -371,7 +372,7 @@ struct PokemonDetailView: View {
             .padding(.vertical, 20)
             .padding(.horizontal)
             if inspectResponse {
-                CodeBlockView(code: viewModel.readResponse())
+                CodeBlockView(code: viewModel.readResponse(), size: 12)
             }
         }
     }
@@ -399,6 +400,7 @@ struct PokemonDetailView: View {
         case "water": return .blue.opacity(0.7)
         case "ghost": return .cyan
         case "dragon": return .indigo
+        case "bug": return .green
         default: return .gray
         }
     }

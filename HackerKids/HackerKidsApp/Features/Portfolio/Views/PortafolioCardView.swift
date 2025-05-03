@@ -15,21 +15,23 @@ struct PortafolioCardView: View {
         self.isPair = pair
     }
     var body: some View {
-        HStack(alignment: .center, spacing: 0) {
-            if isPair {
-                iconsView
-                textDescription
-            } else {
-                textDescription
-                iconsView
+        VStack {
+            HStack(alignment: .center, spacing: 0) {
+                if isPair {
+                    iconsView
+                    textDescription
+                } else {
+                    textDescription
+                    iconsView
+                }
             }
+            .frame(maxWidth: .infinity)
+            .leftRoundedBorder(radius: 20, borderStyle: .ultraThinMaterial, corners: [.allCorners])
+            .padding(.leading)
+            .padding(.trailing, 4)
         }
-        .frame(maxWidth: .infinity)
-        .leftRoundedBorder(radius: 20, borderStyle: .ultraThinMaterial, corners: [.allCorners])
-        .padding(.leading)
-        .padding(.trailing, 4)
         .rotation3DEffect(.degrees(10),axis: (x: 0, y: isPair ? 0.5:-0.5, z: 0))
-        .shadow(color: Color.white, radius: 0.5, x: isPair ? -2.5:2.5, y: 2.5)
+        .shadow(color: Color.white, radius: 1, x: isPair ? -3:3, y: 3)
     }
     var textDescription: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -81,8 +83,8 @@ struct PortafolioCardView: View {
         }
         .foregroundStyle(.ultraThinMaterial)
         .padding(.vertical, 20)
-        .font(.system(size: 40))
-        .frame(maxWidth: 125, maxHeight: .infinity)
+        .font(.system(size: 38))
+        .frame(maxWidth: 120, maxHeight: .infinity)
     }
 }
 

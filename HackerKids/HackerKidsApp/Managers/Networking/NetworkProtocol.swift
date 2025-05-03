@@ -16,8 +16,9 @@ extension NetworkManagerProtocol {
     }
 }
 enum NetworkError: Error, LocalizedError {
-    case invalidURL
     case noInternetConnection
+    case timeout
+    case invalidURL
     case badResponse(statusCode: Int)
     case decodingError(underlying: Error)
     case unknown(underlying: Error)
@@ -34,6 +35,8 @@ enum NetworkError: Error, LocalizedError {
             return "Failed to decode the response: \(underlying.localizedDescription)"
         case .unknown(let underlying):
             return "An unknown error occurred: \(underlying.localizedDescription)"
+        case .timeout:
+            return "Network request timed out."
         }
     }
 }

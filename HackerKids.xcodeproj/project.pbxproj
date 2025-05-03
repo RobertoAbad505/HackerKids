@@ -49,7 +49,7 @@
 		6F059D902DA9DC76008C5718 /* Exceptions for "HackerKids" folder in "HackerKids_DEV" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"/Localized: Info.plist",
+				Info.plist,
 			);
 			target = 6F059D212DA9D86C008C5718 /* HackerKids_DEV */;
 		};
@@ -81,13 +81,14 @@
 		6FD517092CA5131F0052F1D3 /* Exceptions for "HackerKids" folder in "HackerKids" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"/Localized: Info.plist",
+				Info.plist,
 			);
 			target = 6FD516E22CA5131D0052F1D3 /* HackerKids */;
 		};
 		6FE0A73A2D50174300E1C917 /* Exceptions for "HackerKids" folder in "HackerKidsTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"/Localized: InfoPlist.strings",
 				"HackerKidsApp/Extensions/Double+FormatString.swift",
 				"HackerKidsApp/Extensions/View+Extensions.swift",
 				HackerKidsApp/Features/Login/Models/PlayerUser.swift,
@@ -548,7 +549,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertsoft.HackerKids;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -589,7 +590,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertsoft.HackerKids;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

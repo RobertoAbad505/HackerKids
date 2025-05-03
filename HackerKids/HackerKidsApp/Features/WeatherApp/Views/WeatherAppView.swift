@@ -79,8 +79,8 @@ struct WeatherAppView: View {
     
     var body: some View {
         VStack {
-            if !viewModel.startedFeature, !viewModel.startedFeature  {
-                WeatherInitialView(locationManager: self.locationManager)
+            if !viewModel.startedFeature  {
+                WeatherInitialView(viewModel: viewModel, locationManager: self.locationManager)
             } else if let location = locationManager.location {
                 ScrollViewReader { proxy in
                     ScrollView {
@@ -101,20 +101,14 @@ struct WeatherAppView: View {
             }
         }
         .background(getBackgroundGradient(viewModel.weatherStatus))
-        .onChange(of: locationManager.location) { newLocation in
-            guard let coordinate = newLocation?.coordinate else {
-                return
-            }
-            if !hasFetched {
-                hasFetched = true
-                withAnimation {
-                    viewModel.fetchData(using: coordinate)
-                }
-            }
-            if refreshButton {
-                withAnimation {
-                    viewModel.fetchData(using: coordinate)
-                }
+        .onChange(of: locationManager.authorizationStatus) { value in
+            switch value {
+            case .authorizedAlways, .authorizedWhenInUse:
+                locationManager.requestLocation()
+            case .notDetermined:
+                locationManager.askForpermission()
+            @unknown default:
+                break
             }
         }
         .onChange(of: locationManager.permissionDenied) { denied in
@@ -122,20 +116,22 @@ struct WeatherAppView: View {
                 showErrorAlert = true
             }
         }
-        .alert("Permiso de ubicación denegado", isPresented: $showErrorAlert) {
-            Button("Cerrar", role: .cancel) {
-                dismiss()
-            }
-        } message: {
-            Text("Por favor activa la ubicación en configuración para usar esta funcionalidad.")
-        }
-        .onAppear {
-            print("Fetching weather data...")
+        .alert(isPresented: $showErrorAlert) {
+            Alert(title: Text(LocalizedStringKey("weather.alert.weather.permision.title")),
+                  message: Text(LocalizedStringKey("weather.alert.weather.permision.message")),
+                  primaryButton: .cancel(Text(LocalizedStringKey("close.label")), action: { dismiss()}),
+                  secondaryButton: .default(Text(LocalizedStringKey("settings.go.label")), action: {
+                if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(appSettings)
+                }
+            }))
         }
         .onDisappear {
-            viewModel.startedFeature = false
-            hasFetched = false
-            locationManager.location = nil
+            if viewModel.weather == nil {
+                viewModel.startedFeature = false
+                hasFetched = false
+            }
+            viewModel.loading = false
         }
     }
     var weatherView: some View {
@@ -237,16 +233,19 @@ struct WeatherAppView: View {
         }
         .foregroundStyle(.white)
         .padding()
-        .padding(.horizontal)
         .background(.ultraThinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 30))
         .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
     }
     var coordinatesView: some View {
         VStack(alignment: .center, spacing: 10) {
-            Text("📍GPS Coordinates")
-                .font(.title2)
-                .fontWeight(.bold)
+            HStack {
+                Spacer()
+                Text("📍GPS Coordinates")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Spacer()
+            }
             HStack {
                 VStack {
                     Text("🌐 Latitud")
@@ -256,7 +255,6 @@ struct WeatherAppView: View {
                         .font(.title3)
                         .fontWeight(.bold)
                 }
-                Spacer()
                 VStack {
                     Text("🌐 Longitude")
                         .font(.headline)
@@ -277,9 +275,12 @@ struct WeatherAppView: View {
     }
     var reloadDataButton: some View {
         Button(action: {
+            locationManager.requestLocation()
             withAnimation {
-                refreshButton = true
-                locationManager.requestLocation()
+                if let coordinate = locationManager.location?.coordinate {
+                    refreshButton = true
+                    viewModel.fetchData(using: coordinate)
+                }
                 scrollId = "top"
             }
         }, label: {
@@ -399,7 +400,7 @@ struct WeatherAppView: View {
             .padding(.vertical, 20)
             .padding(.horizontal)
             if inspectResponse {
-                CodeBlockView(code: viewModel.readResponse())
+                CodeBlockView(code: viewModel.readResponse(), size: 15)
             }
         }
     }
