@@ -74,6 +74,7 @@ struct StartView: View {
             .onAppear {
                 aboutViewModel.fetchGitHubUser()
 //                SessionManager.shared.fetchLastSession(modelContext)
+                MyiOSCard().writeLocal()
             }
             .onChange(of: aboutViewModel.isLoading) { user in
                 self.gitHubUser = aboutViewModel.gitHubUser
