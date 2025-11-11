@@ -11,7 +11,7 @@ import Kingfisher
 
 struct AboutAppView: View {
     @EnvironmentObject var appState: AppState
-    @StateObject var audioManager: AudioManager = AudioManager()
+    @EnvironmentObject var audioManager: AudioManager
     @State private var result: Result<MessageComposeResult, Error>? = nil
     
     @State private var rotationAngle: Angle = .degrees(0) // Ángulo de rotación

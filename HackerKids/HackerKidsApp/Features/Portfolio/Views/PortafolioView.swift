@@ -93,15 +93,15 @@ struct PortafolioView: View {
     }
     var header: some View {
         HStack(alignment: .top) {
-            Button(action: {
-                self.presentationMode.wrappedValue.dismiss()
-            }, label: {
-                Image(systemName: "chevron.backward")
-                    .foregroundColor(.white)
-                    .font(.system(size: 24))
-                    .fontWeight(.bold)
-            })
-            .padding(.leading)
+//            Button(action: {
+//                self.presentationMode.wrappedValue.dismiss()
+//            }, label: {
+//                Image(systemName: "chevron.backward")
+//                    .foregroundColor(.white)
+//                    .font(.system(size: 24))
+//                    .fontWeight(.bold)
+//            })
+//            .padding(.leading)
             Spacer()
             Text("🍎💼 iOS Portafolio")
                 .font(.title)
@@ -170,6 +170,8 @@ struct PortafolioView: View {
             WeatherAppView()
         case .movies:
             MovieBrowserView()
+        case .flipCoin:
+            FlipCoinView()
         }
     }
     // Interpola colores según el offset

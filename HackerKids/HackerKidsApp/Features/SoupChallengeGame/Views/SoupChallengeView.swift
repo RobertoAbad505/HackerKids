@@ -116,7 +116,7 @@ struct SoupChallengeView: View {
     }
     var startedGame: some View {
         ScrollView {
-            VStack(alignment: .center, spacing: 15) {
+            VStack(alignment: .center, spacing: 10) {
                 title
                 gameView
                 wordsListView

@@ -23,8 +23,13 @@ struct HomeViewContainer: View {
                     }
                 PortafolioView()
                     .tabItem {
-                        Image(systemName: "house")
+                        Image(systemName: "circle.grid.3x3.circle")
                         Text("Demos!")
+                    }
+                PortafolioView()
+                    .tabItem {
+                        Image(systemName: "person.circle")
+                        Text("contact me")
                     }
                 
                 AboutAppView()

@@ -13,6 +13,7 @@ struct FeatureModel: Identifiable {
     let description: String
     let lclstring: LocalizedStringResource
     let type: Feature
+    let icon: String
 }
 enum Feature: String, CaseIterable {
     case pokemon
@@ -20,4 +21,5 @@ enum Feature: String, CaseIterable {
     case soupChallenge
     case weather
     case movies
+    case flipCoin
 }

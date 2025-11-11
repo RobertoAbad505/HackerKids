@@ -11,15 +11,20 @@ import SwiftUI
 import Kingfisher
 
 struct StartView: View {
+    //Environment objects
+    @EnvironmentObject var audioManager: AudioManager
+    @EnvironmentObject var appState: AppState
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var appState: AppState
+    
     //SHEET PRESENTATION FLAGS
     @State var infoView: Bool = false
     @State var loginView: Bool = false
     @State private var result: Result<MessageComposeResult, Error>? = nil
-    @StateObject var audioManager: AudioManager = AudioManager()
     @State var contactView: Bool = false
+    
+    //Presentation
+    @State var firstRotation: Bool = false
     
     //Demos controls
     @State var selectedFeature: FeatureModel?
@@ -30,8 +35,13 @@ struct StartView: View {
     // Colores para la gradiente (personaliza según tu estilo)
     let colors: [Color] = [.blue,
                            .black,
-                           .white,
+                           .orange,
+                           .black,
                            .green,
+                           .white,
+                           .red,
+                           .white,
+                           .yellow,
                            .white,
                            .purple]
     
@@ -43,7 +53,7 @@ struct StartView: View {
         NavigationView {
             VStack(spacing: 20) {
                 ScrollView {
-                    VStack(alignment: .center, spacing: 40) {
+                    VStack(alignment: .center, spacing: 30) {
                         titleView
                         gitHubPicture
                         greetings
@@ -56,7 +66,6 @@ struct StartView: View {
                         versionView
                     }
                     .padding(.top, 48)
-                    .padding(.horizontal)
                     .modifier(ScrollViewOffset(offset: $scrollOffset))
                 }
                 .coordinateSpace(name: "scroll") // Necesario para el GeometryReader
@@ -70,17 +79,17 @@ struct StartView: View {
                     .ignoresSafeArea()
                 )
             }
-            .padding()
+            .padding(.vertical)
             .background(colorScheme == .dark ? .black : .white)
             .edgesIgnoringSafeArea(.all)
             .navigationBarHidden(true)
             .onAppear {
+                selectedFeature = nil
+                navigate = false
                 self.appState.aboutViewModel.fetchGitHubUser()
 //                SessionManager.shared.fetchLastSession(modelContext)
                 MyiOSCard().writeLocal()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
-                    self.rotate()
-                }
+                if !firstRotation { DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) { self.rotate(); self.firstRotation = true }}
             }
             .sheet(isPresented: $appState.aboutViewModel.showMailView) {
                 MailView(
@@ -107,19 +116,21 @@ struct StartView: View {
                 .foregroundColor(.white)
             Spacer()
             //settings button
-            Button(action: {
-                //settings toggle
-            }, label: {
+            Menu {
+                Button("Option 1", action: {})
+                Menu("Language") {
+                    Button("English🇺🇸", action: {})
+                    Button("Spanish🇲🇽", action: {})
+                }
+            } label: {
                 //gear icon
                 Image(systemName: "gearshape.fill")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundStyle(Color(colorScheme != .dark ? .black : .white))
-            })
+            }
         }
-    }
-    func getLanguageID() -> String {
-        return "Lang \(Locale.current.languageCode?.uppercased() ?? "EN")"
+        .padding(.horizontal)
     }
     
     var gitHubPicture: some View {
@@ -161,7 +172,7 @@ struct StartView: View {
         }
     }
     func rotate() {
-        audioManager.playSoundEffect(named: "coinFx")
+//        audioManager.playSoundEffect(named: "coinFx")
         // Animación para girar 3 veces (1080 grados) en 1.5 segundos
         withAnimation(.bouncy(duration: 1.2)) {
             rotationAngle = .degrees(rotationAngle.degrees + 1080)
@@ -178,16 +189,14 @@ struct StartView: View {
                 .fontWeight(.bold)
             tryRandomDemo
         }
-        .padding(20)
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 45))
-        .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
     }
     var tryRandomDemo: some View {
         HStack {
             Spacer()
             Button(action: {
-                
+                audioManager.playSoundEffect(named: "coinFx")
+                selectedFeature = appState.demosViewModel.features.randomElement()!
+                navigate = true
             }, label: {
                 HStack {
                     Text("🔥Try a Demo!")
@@ -196,19 +205,22 @@ struct StartView: View {
                 }
             })
             .padding()
-            .padding(.horizontal)
+            .padding(.horizontal, 30)
             .foregroundStyle(colorScheme == .dark ? .white : .primary)
-            .background(Color.blue)
+            .background(.ultraThinMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 20))
-            .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
+            .shadow(color: Color.black, radius: 10, x: 10, y: 10)
             Spacer()
         }
+        .padding(.top, 10)
     }
     var demoSlideShow: some View {
         ScrollView(.horizontal) {
-            LazyHGrid(rows: [GridItem(.flexible())], spacing: 10) {
+            LazyHGrid(rows: [GridItem(.flexible())], spacing: 0) {
                 ForEach(Array(appState.demosViewModel.features.enumerated()), id: \.offset) { index, feature in
                     DemoItemView(feature: feature, index % 2 == 0)
+                        .padding()
+                        .padding(.bottom)
                     .onTapGesture(perform: {
                         audioManager.playSelectionSound()
                         // Delay para permitir que el sonido suene antes de navegar
@@ -253,62 +265,66 @@ struct StartView: View {
             WeatherAppView()
         case .movies:
             MovieBrowserView()
+        case .flipCoin:
+            FlipCoinView()
         }
     }
     var contactoView: some View {
-        VStack(alignment: .center) {
-            Text("📲 Leave a message! ;)")
-                .font(.title3)
-                .fontWeight(.bold)
-                .padding(.bottom)
-            HStack {
-                getButton(.linkedIn)
-                getButton(.github)
-                getButton(.whatsApp)
-                getButton(.ig)
-            }
-            .padding(.bottom)
-            HStack {
-                Spacer()
-                getButton(.mail)
-                getButton(.phone)
-                getButton(.text)
-                Spacer()
-            }
-            if FeatureManager.scheduleACall {
-                Text("or")
+        VStack {
+            VStack(alignment: .center) {
+                Text("📲 Leave a message! ;)")
                     .font(.title3)
                     .fontWeight(.bold)
-                    .frame(alignment: .center)
+                    .padding(.bottom)
                 HStack {
-                    Button(action: {
-                        audioManager.playSelectionSound()
-                        UIApplication.shared.open(URL(string: "https://calendly.com/roberto-rmzabad/30min")!)
-                    }, label: {
-                        HStack {
-                            Spacer()
-                            Text("🗓️📞 Schedule a call")
-                                .font(.callout)
-                                .fontWeight(.bold)
-                                .fontDesign(.monospaced)
-                                .foregroundStyle(.white)
-                            Spacer()
-                        }
-                        .padding()
-                        .background(Color.clear)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke((.white), lineWidth: 3)
-                        )
-                    })
+                    getButton(.linkedIn)
+                    getButton(.github)
+                    getButton(.whatsApp)
+                    getButton(.ig)
+                }
+                .padding(.bottom)
+                HStack {
+                    Spacer()
+                    getButton(.mail)
+                    getButton(.phone)
+                    getButton(.text)
+                    Spacer()
+                }
+                if FeatureManager.scheduleACall {
+                    Text("or")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .frame(alignment: .center)
+                    HStack {
+                        Button(action: {
+                            audioManager.playSelectionSound()
+                            UIApplication.shared.open(URL(string: "https://calendly.com/roberto-rmzabad/30min")!)
+                        }, label: {
+                            HStack {
+                                Spacer()
+                                Text("🗓️📞 Schedule a call")
+                                    .font(.callout)
+                                    .fontWeight(.bold)
+                                    .fontDesign(.monospaced)
+                                    .foregroundStyle(.white)
+                                Spacer()
+                            }
+                            .padding()
+                            .background(Color.clear)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke((.white), lineWidth: 3)
+                            )
+                        })
+                    }
                 }
             }
+            .padding(30)
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 45))
+            .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
         }
-        .padding(30)
-        .padding(.vertical)
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 45))
-        .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
+        .padding(.horizontal)
     }
     var portfolioView: some View {
         VStack(alignment: .center, spacing: 25) {
@@ -408,7 +424,7 @@ struct StartView: View {
     }
     var versionView: some View {
         HStack {
-            Text(getLanguageID())
+            Text("Lang \(Locale.current.languageCode?.uppercased() ?? "EN")")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .monospaced()
@@ -420,7 +436,7 @@ struct StartView: View {
     }
     // Interpola colores según el offset
     private var interpolatedColors: [Color] {
-        let progress = scrollOffset / 900 // Ajusta el divisor para velocidad de cambio
+        let progress = scrollOffset / 1500 // Ajusta el divisor para velocidad de cambio
         let colorCount = CGFloat(colors.count - 1)
         let index = min(colorCount - 1, max(0, progress * colorCount))
         
@@ -429,14 +445,14 @@ struct StartView: View {
         let blend = index - CGFloat(currentIndex)
         
         return [
-            blendColor(colors[currentIndex], colors[nextIndex], blend: blend),
-            blendColor(colors[nextIndex], colors[currentIndex], blend: blend)
+            Color.blendColor(colors[currentIndex], colors[nextIndex], blend: blend),
+            Color.blendColor(colors[nextIndex], colors[currentIndex], blend: blend)
         ]
     }
     // Interpola colores según el offset
     private var pictureColors: [Color] {
-        let colors: [Color] = [.white, .blue, .white, .black, .white, .blue]
-        let progress = scrollOffset / 550 // Ajusta el divisor para velocidad de cambio
+//        let colors: [Color] = [.white, .blue, .white, .black, .white, .blue]
+        let progress = scrollOffset / 1000 // Ajusta el divisor para velocidad de cambio
         let colorCount = CGFloat(colors.count - 1)
         let index = min(colorCount - 1, max(0, progress * colorCount))
         
@@ -445,8 +461,8 @@ struct StartView: View {
         let blend = index - CGFloat(currentIndex)
         
         return [
-            blendColor(colors[currentIndex], colors[nextIndex], blend: blend),
-            blendColor(colors[nextIndex], colors[currentIndex], blend: blend)
+            Color.blendColor(colors[currentIndex], colors[nextIndex], blend: blend),
+            Color.blendColor(colors[nextIndex], colors[currentIndex], blend: blend)
         ]
     }
     
@@ -458,23 +474,7 @@ struct StartView: View {
     private var endPoint: UnitPoint {
         UnitPoint(x: scrollOffset * 0.0005 + 0.5, y: 1)
     }
-    // Función para mezclar colores
-    private func blendColor(_ color1: Color, _ color2: Color, blend: CGFloat) -> Color {
-        let uiColor1 = UIColor(color1)
-        let uiColor2 = UIColor(color2)
-        
-        var (r1, g1, b1, a1): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
-        var (r2, g2, b2, a2): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
-        
-        uiColor1.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
-        uiColor2.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
-        
-        return Color(
-            red: r1 + (r2 - r1) * blend,
-            green: g1 + (g2 - g1) * blend,
-            blue: b1 + (b2 - b1) * blend
-        )
-    }
+    
     func getButton(_ source: ContactSource) -> some View {
         var img = Image("igIcon")
         var color: Color = .pink

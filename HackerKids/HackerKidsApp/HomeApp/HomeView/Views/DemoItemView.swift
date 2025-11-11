@@ -16,22 +16,19 @@ struct DemoItemView: View {
     }
     var body: some View {
         VStack {
-            HStack(alignment: .center, spacing: 0) {
-                if isPair {
-                    iconsView
-                    textDescription
-                } else {
-                    textDescription
-                    iconsView
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .leftRoundedBorder(radius: 20, borderStyle: .ultraThinMaterial, corners: [.allCorners])
-            .padding(.leading)
-            .padding(.trailing, 4)
+            Text(feature.icon)
+                .font(Font.system(size: 60, weight: .bold))
+            Text(feature.name)
+                .font(.system(size: 12))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
-//        .rotation3DEffect(.degrees(10),axis: (x: 0, y: isPair ? 0.5:-0.5, z: 0))
-//        .shadow(color: Color.white, radius: 1, x: isPair ? -3:3, y: 3)
+        .padding()
+        .padding(.horizontal)
+        .frame(minWidth: 150, maxWidth: 180)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: Color.black, radius: 10, x: 10, y: 10)
     }
     var textDescription: some View {
         VStack(alignment: .leading, spacing: 5) {
@@ -87,4 +84,12 @@ struct DemoItemView: View {
         .padding(.vertical, 30)
         .font(.system(size: 30))
     }
+}
+#Preview {
+    DemoItemView(feature: .init(id: 1,
+                                      name: "Prueba",
+                                      description: "Prueba",
+                                      lclstring: LocalizedStringResource("Prueba"),
+                                      type: .pokemon,
+                                      icon: "👽"))
 }

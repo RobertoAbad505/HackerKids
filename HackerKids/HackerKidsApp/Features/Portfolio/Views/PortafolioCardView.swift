@@ -89,5 +89,10 @@ struct PortafolioCardView: View {
 }
 
 #Preview {
-    PortafolioCardView(feature: .init(id: 1, name: "Prueba", description: "Prueba", lclstring: LocalizedStringResource("Prueba"), type: .pokemon))
+    PortafolioCardView(feature: .init(id: 1,
+                                      name: "Prueba",
+                                      description: "Prueba",
+                                      lclstring: LocalizedStringResource("Prueba"),
+                                      type: .pokemon,
+                                      icon: "👽"))
 }

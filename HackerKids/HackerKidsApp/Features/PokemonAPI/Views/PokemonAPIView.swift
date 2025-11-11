@@ -28,7 +28,7 @@ struct PokemonAPIView: View {
             .task {
                 print("🚀Initial task launched . . . !")
                 if self.backgroundMusic {
-//                    self.backgroundMusic = audioManager.playBackgroundMusic(named: backgrounMusicName)
+                    self.backgroundMusic = audioManager.playBackgroundMusic(named: backgrounMusicName)
                 }
                 if appState.pokemonViewModel.pokemonList.isEmpty {
                     appState.pokemonViewModel.fetchPokedexPage()
