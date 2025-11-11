@@ -8,19 +8,13 @@
 import SwiftUI
 
 struct PortafolioView: View {
-    @ObservedObject var viewModel: PortfolioViewModel = .init()
+    @EnvironmentObject var appState: AppState
     @Environment(\.presentationMode) private var presentationMode
     @State var selectedFeature: FeatureModel?
     @State var navigate: Bool = false
     
     //Managers
-    @State var audioManager: AudioManager = .init()
-    
-    //viewModels
-    @ObservedObject var pokemonViewModel: PokemonApiViewModel = .init()
-    @ObservedObject var ricknMortyViewModel: RickAndMortyViewModel = .init()
-    @ObservedObject var weatherViewModel: WeatherViewModel = .init()
-    
+    @EnvironmentObject var audioManager: AudioManager  
     
     @ObservedObject var localizationManager: LocationManager = .init()
     
@@ -29,7 +23,6 @@ struct PortafolioView: View {
     // Colores para la gradiente
     let colors: [Color] = [.indigo, .white, .orange, .red, .blue, .green]
     let isIpad = UIDevice.current.userInterfaceIdiom == .pad
-    let onNavigate: () -> Void
     
     var body: some View {
         VStack {
@@ -77,7 +70,7 @@ struct PortafolioView: View {
                 .foregroundColor(.white)
                 .padding(.horizontal)
             Button(action: {
-                onNavigate()
+                appState.aboutViewModel.openUrl(.github)
             }, label: {
                 HStack {
                     Spacer()
@@ -132,7 +125,7 @@ struct PortafolioView: View {
     }
     var listView: some View {
         LazyVGrid(columns: [GridItem(.flexible())], spacing: 25) {
-            ForEach(Array(viewModel.features.enumerated()), id: \.offset) { index, feature in
+            ForEach(Array(appState.demosViewModel.features.enumerated()), id: \.offset) { index, feature in
                 PortafolioCardView(feature: feature, index % 2 == 0)
                 .onTapGesture(perform: {
                     audioManager.playSelectionSound()
@@ -168,13 +161,15 @@ struct PortafolioView: View {
     func destinationView(for feature: FeatureModel) -> some View {
         switch feature.type {
         case .pokemon:
-            PokemonAPIView(viewModel: self.pokemonViewModel)
+            PokemonAPIView()
         case .rickAndMorty:
-            RickAndMortyHome(viewModel: self.ricknMortyViewModel)
+            RickAndMortyHome()
         case .soupChallenge:
             SoupChallengeView(onExit: {})
         case .weather:
-            WeatherAppView(viewModel: self.weatherViewModel, locationManager: self.localizationManager)
+            WeatherAppView()
+        case .movies:
+            MovieBrowserView()
         }
     }
     // Interpola colores según el offset

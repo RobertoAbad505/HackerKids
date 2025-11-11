@@ -1,0 +1,90 @@
+//
+//  DemoItemView.swift
+//  HackerKids
+//
+//  Created by Roberto Ramirez on 11/11/25.
+//
+
+import SwiftUI
+
+struct DemoItemView: View {
+    let feature: FeatureModel
+    let isPair: Bool
+    init(feature: FeatureModel, _ pair: Bool = false) {
+        self.feature = feature
+        self.isPair = pair
+    }
+    var body: some View {
+        VStack {
+            HStack(alignment: .center, spacing: 0) {
+                if isPair {
+                    iconsView
+                    textDescription
+                } else {
+                    textDescription
+                    iconsView
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .leftRoundedBorder(radius: 20, borderStyle: .ultraThinMaterial, corners: [.allCorners])
+            .padding(.leading)
+            .padding(.trailing, 4)
+        }
+//        .rotation3DEffect(.degrees(10),axis: (x: 0, y: isPair ? 0.5:-0.5, z: 0))
+//        .shadow(color: Color.white, radius: 1, x: isPair ? -3:3, y: 3)
+    }
+    var textDescription: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            HStack {
+                Text(feature.name)
+                    .font(.body)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            Text(feature.lclstring)
+                .font(.system(size: 12))
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: 200)
+            Spacer(minLength: 5)
+            navigateButton
+        }
+        .padding()
+        .padding(.vertical)
+        .background(.ultraThinMaterial.opacity(0.5))
+    }
+    var navigateButton: some View {
+        HStack {
+            Image(systemName: "chevron.right")
+                .font(.system(size: 15, weight: .medium))
+            Text("Navegar!")
+                .font(.system(size: 15, weight: .medium))
+                .fontWeight(.bold)
+                .fontDesign(.monospaced)
+        }
+        .padding()
+        .padding(.horizontal)
+        .foregroundStyle(.white)
+        .background(Color.clear)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke((.white), lineWidth: 3)
+        )
+        .padding(.top)
+    }
+    var iconsView: some View {
+        VStack(alignment: .center, spacing: 10) {
+            HStack(alignment: .lastTextBaseline) {
+                Image(systemName: "mappin.circle")
+                Image(systemName: "apple.logo")
+            }
+            HStack(alignment: .lastTextBaseline) {
+                Image(systemName: "camera")
+                Image(systemName: "network")
+            }
+        }
+        .foregroundStyle(.ultraThinMaterial)
+        .padding(.vertical, 30)
+        .font(.system(size: 30))
+    }
+}

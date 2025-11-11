@@ -49,7 +49,7 @@ struct SoupChallengeWin: View {
     }
     var controls: some View {
         VStack {
-            HStack(alignment: .center, spacing: 30) {
+            VStack(alignment: .center, spacing: 30) {
                 Button(action: {
                     onEndGame()
                     presentationMode.wrappedValue.dismiss()

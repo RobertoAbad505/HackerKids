@@ -10,7 +10,6 @@ import SwiftData
 
 @main
 struct HackerKidsApp: App {
-    @ObservedObject var userViewModel: LoginViewModel = LoginViewModel()
     @Environment(\.modelContext) private var modelContext
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -23,17 +22,21 @@ struct HackerKidsApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    @StateObject private var appState = AppState()
+    @StateObject private var audioManager = AudioManager()
 
     var body: some Scene {
         WindowGroup {
-            StartView(viewModel: userViewModel)
+            HomeViewContainer()
+                .environmentObject(appState)
+                .environmentObject(audioManager)
                 .preferredColorScheme(.dark)
-//                .onAppear {
-//                    #if ISDEBUG
-//                    print("🐛🐞🐜🦟🪲🪳🕷️ IS DEVELOPMENT TARGET")
-//                    #else
-//                    print("✈️✈️✈️✈️✈️✈️✈️ IS RELEASE TARGET")
-//                    #endif
+                .onAppear {
+                    #if ISDEBUG
+                    print("🐛🐞🐜🦟🪲🪳🕷️ IS DEVELOPMENT TARGET")
+                    #else
+                    print("✈️✈️✈️✈️✈️✈️✈️ IS RELEASE TARGET")
+                    #endif
 //                    SessionManager.shared.fetchLastSession(modelContext)
 //                    GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
 //                        // Check if `user` exists; otherwise, do something with `error`
@@ -44,7 +47,7 @@ struct HackerKidsApp: App {
 //                            userViewModel.successGoogleSignIn(user, modelContext)
 //                        }
 //                    }
-//                }
+                }
         }
 //        .modelContainer(sharedModelContainer)
     }

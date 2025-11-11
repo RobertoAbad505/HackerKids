@@ -8,7 +8,9 @@ import MapKit
 import SwiftUI
 
 struct WeatherAppView: View {
-    @ObservedObject private var locationManager: LocationManager
+    @EnvironmentObject var appState: AppState
+    
+//    @ObservedObject private var locationManager: LocationManager
     @Environment(\.dismiss) private var dismiss
     @State private var hasFetched = false
     @State private var refreshButton = false
@@ -72,16 +74,13 @@ struct WeatherAppView: View {
             morningBackground
         }
     }
-    init(viewModel: WeatherViewModel, locationManager: LocationManager) {
-        self.locationManager = locationManager
-        self.viewModel = viewModel
-    }
     
     var body: some View {
         VStack {
             if !viewModel.startedFeature  {
-                WeatherInitialView(viewModel: viewModel, locationManager: self.locationManager)
-            } else if let location = locationManager.location {
+                WeatherInitialView(viewModel: appState.weatherViewModel,
+                                   locationManager: self.appState.localizationManager)
+            } else if let location = self.appState.localizationManager.location {
                 ScrollViewReader { proxy in
                     ScrollView {
                         ZStack {
@@ -101,17 +100,17 @@ struct WeatherAppView: View {
             }
         }
         .background(getBackgroundGradient(viewModel.weatherStatus))
-        .onChange(of: locationManager.authorizationStatus) { value in
+        .onChange(of: self.appState.localizationManager.authorizationStatus) { value in
             switch value {
             case .authorizedAlways, .authorizedWhenInUse:
-                locationManager.requestLocation()
+                self.appState.localizationManager.requestLocation()
             case .notDetermined:
-                locationManager.askForpermission()
+                self.appState.localizationManager.askForpermission()
             @unknown default:
                 break
             }
         }
-        .onChange(of: locationManager.permissionDenied) { denied in
+        .onChange(of: self.appState.localizationManager.permissionDenied) { denied in
             if denied {
                 showErrorAlert = true
             }
@@ -149,9 +148,10 @@ struct WeatherAppView: View {
     }
     var cityTemperature: some View {
         VStack(alignment: .center, spacing: 20) {
-            if let location = locationManager.location, let pin = locationManager.pinLocation {
+            if let location = self.appState.localizationManager.location,
+                let pin = self.appState.localizationManager.pinLocation {
                 HStack(alignment: .top) {
-                    Text("\(viewModel.weather?.name ?? ""), \(viewModel.weather?.sys?.country ?? "")")
+                    Text("\(appState.weatherViewModel.weather?.name ?? ""), \(appState.weatherViewModel.weather?.sys?.country ?? "")")
                         .multilineTextAlignment(.leading)
                         .font(.title2)
                         .fontWeight(.bold)
@@ -160,22 +160,22 @@ struct WeatherAppView: View {
                         Text("Today")
                             .fontWeight(.bold)
                             .multilineTextAlignment(.trailing)
-                        Text("\(viewModel.lastReportDateTime.toString())")
+                        Text("\(appState.weatherViewModel.lastReportDateTime.toString())")
                             .font(.footnote)
                             .multilineTextAlignment(.trailing)
                     }
                 }
                 HStack {
                     VStack {
-                        Image(systemName: viewModel.iconName)
+                        Image(systemName: appState.weatherViewModel.iconName)
                             .font(.system(size: 45))
                             .foregroundStyle(.white)
-                        Text(viewModel.weather?.weather?.first?.main ?? "")
+                        Text(appState.weatherViewModel.weather?.weather?.first?.main ?? "")
                             .font(.footnote)
                     }
                     Spacer()
                     HStack {
-                        Text("\((viewModel.weather?.main?.temp ?? 0).toStringRounded)")
+                        Text("\((appState.weatherViewModel.weather?.main?.temp ?? 0).toStringRounded)")
                             .font(.system(size: 53))
                             .foregroundStyle(Color.white)
                             .fontWeight(.bold)
@@ -201,20 +201,20 @@ struct WeatherAppView: View {
             HStack {
                 WeatherDataView(icon: "drop.circle.fill",
                                header: "Humidity",
-                               value: "\(viewModel.weather?.main?.humidity ?? 0) %")
+                               value: "\(appState.weatherViewModel.weather?.main?.humidity ?? 0) %")
                 Spacer()
                 WeatherDataView(icon: "figure.walk.diamond",
                                header: "mts above sea level",
-                               value: "\(viewModel.weather?.main?.grnd_level ?? 0) mts")
+                               value: "\(appState.weatherViewModel.weather?.main?.grnd_level ?? 0) mts")
             }
             HStack {
                 WeatherDataView(icon: "thermometer.medium",
                                header: "Perceived temperature",
-                               value: "\(viewModel.weather?.main?.feels_like ?? 0) °C")
+                               value: "\(appState.weatherViewModel.weather?.main?.feels_like ?? 0) °C")
                 Spacer()
                 WeatherDataView(icon: "wind.circle",
                                header: "Wind speed",
-                                value: "\(viewModel.weather?.wind?.speed ?? 0) m/s")
+                                value: "\(appState.weatherViewModel.weather?.wind?.speed ?? 0) m/s")
                 
             }
             HStack {
@@ -224,7 +224,7 @@ struct WeatherAppView: View {
                 Spacer()
                 WeatherDataView(icon: "sun.max",
                                header: "Max temperature",
-                               value: "\(viewModel.weather?.main?.temp_max ?? 0) °C")
+                               value: "\(appState.weatherViewModel.weather?.main?.temp_max ?? 0) °C")
             }
             .padding(.bottom)
             if !refreshButton {
@@ -251,7 +251,7 @@ struct WeatherAppView: View {
                     Text("🌐 Latitud")
                         .font(.headline)
                         .fontWeight(.bold)
-                    Text("\(viewModel.weather?.coord?.lat ?? 0)")
+                    Text("\(appState.weatherViewModel.weather?.coord?.lat ?? 0)")
                         .font(.title3)
                         .fontWeight(.bold)
                 }
@@ -259,7 +259,7 @@ struct WeatherAppView: View {
                     Text("🌐 Longitude")
                         .font(.headline)
                         .fontWeight(.bold)
-                    Text("\(viewModel.weather?.coord?.lon ?? 0)")
+                    Text("\(appState.weatherViewModel.weather?.coord?.lon ?? 0)")
                         .font(.title3)
                         .fontWeight(.bold)
                 }
@@ -275,9 +275,9 @@ struct WeatherAppView: View {
     }
     var reloadDataButton: some View {
         Button(action: {
-            locationManager.requestLocation()
+            self.appState.localizationManager.requestLocation()
             withAnimation {
-                if let coordinate = locationManager.location?.coordinate {
+                if let coordinate = self.appState.localizationManager.location?.coordinate {
                     refreshButton = true
                     viewModel.fetchData(using: coordinate)
                 }
@@ -305,7 +305,8 @@ struct WeatherAppView: View {
     }
     var mapView: some View {
         HStack {
-            if let location = locationManager.location, let pin = locationManager.pinLocation {
+            if let location = self.appState.localizationManager.location,
+               let pin = self.appState.localizationManager.pinLocation {
                 VStack {
                     Text("🗺️ Weather Map")
                         .font(.title2)
@@ -416,5 +417,5 @@ struct WeatherAppView: View {
 
 
 #Preview {
-    WeatherAppView(viewModel: .init(), locationManager: .init())
+    WeatherAppView()
 }

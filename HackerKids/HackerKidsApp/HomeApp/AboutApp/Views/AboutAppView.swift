@@ -7,29 +7,36 @@
 
 import MessageUI
 import SwiftUI
+import Kingfisher
 
 struct AboutAppView: View {
-    @ObservedObject var viewModel: AboutAppViewModel
+    @EnvironmentObject var appState: AppState
+    @StateObject var audioManager: AudioManager = AudioManager()
     @State private var result: Result<MessageComposeResult, Error>? = nil
-    init(_ viewModel: AboutAppViewModel) {
-        self.viewModel = viewModel
-    }
+    
+    @State private var rotationAngle: Angle = .degrees(0) // Ángulo de rotación
+    @State private var lastDragValue: CGFloat = 0 // Última posición del arrastre
+    
+
     var body: some View {
         VStack(spacing: 10) {
-            title
-            gitHubProfile
-            contactButtons
+            ScrollView {
+                title
+                gitHubPicture
+                mainDescription
+                contactButtons
+            }
         }
         .background(Color.blue.opacity(0.3).cornerRadius(20))
-        .padding()
-        .sheet(isPresented: $viewModel.showMailView) {
+//        .padding()
+        .sheet(isPresented: $appState.aboutViewModel.showMailView) {//ERROR HERE
             MailView(
-                recipients: [viewModel.developerEmailAddress],
+                recipients: [appState.aboutViewModel.developerEmailAddress],
                 subject: "Consulta desde la app",
                 body: "Hola, este es un mensaje generado desde la app SwiftSkills."
             )
         }
-        .sheet(isPresented: $viewModel.isShowingMessageCompose) {
+        .sheet(isPresented: $appState.aboutViewModel.isShowingMessageCompose) {
             MessageComposeView(result: $result) { controller in
                 // Configura el mensaje aquí
                 controller.recipients = ["+52 442 333 0132"] // Número de teléfono
@@ -37,7 +44,10 @@ struct AboutAppView: View {
             }
         }
         .onAppear {
-            viewModel.fetchGitHubUser()
+            appState.aboutViewModel.fetchGitHubUser()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                self.rotate()
+            }
         }
     }
     var title: some View {
@@ -47,33 +57,85 @@ struct AboutAppView: View {
             HStack(spacing: 0) {
                 Text("by ")
                 Button(action: {
-                    viewModel.openGitHub()
+                    appState.aboutViewModel.openGitHub()
                 }, label: {
-                    Text("\(viewModel.gitHubUser?.login ?? "")")
+                    Text("\(appState.aboutViewModel.gitHubUser?.login ?? "")")
                         .foregroundStyle(Color.blue)
                 })
             }
         }
     }
-    var gitHubProfile: some View {
-        VStack(spacing: 10) {
-            AsyncImage(url: URL(string: viewModel.gitHubUser?.avatarUrl ?? "")) { img in
-                img
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .clipShape(Circle())
-            } placeholder: {
+    var gitHubPicture: some View {
+        KFImage(URL(string: self.appState.aboutViewModel.gitHubUser?.avatarUrl ?? ""))
+            .placeholder {
                 ProgressView()
             }
-            .frame(width: 200, height: 200)
-            .padding(5)
-            .background(LinearGradient(colors: [.blue, .white, .blue], startPoint: .bottomLeading, endPoint: .top))
+            .retry(maxCount: 3, interval: .seconds(2))
+            .cacheOriginalImage()
+            .fade(duration: 0.25)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
             .clipShape(Circle())
-            Text(viewModel.gitHubUser?.bio ?? "")
-                .font(.body)
-                .padding(.horizontal)
+            .frame(width: 230, height: 230)
+            .padding(5)
+            .background(
+//                LinearGradient(
+//                    gradient: Gradient(colors: pictureColors),
+//                    startPoint: startPoint,
+//                    endPoint: endPoint
+//                )
+//                .ignoresSafeArea()
+                .blue
+            )
+            .clipShape(Circle())
+            .shadow(color: Color.black.opacity(0.8), radius: 10, x: 5, y: 5)
+            .rotation3DEffect(
+                rotationAngle,
+                axis: (x: 0, y: 1, z: 0) // Rotación en el eje Y para efecto de moneda
+            )
+            .gesture(
+                TapGesture()
+                    .onEnded {
+                        rotate()
+                    }
+            )
+    }
+    var mainDescription: some View {
+        VStack(alignment: .center, spacing: 10) {
+            HStack {
+                Spacer()
+                Text("Roberto Ramirez")
+                    .font(.title)
+                    .bold()
+                Spacer()
+            }
+            Text("iOS Dev • SwiftUI • GraphQL • APIs integrations • Clean Architecture")
+                .multilineTextAlignment(.center)
+                .font(.title3)
+                .foregroundColor(.secondary)
+                .fontWeight(.bold)
+            if let location = self.appState.aboutViewModel.gitHubUser?.location {
+                Text("📍\(location) | Always on the move ✈️")
+                    .multilineTextAlignment(.center)
+                    .font(.headline)
+                    .fontWeight(.bold)
+                .foregroundColor(.secondary)
+            }
+            Text(self.appState.aboutViewModel.gitHubUser?.bio ?? "")
+                .multilineTextAlignment(.center)
+                .font(.headline)
         }
-        .padding(.horizontal)
+        .padding(20)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 45))
+        .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
+    }
+    func rotate() {
+        audioManager.playSoundEffect(named: "coinFx")
+        // Animación para girar 3 veces (1080 grados) en 1.5 segundos
+        withAnimation(.bouncy(duration: 1.2)) {
+            rotationAngle = .degrees(rotationAngle.degrees + 1080)
+        }
     }
     var contactButtons: some View {
         VStack {
@@ -127,7 +189,7 @@ struct AboutAppView: View {
             iconWidth = 34.0
         }
         return Button(action: {
-            viewModel.openUrl(source)
+            appState.aboutViewModel.openUrl(source)
         }, label: {
             img
                 .resizable()

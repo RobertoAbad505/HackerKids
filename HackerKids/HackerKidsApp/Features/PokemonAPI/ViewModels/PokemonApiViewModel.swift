@@ -7,7 +7,7 @@
 
 import Foundation
 import Combine
-import SwiftUICore
+import SwiftUI
 import SwiftData
 
 class PokemonApiViewModel: ObservableObject {

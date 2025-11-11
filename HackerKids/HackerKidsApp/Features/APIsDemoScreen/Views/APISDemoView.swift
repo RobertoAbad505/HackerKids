@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct APISDemoView: View {
-    @StateObject var ricknMortyViewModel: RickAndMortyViewModel = .init()
-    @StateObject var pokemonViewModel: PokemonApiViewModel = .init()
 
     var body: some View {
         VStack {
@@ -21,12 +19,12 @@ struct APISDemoView: View {
         .padding()
     }
     var rickAndMortyAPI: some View {
-        NavigationLink(destination: RickAndMortyHome(viewModel: ricknMortyViewModel) , label: {
+        NavigationLink(destination: RickAndMortyHome() , label: {
             HomeButtonView(title: "Rick and Morty API", icon: "atom")
         })
     }
     var pokemonApi: some View {
-        NavigationLink(destination: PokemonAPIView(viewModel: pokemonViewModel) , label: {
+        NavigationLink(destination: PokemonAPIView() , label: {
             HomeButtonView(title: "Pokémon API v2", icon: "atom")
         })
     }

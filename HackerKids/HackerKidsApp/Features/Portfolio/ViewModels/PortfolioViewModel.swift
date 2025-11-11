@@ -36,6 +36,13 @@ class PortfolioViewModel: ObservableObject {
             description: "Get real-time weather updates based on your current location and integrate with the OpenWeatherMap API(https://openweathermap.org/api/). Uses GPS to display current conditions, forecasts, and more.",
             lclstring: LocalizedStringResource("portfolio.weather.description"),
             type: .weather
+        ),
+        FeatureModel(
+            id: 4,
+            name: "MoviesApp",
+            description: "Browse recent movies, overviews, and more. Powered by the TMDb API(https://www.themoviedb.org/documentation/api).",
+            lclstring: LocalizedStringResource("portfolio.movies.description"),
+            type: .movies
         )
     ]
 }

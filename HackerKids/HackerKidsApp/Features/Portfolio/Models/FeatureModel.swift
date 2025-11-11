@@ -19,4 +19,5 @@ enum Feature: String, CaseIterable {
     case rickAndMorty
     case soupChallenge
     case weather
+    case movies
 }

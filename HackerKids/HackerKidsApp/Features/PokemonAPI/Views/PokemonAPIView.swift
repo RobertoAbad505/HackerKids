@@ -9,20 +9,16 @@ import SwiftUI
 
 struct PokemonAPIView: View {
     @Environment(\.presentationMode) private var presentationMode
-    @StateObject var audioManager = AudioManager()
-    @ObservedObject var viewModel: PokemonApiViewModel
+    @EnvironmentObject var audioManager: AudioManager
+    @EnvironmentObject var appState: AppState
     @State var backgroundMusic: Bool = true
     @State private var isScrolling: Bool = false
     let backgrounMusicName: String = "pokeaudio"
     
-    init(viewModel: PokemonApiViewModel) {
-        self.viewModel = viewModel
-    }
-    
     var body: some View {
         NavigationView {
             VStack {
-                if !viewModel.errorFetch {
+                if !appState.pokemonViewModel.errorFetch {
                     scrollViewCurrentVersion
                 } else {
                     errorView
@@ -34,26 +30,26 @@ struct PokemonAPIView: View {
                 if self.backgroundMusic {
 //                    self.backgroundMusic = audioManager.playBackgroundMusic(named: backgrounMusicName)
                 }
-                if viewModel.pokemonList.isEmpty {
-                    viewModel.fetchPokedexPage()
+                if appState.pokemonViewModel.pokemonList.isEmpty {
+                    appState.pokemonViewModel.fetchPokedexPage()
                 }
                 print("✅Initial task finished . . . !")
             }
             .onDisappear {
-                if !viewModel.navigateDetail {
+                if !appState.pokemonViewModel.navigateDetail {
                     audioManager.stop()
                 }
             }
             .modifier(ToolbarVisibilityModifier(isScrolling: isScrolling))
             .navigationBarTitle(
-                !viewModel.navigateDetail ? Text("👾SwiftUI Lists"): Text("")
+                !appState.pokemonViewModel.navigateDetail ? Text("👾SwiftUI Lists"): Text("")
             )
             .toolbar {
-                if viewModel.navigateDetail {
+                if appState.pokemonViewModel.navigateDetail {
                     ToolbarItem(placement: .topBarLeading, content: {
                         Button(action: {
                             withAnimation(.bouncy(duration: 1, extraBounce: 0.5)) {
-                                self.viewModel.navigateDetail = false
+                                self.appState.pokemonViewModel.navigateDetail = false
                             }
                         }, label: {
                             Image(systemName: "chevron.backward")
@@ -64,7 +60,7 @@ struct PokemonAPIView: View {
                         .padding(.leading)
                     })
                 }
-                if !viewModel.navigateDetail {
+                if !appState.pokemonViewModel.navigateDetail {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
                             withAnimation(.bouncy(duration: 1, extraBounce: 0.5)) {
@@ -106,8 +102,8 @@ struct PokemonAPIView: View {
         }
         .background(
             NavigationLink(
-                destination: PokemonDetailView(viewModel: self.viewModel),
-                isActive: $viewModel.navigateDetail,
+                destination: PokemonDetailView(viewModel: self.appState.pokemonViewModel),
+                isActive: $appState.pokemonViewModel.navigateDetail,
                 label: { EmptyView() }
             )
             .hidden()
@@ -117,21 +113,21 @@ struct PokemonAPIView: View {
         ScrollView {
             VStack {
                 LazyVGrid(columns: [GridItem.init(.flexible())]) {
-                    ForEach(Array(viewModel.pokemonList.enumerated()), id: \.element.id) { index, pokemon in
-                        PokedexItemView(viewModel: viewModel,item: pokemon, onSelected: {
+                    ForEach(Array(appState.pokemonViewModel.pokemonList.enumerated()), id: \.element.id) { index, pokemon in
+                        PokedexItemView(viewModel: appState.pokemonViewModel,item: pokemon, onSelected: {
                             //play selected pokemon sound
                             audioManager.playSoundEffect(named: "coinFx")
-                            viewModel.selectedPokemon = pokemon
+                            appState.pokemonViewModel.selectedPokemon = pokemon
                             // Delay para permitir que el sonido suene antes de navegar
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                viewModel.navigateDetail = true
-                                viewModel.fetchPokemonDetail()
+                                appState.pokemonViewModel.navigateDetail = true
+                                appState.pokemonViewModel.fetchPokemonDetail()
                             }
                         })
                         .onAppear {
-                            if index == viewModel.pokemonList.count - 1 && !viewModel.isLoading {
+                            if index == appState.pokemonViewModel.pokemonList.count - 1 && !appState.pokemonViewModel.isLoading {
                                 print("Fetch next page . . .")
-                                viewModel.fetchPokedexPage()
+                                appState.pokemonViewModel.fetchPokedexPage()
                             }
                         }
                         .shadow(color: Color.black, radius: 3, x: 10, y: 10)
@@ -183,5 +179,5 @@ struct PokemonAPIView: View {
 }
 
 #Preview {
-    PokemonAPIView(viewModel: .init())
+    PokemonAPIView()
 }

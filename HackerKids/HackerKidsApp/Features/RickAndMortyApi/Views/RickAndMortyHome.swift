@@ -9,7 +9,7 @@ import Kingfisher
 import SwiftUI
 
 struct RickAndMortyHome: View {
-    @ObservedObject var viewModel: RickAndMortyViewModel
+    @EnvironmentObject var appState: AppState
     @Environment(\.presentationMode) private var presentationMode
     //view orientation and design
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -33,15 +33,10 @@ struct RickAndMortyHome: View {
         let count = isIpad ? (isLandscape ? 5:4): (isLandscape ? 3:2)
         return Array(repeating: GridItem(.flexible()), count: count)
     }
-    
-    
-    init(viewModel: RickAndMortyViewModel) {
-        self.viewModel = viewModel
-    }
     var body: some View {
         NavigationView {
             VStack {
-                if !viewModel.errorLoading {
+                if !appState.rickAndMortyViewModel.errorLoading {
                     scrollViewCurrentVersion
                 } else {
                     errorView
@@ -49,8 +44,8 @@ struct RickAndMortyHome: View {
             }
             .background(Image("seaBluebackground").resizable().edgesIgnoringSafeArea(.all))
             .onAppear {
-                if viewModel.charactersCatalog.isEmpty {
-                    viewModel.fetchData()
+                if appState.rickAndMortyViewModel.charactersCatalog.isEmpty {
+                    appState.rickAndMortyViewModel.fetchData()
                     updateOrientation()
                 }
             }
@@ -60,14 +55,14 @@ struct RickAndMortyHome: View {
             }
             .modifier(ToolbarVisibilityModifier(isScrolling: isScrolling))
             .navigationBarTitle(
-                !viewModel.isNavigating ? Text("Catalog: page \(currentPage) of \(viewModel.totalPages)"):Text("")
+                !appState.rickAndMortyViewModel.isNavigating ? Text("Catalog: page \(currentPage) of \(appState.rickAndMortyViewModel.totalPages)"):Text("")
             )
             .toolbar {
-                if viewModel.isNavigating {
+                if appState.rickAndMortyViewModel.isNavigating {
                     ToolbarItem(placement: .topBarLeading, content: {
                         Button(action: {
                             withAnimation(.bouncy(duration: 1, extraBounce: 0.5)) {
-                                self.viewModel.isNavigating = false
+                                self.appState.rickAndMortyViewModel.isNavigating = false
                             }
                         }, label: {
                             Image(systemName: "chevron.backward")
@@ -78,7 +73,7 @@ struct RickAndMortyHome: View {
                         .padding(.leading)
                     })
                 }
-                if !viewModel.isNavigating {
+                if !appState.rickAndMortyViewModel.isNavigating {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
                             withAnimation(.bouncy(duration: 1, extraBounce: 0.5)) {
@@ -117,7 +112,7 @@ struct RickAndMortyHome: View {
     }
     var catalogPicker: some View {
         Picker("Select catalog",
-               selection: $viewModel.queryObject,
+               selection: $appState.rickAndMortyViewModel.queryObject,
                content: {
             ForEach(RickAndMortyQueryObject.allCases) { catalog in
                 Text(catalog.rawValue).tag(catalog)
@@ -150,13 +145,13 @@ struct RickAndMortyHome: View {
         ScrollView {
             VStack {
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(Array(viewModel.charactersCatalog.enumerated()), id: \.element) { index, character in
-                        CharacterCardView(viewModel: viewModel,character: character)
+                    ForEach(Array(appState.rickAndMortyViewModel.charactersCatalog.enumerated()), id: \.element) { index, character in
+                        CharacterCardView(viewModel: appState.rickAndMortyViewModel,character: character)
                         .onAppear {
-                            if index == viewModel.charactersCatalog.count - 1 {
+                            if index == appState.rickAndMortyViewModel.charactersCatalog.count - 1 {
                                 self.currentPage = "\(index / 20 + 1)"
                                 print("Fetching next page . . .")
-                                viewModel.fetchData(true)
+                                appState.rickAndMortyViewModel.fetchData(true)
                             }
                         }
                     }

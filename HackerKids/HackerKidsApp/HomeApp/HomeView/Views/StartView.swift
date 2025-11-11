@@ -13,15 +13,17 @@ import Kingfisher
 struct StartView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var viewModel: LoginViewModel
-    @ObservedObject var aboutViewModel: AboutAppViewModel = AboutAppViewModel()
+    @EnvironmentObject var appState: AppState
     //SHEET PRESENTATION FLAGS
     @State var infoView: Bool = false
     @State var loginView: Bool = false
-    @State var gitHubUser: GitHubUser?
     @State private var result: Result<MessageComposeResult, Error>? = nil
     @StateObject var audioManager: AudioManager = AudioManager()
     @State var contactView: Bool = false
+    
+    //Demos controls
+    @State var selectedFeature: FeatureModel?
+    @State var navigate: Bool = false
     
     //background variables
     @State private var scrollOffset: CGFloat = 0
@@ -42,9 +44,10 @@ struct StartView: View {
             VStack(spacing: 20) {
                 ScrollView {
                     VStack(alignment: .center, spacing: 40) {
-                        activeProfile
+                        titleView
                         gitHubPicture
-                        mainDescription
+                        greetings
+                        demoSlideShow
                         contactoView
                         portfolioView
                         aboutMe
@@ -72,21 +75,21 @@ struct StartView: View {
             .edgesIgnoringSafeArea(.all)
             .navigationBarHidden(true)
             .onAppear {
-                aboutViewModel.fetchGitHubUser()
+                self.appState.aboutViewModel.fetchGitHubUser()
 //                SessionManager.shared.fetchLastSession(modelContext)
                 MyiOSCard().writeLocal()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                    self.rotate()
+                }
             }
-            .onChange(of: aboutViewModel.isLoading) { user in
-                self.gitHubUser = aboutViewModel.gitHubUser
-            }
-            .sheet(isPresented: $aboutViewModel.showMailView) {
+            .sheet(isPresented: $appState.aboutViewModel.showMailView) {
                 MailView(
-                    recipients: [aboutViewModel.developerEmailAddress],
+                    recipients: [appState.aboutViewModel.developerEmailAddress],
                     subject: "Consulta desde la app",
                     body: "Dejame un mensaje..."
                 )
             }
-            .sheet(isPresented: $aboutViewModel.isShowingMessageCompose) {
+            .sheet(isPresented: $appState.aboutViewModel.isShowingMessageCompose) {
                 MessageComposeView(result: $result) { controller in
                     // Configura el mensaje aquí
                     controller.recipients = ["+52 442 333 0132"] // Número de teléfono
@@ -96,113 +99,166 @@ struct StartView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
-    var activeProfile: some View {
+    var titleView: some View {
         HStack {
+            Text("HackerKids")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
             Spacer()
-            if let user = SessionManager.shared.signedInUser {
-                VStack(alignment: .trailing) {
-                    Text("Hi! \(user.userName)")
-                        .font(.footnote)
-                        .onAppear {
-                            print("Usuario \(SessionManager.shared.signedInUser?.email ?? "")")
-                        }
-                }
-                if let img = SessionManager.shared.signedInUser?.picture?.createImage() {
-                    img
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .clipShape(Circle())
-                        .padding(4)
-                        .background(UIManager.shared.backgroundGradient)
-                        .clipShape(Circle())
-                } else {
-                    Image(systemName: "person.fill")
-                        .frame(width: 30, height: 30)
-                        .padding(3)
-                        .background(UIManager.shared.backgroundGradient)
-                        .clipShape(Circle())
-                }
-            }
+            //settings button
+            Button(action: {
+                //settings toggle
+            }, label: {
+                //gear icon
+                Image(systemName: "gearshape.fill")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundStyle(Color(colorScheme != .dark ? .black : .white))
+            })
         }
-        .padding()
-        .padding(.bottom, 50)
     }
     func getLanguageID() -> String {
         return "Lang \(Locale.current.languageCode?.uppercased() ?? "EN")"
     }
     
     var gitHubPicture: some View {
-        KFImage(URL(string: self.gitHubUser?.avatarUrl ?? ""))
-            .placeholder {
-                ProgressView()
-            }
-            .retry(maxCount: 3, interval: .seconds(2))
-            .cacheOriginalImage()
-            .fade(duration: 0.25)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .clipShape(Circle())
-            .frame(width: 230, height: 230)
-            .padding(5)
-            .background(
-                LinearGradient(
-                    gradient: Gradient(colors: pictureColors),
-                    startPoint: startPoint,
-                    endPoint: endPoint
+        HStack {
+            Spacer()
+            KFImage(URL(string: self.appState.aboutViewModel.gitHubUser?.avatarUrl ?? ""))
+                .placeholder {
+                    ProgressView()
+                }
+                .retry(maxCount: 3, interval: .seconds(2))
+                .cacheOriginalImage()
+                .fade(duration: 0.25)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .clipShape(Circle())
+                .frame(width: 140, height: 140)
+                .padding(5)
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: pictureColors),
+                        startPoint: startPoint,
+                        endPoint: endPoint
+                    )
+                    .ignoresSafeArea()
                 )
-                .ignoresSafeArea()
-            )
-            .clipShape(Circle())
-            .shadow(color: Color.black.opacity(0.8), radius: 10, x: 5, y: 5)
-            .rotation3DEffect(
-                rotationAngle,
-                axis: (x: 0, y: 1, z: 0) // Rotación en el eje Y para efecto de moneda
-            )
-            .gesture(
-                TapGesture()
-                    .onEnded {
-                        audioManager.playSoundEffect(named: "coinFx")
-                        // Animación para girar 3 veces (1080 grados) en 1.5 segundos
-                        withAnimation(.bouncy(duration: 1.2)) {
-                            rotationAngle = .degrees(rotationAngle.degrees + 1080)
+                .clipShape(Circle())
+                .shadow(color: Color.black.opacity(0.8), radius: 10, x: 5, y: 5)
+                .rotation3DEffect(
+                    rotationAngle,
+                    axis: (x: 0, y: 1, z: 0) // Rotación en el eje Y para efecto de moneda
+                )
+                .gesture(
+                    TapGesture()
+                        .onEnded {
+                            self.rotate()
                         }
-                    }
-            )
+                )
+            Spacer()
+        }
     }
-    var mainDescription: some View {
+    func rotate() {
+        audioManager.playSoundEffect(named: "coinFx")
+        // Animación para girar 3 veces (1080 grados) en 1.5 segundos
+        withAnimation(.bouncy(duration: 1.2)) {
+            rotationAngle = .degrees(rotationAngle.degrees + 1080)
+        }
+    }
+    var greetings: some View {
         VStack(alignment: .center, spacing: 10) {
-            HStack {
-                Spacer()
-                Text("Roberto Ramirez")
-                    .font(.title)
-                    .bold()
-                Spacer()
-            }
-            Text("iOS Dev • SwiftUI • GraphQL • APIs integrations • Clean Architecture")
-                .multilineTextAlignment(.center)
+            Text("Hi! I'm Roberto Ramirez - iOS Dev")
                 .font(.title3)
-                .foregroundColor(.secondary)
-                .fontWeight(.bold)
-            if let location = self.gitHubUser?.location {
-                Text("📍\(location) | Always on the move ✈️")
-                    .multilineTextAlignment(.center)
-                    .font(.headline)
-                    .fontWeight(.bold)
-                .foregroundColor(.secondary)
-            }
-            Text(self.gitHubUser?.bio ?? "")
+                .bold()
+            Text("Explore my live SwiftUI demos.")
                 .multilineTextAlignment(.center)
-                .font(.headline)
+                .font(.subheadline)
+                .fontWeight(.bold)
+            tryRandomDemo
         }
         .padding(20)
         .background(.ultraThinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 45))
         .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
     }
+    var tryRandomDemo: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                
+            }, label: {
+                HStack {
+                    Text("🔥Try a Demo!")
+                        .font(.body)
+                        .fontWeight(.bold)
+                }
+            })
+            .padding()
+            .padding(.horizontal)
+            .foregroundStyle(colorScheme == .dark ? .white : .primary)
+            .background(Color.blue)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
+            Spacer()
+        }
+    }
+    var demoSlideShow: some View {
+        ScrollView(.horizontal) {
+            LazyHGrid(rows: [GridItem(.flexible())], spacing: 10) {
+                ForEach(Array(appState.demosViewModel.features.enumerated()), id: \.offset) { index, feature in
+                    DemoItemView(feature: feature, index % 2 == 0)
+                    .onTapGesture(perform: {
+                        audioManager.playSelectionSound()
+                        // Delay para permitir que el sonido suene antes de navegar
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            selectedFeature = feature
+                            navigate = true
+                        }
+                    })
+                }
+    //            .padding(.horizontal, isIpad ? 60:0)
+            }
+            .background(
+                NavigationLink(
+                    destination: navigationDestination,
+                    isActive: $navigate,
+                    label: { EmptyView() }
+                )
+                .hidden()
+            )
+        }
+    }
+    private var navigationDestination: some View {
+        Group {
+            if let feature = selectedFeature {
+                destinationView(for: feature)
+            } else {
+                EmptyView()
+            }
+        }
+    }
+
+    @ViewBuilder
+    func destinationView(for feature: FeatureModel) -> some View {
+        switch feature.type {
+        case .pokemon:
+            PokemonAPIView()
+        case .rickAndMorty:
+            RickAndMortyHome()
+        case .soupChallenge:
+            SoupChallengeView(onExit: {})
+        case .weather:
+            WeatherAppView()
+        case .movies:
+            MovieBrowserView()
+        }
+    }
     var contactoView: some View {
         VStack(alignment: .center) {
             Text("📲 Leave a message! ;)")
-                .font(.title2)
+                .font(.title3)
                 .fontWeight(.bold)
                 .padding(.bottom)
             HStack {
@@ -218,6 +274,34 @@ struct StartView: View {
                 getButton(.phone)
                 getButton(.text)
                 Spacer()
+            }
+            if FeatureManager.scheduleACall {
+                Text("or")
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .frame(alignment: .center)
+                HStack {
+                    Button(action: {
+                        audioManager.playSelectionSound()
+                        UIApplication.shared.open(URL(string: "https://calendly.com/roberto-rmzabad/30min")!)
+                    }, label: {
+                        HStack {
+                            Spacer()
+                            Text("🗓️📞 Schedule a call")
+                                .font(.callout)
+                                .fontWeight(.bold)
+                                .fontDesign(.monospaced)
+                                .foregroundStyle(.white)
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color.clear)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke((.white), lineWidth: 3)
+                        )
+                    })
+                }
             }
         }
         .padding(30)
@@ -247,9 +331,7 @@ struct StartView: View {
             }
             Text(LocalizedStringResource("startview.portfolio.description"))
                 .font(.body)
-            NavigationLink(destination: PortafolioView(onNavigate: {
-                aboutViewModel.openUrl(.github)
-            }), label: {
+            NavigationLink(destination: PortafolioView() , label: {
                 HStack {
                     Spacer()
                     Text("🍎📱 Apps y prototipos")
@@ -298,7 +380,7 @@ struct StartView: View {
                 .font(.title2)
                 .fontWeight(.bold)
             Button(action: {
-                aboutViewModel.getResume()
+                appState.aboutViewModel.getResume()
             }, label: {
                 HStack {
                     Spacer()
@@ -426,7 +508,7 @@ struct StartView: View {
             iconWidth = 34.0
         }
         return Button(action: {
-            aboutViewModel.openUrl(source)
+            appState.aboutViewModel.openUrl(source)
         }, label: {
             img
                 .resizable()
