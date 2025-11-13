@@ -18,7 +18,6 @@ struct WeatherAppView: View {
     @State private var inspectResponse = false
     @State private var scrollId = ""
     @State private var userLocationPin: LocationPin?
-    @ObservedObject var viewModel: WeatherViewModel = .init()
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
@@ -77,9 +76,8 @@ struct WeatherAppView: View {
     
     var body: some View {
         VStack {
-            if !viewModel.startedFeature  {
-                WeatherInitialView(viewModel: appState.weatherViewModel,
-                                   locationManager: self.appState.localizationManager)
+            if !appState.weatherViewModel.startedFeature  {
+                WeatherInitialView()
             } else if let location = self.appState.localizationManager.location {
                 ScrollViewReader { proxy in
                     ScrollView {
@@ -99,7 +97,7 @@ struct WeatherAppView: View {
                 }
             }
         }
-        .background(getBackgroundGradient(viewModel.weatherStatus))
+        .background(getBackgroundGradient(appState.weatherViewModel.weatherStatus))
         .onChange(of: self.appState.localizationManager.authorizationStatus) { value in
             switch value {
             case .authorizedAlways, .authorizedWhenInUse:
@@ -126,11 +124,10 @@ struct WeatherAppView: View {
             }))
         }
         .onDisappear {
-            if viewModel.weather == nil {
-                viewModel.startedFeature = false
+            if appState.weatherViewModel.weather == nil {
+                appState.weatherViewModel.startedFeature = false
                 hasFetched = false
             }
-            viewModel.loading = false
         }
     }
     var weatherView: some View {
@@ -220,7 +217,7 @@ struct WeatherAppView: View {
             HStack {
                 WeatherDataView(icon: "sun.min",
                                header: "Min temperature",
-                               value: "\(viewModel.weather?.main?.temp_min ?? 0) °C")
+                               value: "\(appState.weatherViewModel.weather?.main?.temp_min ?? 0) °C")
                 Spacer()
                 WeatherDataView(icon: "sun.max",
                                header: "Max temperature",
@@ -279,7 +276,7 @@ struct WeatherAppView: View {
             withAnimation {
                 if let coordinate = self.appState.localizationManager.location?.coordinate {
                     refreshButton = true
-                    viewModel.fetchData(using: coordinate)
+                    appState.weatherViewModel.fetchData(using: coordinate)
                 }
                 scrollId = "top"
             }
@@ -355,7 +352,7 @@ struct WeatherAppView: View {
             ForEach(WeatherState.allCases, id: \.hashValue ) { state in
                 Button(action: {
                     withAnimation {
-                        viewModel.weatherStatus = state
+                        appState.weatherViewModel.weatherStatus = state
                         self.scrollId = "top"
                     }
                 }, label: {
@@ -401,7 +398,7 @@ struct WeatherAppView: View {
             .padding(.vertical, 20)
             .padding(.horizontal)
             if inspectResponse {
-                CodeBlockView(code: viewModel.readResponse(), size: 15)
+                CodeBlockView(code: appState.weatherViewModel.readResponse(), size: 15)
             }
         }
     }

@@ -172,7 +172,7 @@ struct StartView: View {
         }
     }
     func rotate() {
-//        audioManager.playSoundEffect(named: "coinFx")
+        audioManager.playSoundEffect(named: "coinFx")
         // Animación para girar 3 veces (1080 grados) en 1.5 segundos
         withAnimation(.bouncy(duration: 1.2)) {
             rotationAngle = .degrees(rotationAngle.degrees + 1080)

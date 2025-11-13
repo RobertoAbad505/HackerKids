@@ -8,16 +8,20 @@
 import SwiftUI
 
 struct WeatherInitialView: View {
-    @ObservedObject var viewModel: WeatherViewModel
-    @ObservedObject var locationManager: LocationManager
+    @EnvironmentObject var appState: AppState
     @State var refreshButton: Bool = false
 
     var body: some View {
         VStack(alignment: .center, spacing: 35) {
             Spacer()
-            if !viewModel.errorFetch {
+            switch appState.weatherViewModel.status {
+            case .initialView, .askPermission:
                 startingView
-            } else {
+            case .loading:
+                loadingView
+            case .presenting:
+                startingView
+            case .error:
                 errorView
             }
             Spacer()
@@ -27,8 +31,9 @@ struct WeatherInitialView: View {
         .ignoresSafeArea(edges: .all)
         .background(Color.blue.opacity(0.8))
         .onAppear {
-            if locationManager.authorizationStatus == .notDetermined {
-                locationManager.askForpermission()
+            if appState.localizationManager.authorizationStatus == .notDetermined {
+                appState.weatherViewModel.status = .askPermission
+                appState.localizationManager.askForpermission()
             }
         }
     }
@@ -39,49 +44,57 @@ struct WeatherInitialView: View {
             reloadDataButton
         }
     }
+    var locationButtonView: some View {
+        VStack {
+            Image(systemName: "location.circle")
+                .font(.system(size: 110))
+                .padding(35)
+                .background(.white)
+                .clipShape(Circle())
+                .shadow(color: Color.black.opacity(0.7), radius: 10, x: -2, y: 5)
+        }
+    }
     var startingView: some View {
         VStack(alignment: .center, spacing: 35) {
             Button(action: {
                 withAnimation {
-                    self.viewModel.loading = true
-                    if let coordinate = locationManager.location?.coordinate {
-                        self.viewModel.fetchData(using: coordinate)
+                    if let coordinate = appState.localizationManager.location?.coordinate {
+                        self.appState.weatherViewModel.fetchData(using: coordinate)
+                    } else {
+                        print("❌❌❌❌Error: Weather module couldn't start, couldn't get location")
                     }
                 }
             }, label: {
-                Image(systemName: "location.circle")
-                    .font(.system(size: 110))
-                    .padding(35)
-                    .background(.white)
-                    .clipShape(Circle())
-                    .shadow(color: Color.black.opacity(0.7), radius: 10, x: -2, y: 5)
+                locationButtonView
             })
-            if viewModel.loading {
-                ProgressView(label: {
-                    Text("Obteniendo su ubicación . . .")
-                })
+            Text("Ver el clima desde su ubicación actual.")
+                .font(.title2)
                 .foregroundStyle(.white)
-                .tint(.white)
-                .font(.system(size: 14, weight: .semibold, design: .monospaced))
-            } else {
-                Text("Ver el clima desde su ubicación actual.")
-                    .font(.title2)
-                    .foregroundStyle(.white)
-            }
+        }
+    }
+    var loadingView: some View {
+        VStack {
+            locationButtonView
+            ProgressView(label: {
+                Text("Obteniendo su ubicación . . .")
+            })
+            .foregroundStyle(.white)
+            .tint(.white)
+            .font(.system(size: 14, weight: .semibold, design: .monospaced))
         }
     }
     var reloadDataButton: some View {
         Button(action: {
-            withAnimation {
-                if let coordinate = locationManager.location?.coordinate {
-                    self.viewModel.errorFetch = false
-                    self.viewModel.loading = true
-                    self.viewModel.startedFeature = false
-                    self.viewModel.fetchData(using: coordinate)
-                } else {
-                    locationManager.requestLocation()
-                }
-            }
+//            withAnimation {
+//                if let coordinate = appState.localizationManager.location?.coordinate {
+//                    self.appState.weatherViewModel.status = false
+//                    self.appState.weatherViewModel.loading = true
+//                    self.appState.weatherViewModel.startedFeature = false
+//                    self.appState.weatherViewModel.fetchData(using: coordinate)
+//                } else {
+//                    appState.localizationManager.requestLocation()
+//                }
+//            }
         }, label: {
             HStack {
                 Image(systemName: "arrow.trianglehead.2.clockwise")
@@ -91,7 +104,7 @@ struct WeatherInitialView: View {
                     .fontWeight(.bold)
                     .fontDesign(.monospaced)
             }
-            .padding()
+            .padding() 
             .padding(.horizontal)
             .foregroundStyle(.white)
             .background(Color.clear)

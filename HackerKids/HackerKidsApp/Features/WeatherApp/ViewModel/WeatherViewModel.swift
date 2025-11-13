@@ -14,10 +14,9 @@ class WeatherViewModel: ObservableObject {
     private var services = WeatherServices()
     var cancellables: Set<AnyCancellable> = .init()
     @Published var weather: WeatherModel?
-    @Published var loading: Bool = false
-    @Published var errorFetch: Bool = false
     @Published var iconName: String = ""
     @Published var weatherStatus: WeatherState = .dayTime
+    @Published var status: WeatherStep = .initialView
     let languageEn = "en"
     let languageEs = "es"
     
@@ -28,22 +27,23 @@ class WeatherViewModel: ObservableObject {
     func fetchData(using coordinate: CLLocationCoordinate2D) {
         let latitude = coordinate.latitude
         let longitude = coordinate.longitude
-        print("Llamando al API con lat: \(latitude), lon: \(longitude)")
+        print("🪲 Llamando al API con lat: \(latitude), lon: \(longitude)")
         guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=0ae7859c64174984eb990d6673e70098&units=metric") else {
             print("Error generando URL del clima para lat:\(latitude), lon:\(longitude)")
+            self.status = .error
             return
         }
+        self.status = .loading
         services.fetchWeather(url)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .failure(let error):
-                    print("Error: \(error.errorDescription)")
-                    self?.errorFetch = true
+                    print("❌❌❌Error: \(error.errorDescription)")
+                    self?.status = .error
                 case .finished:
                     return
                 }
-                self?.loading = false
             }, receiveValue: { [weak self] model in
                 self?.processResponse(model)
             })
@@ -56,7 +56,8 @@ class WeatherViewModel: ObservableObject {
         }
         self.iconName = getIconName()
         self.startedFeature = true
-        print("Started feature!")
+        self.status = .presenting
+        print("🌤️ Weather processed: status is presenting!")
     }
     func getIconName() -> String {
         guard let main = weather?.weather?.first?.main else {
@@ -99,4 +100,11 @@ enum WeatherState: String, CaseIterable {
     case dayTime = "Day time"
     case afternoon = "Afternoon"
     case morning = "Morning"
+}
+enum WeatherStep {
+    case askPermission
+    case initialView
+    case loading
+    case presenting
+    case error
 }
