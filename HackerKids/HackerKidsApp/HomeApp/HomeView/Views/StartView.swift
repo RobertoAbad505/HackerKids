@@ -118,19 +118,19 @@ struct StartView: View {
             //settings button
             Menu {
                 Menu("Language") {
-                      Button(action: {appState.localizationManager.changeLanguage(.english)}) {
+                    Button(action: {LocalizationManager.shared.changeLanguage(.english)}) {
                           HStack {
                               Text("English 🇺🇸")
-                              if appState.localizationManager.currentLanguage == .english {
+                              if LocalizationManager.shared.currentLanguage == .english {
                                   Image(systemName: "checkmark")
                               }
                           }
                       }
 
-                      Button(action: { appState.localizationManager.changeLanguage(.spanish)}) {
+                      Button(action: { LocalizationManager.shared.changeLanguage(.spanish)}) {
                           HStack {
                               Text("Spanish 🇲🇽")
-                              if appState.localizationManager.currentLanguage == .spanish {
+                              if LocalizationManager.shared.currentLanguage == .spanish {
                                   Image(systemName: "checkmark")
                               }
                           }

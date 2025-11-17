@@ -20,7 +20,6 @@ enum AppLanguage: String, CaseIterable {
 final class LocalizationManager: ObservableObject {
 
     static let shared = LocalizationManager()
-
     @Published private(set) var currentLanguage: AppLanguage = .english
     private var bundle: Bundle = .main
 

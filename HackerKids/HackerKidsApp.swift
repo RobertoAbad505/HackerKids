@@ -24,12 +24,15 @@ struct HackerKidsApp: App {
     }()
     @StateObject private var appState = AppState()
     @StateObject private var audioManager = AudioManager()
+    @StateObject private var localizationManager = LocalizationManager.shared
+    
 
     var body: some Scene {
         WindowGroup {
             HomeViewContainer()
+                .id(localizationManager.currentLanguage)
                 .environmentObject(appState)
-                .environmentObject(appState.localizationManager)
+                .environmentObject(localizationManager)
                 .environmentObject(audioManager)
                 .preferredColorScheme(.dark)
                 .onAppear {

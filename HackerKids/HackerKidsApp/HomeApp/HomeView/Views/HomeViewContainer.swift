@@ -12,7 +12,6 @@ import SwiftUI
 import Kingfisher
 
 struct HomeViewContainer: View {
-    @EnvironmentObject var appState: AppState
     var body: some View {
         NavigationView {
             VStack {
@@ -40,7 +39,6 @@ struct HomeViewContainer: View {
                         }
                 }
             }
-            .id(appState.localizationManager.currentLanguage)
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }

@@ -14,7 +14,5 @@ final class AppState: ObservableObject {
     @Published var rickAndMortyViewModel = RickAndMortyViewModel()
     @Published var weatherViewModel = WeatherViewModel()
     @Published var locationManager = LocationManager()
-    
-    //User Settings
-    @Published var localizationManager = LocalizationManager.shared
+
 }
