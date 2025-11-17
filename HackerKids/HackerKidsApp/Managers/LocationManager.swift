@@ -15,6 +15,10 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var location: CLLocation?
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
     @Published var permissionDenied: Bool = false
+    
+    var isLocationAvailable: Bool {
+        authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways
+    }
 
     override init() {
         super.init()

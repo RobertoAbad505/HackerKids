@@ -10,12 +10,19 @@ import SwiftUI
 struct WeatherInitialView: View {
     @EnvironmentObject var appState: AppState
     @State var refreshButton: Bool = false
+    @ObservedObject var viewModel: WeatherViewModel
+    @ObservedObject var localizationManager: LocationManager
+    
+    init(_ appState: AppState) {
+        self._viewModel = ObservedObject(initialValue: appState.weatherViewModel)
+        self._localizationManager = ObservedObject(initialValue: appState.localizationManager)
+    }
 
     var body: some View {
         VStack(alignment: .center, spacing: 35) {
             Spacer()
             switch appState.weatherViewModel.status {
-            case .initialView, .askPermission:
+            case .initialView, .askPermission, .missingLocation:
                 startingView
             case .loading:
                 loadingView
@@ -30,18 +37,33 @@ struct WeatherInitialView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea(edges: .all)
         .background(Color.blue.opacity(0.8))
-        .onAppear {
-            if appState.localizationManager.authorizationStatus == .notDetermined {
-                appState.weatherViewModel.status = .askPermission
-                appState.localizationManager.askForpermission()
-            }
+    }
+    
+    var startingView: some View {
+        VStack(alignment: .center, spacing: 35) {
+            Button(action: {
+                withAnimation {
+                    if localizationManager.isLocationAvailable,
+                       let coordinate = appState.localizationManager.location?.coordinate {
+                        viewModel.fetchData(using: coordinate)
+                    } else {
+                        print("❌❌❌❌Error: GPS location is missing...")
+                        viewModel.status = .error
+                    }
+                }
+            }, label: {
+                locationButtonView
+            })
+            Text("Ver el clima desde su ubicación actual.")
+                .font(.title2)
+                .foregroundStyle(.white)
         }
     }
     var errorView : some View {
         VStack {
             Text(LocalizedStringResource("wheater.api.error.title"))
             Text("wheater.api.error.message")
-            reloadDataButton
+//            reloadDataButton
         }
     }
     var locationButtonView: some View {
@@ -52,24 +74,6 @@ struct WeatherInitialView: View {
                 .background(.white)
                 .clipShape(Circle())
                 .shadow(color: Color.black.opacity(0.7), radius: 10, x: -2, y: 5)
-        }
-    }
-    var startingView: some View {
-        VStack(alignment: .center, spacing: 35) {
-            Button(action: {
-                withAnimation {
-                    if let coordinate = appState.localizationManager.location?.coordinate {
-                        self.appState.weatherViewModel.fetchData(using: coordinate)
-                    } else {
-                        print("❌❌❌❌Error: Weather module couldn't start, couldn't get location")
-                    }
-                }
-            }, label: {
-                locationButtonView
-            })
-            Text("Ver el clima desde su ubicación actual.")
-                .font(.title2)
-                .foregroundStyle(.white)
         }
     }
     var loadingView: some View {
@@ -85,16 +89,14 @@ struct WeatherInitialView: View {
     }
     var reloadDataButton: some View {
         Button(action: {
-//            withAnimation {
-//                if let coordinate = appState.localizationManager.location?.coordinate {
-//                    self.appState.weatherViewModel.status = false
-//                    self.appState.weatherViewModel.loading = true
-//                    self.appState.weatherViewModel.startedFeature = false
-//                    self.appState.weatherViewModel.fetchData(using: coordinate)
-//                } else {
-//                    appState.localizationManager.requestLocation()
-//                }
-//            }
+            withAnimation {
+                if let coordinate = appState.localizationManager.location?.coordinate {
+                    self.appState.weatherViewModel.status = .initialView
+                    self.appState.weatherViewModel.fetchData(using: coordinate)
+                } else {
+                    appState.localizationManager.requestLocation()
+                }
+            }
         }, label: {
             HStack {
                 Image(systemName: "arrow.trianglehead.2.clockwise")

@@ -61,54 +61,38 @@ struct WeatherAppView: View {
                        startPoint: .bottom,
                        endPoint: .top)
     }
-    func getBackgroundGradient( _ state: WeatherState) -> LinearGradient {
-        switch state {
-        case .nighttime:
-            nightlightBackground
-        case .dayTime:
-            daylightBackground
-        case .afternoon:
-            afternoonlightBackground
-        case .morning:
-            morningBackground
-        }
+    @ObservedObject var viewModel: WeatherViewModel
+    @ObservedObject var localizationManager: LocationManager
+    
+    init(_ appState: AppState) {
+        self._viewModel = ObservedObject(initialValue: appState.weatherViewModel)
+        self._localizationManager = ObservedObject(initialValue: appState.localizationManager)
     }
     
     var body: some View {
         VStack {
-            if !appState.weatherViewModel.startedFeature  {
-                WeatherInitialView()
-            } else if let location = self.appState.localizationManager.location {
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        ZStack {
-                            EmptyView().id("top")
-                            weatherView
-                        }
-                    }
-                    .onChange(of: self.scrollId) { newValue in
-                        if !newValue.isEmpty {
-                            withAnimation {
-                                proxy.scrollTo(newValue, anchor: .top)
-                                self.scrollId = ""
-                            }
-                        }
-                    }
-                }
+            switch viewModel.status {
+            case .presenting:
+                weatherViewContainer
+            default:
+                WeatherInitialView(appState)
             }
         }
-        .background(getBackgroundGradient(appState.weatherViewModel.weatherStatus))
-        .onChange(of: self.appState.localizationManager.authorizationStatus) { value in
+        .onAppear {
+            handleLocationState()
+        }
+        .background(getBackgroundGradient(viewModel.weatherStatus))
+        .onChange(of: localizationManager.authorizationStatus) { value in
             switch value {
             case .authorizedAlways, .authorizedWhenInUse:
-                self.appState.localizationManager.requestLocation()
+                self.localizationManager.requestLocation()
             case .notDetermined:
-                self.appState.localizationManager.askForpermission()
+                self.localizationManager.askForpermission()
             @unknown default:
                 break
             }
         }
-        .onChange(of: self.appState.localizationManager.permissionDenied) { denied in
+        .onChange(of: localizationManager.permissionDenied) { denied in
             if denied {
                 showErrorAlert = true
             }
@@ -124,13 +108,30 @@ struct WeatherAppView: View {
             }))
         }
         .onDisappear {
-            if appState.weatherViewModel.weather == nil {
-                appState.weatherViewModel.startedFeature = false
-                hasFetched = false
+            if viewModel.status == .presenting {
+                appState.weatherViewModel = self.viewModel
             }
         }
     }
-    var weatherView: some View {
+    var weatherViewContainer: some View {
+        ScrollViewReader { proxy in
+            ScrollView {
+                ZStack {
+                    EmptyView().id("top")
+                    weatherViewComponents
+                }
+            }
+            .onChange(of: self.scrollId) { newValue in
+                if !newValue.isEmpty {
+                    withAnimation {
+                        proxy.scrollTo(newValue, anchor: .top)
+                        self.scrollId = ""
+                    }
+                }
+            }
+        }
+    }
+    var weatherViewComponents: some View {
         VStack(alignment: .center, spacing: 25) {
             cityTemperature
             moreInfoView
@@ -145,10 +146,10 @@ struct WeatherAppView: View {
     }
     var cityTemperature: some View {
         VStack(alignment: .center, spacing: 20) {
-            if let location = self.appState.localizationManager.location,
-                let pin = self.appState.localizationManager.pinLocation {
+            if let location = localizationManager.location,
+                let pin = self.localizationManager.pinLocation {
                 HStack(alignment: .top) {
-                    Text("\(appState.weatherViewModel.weather?.name ?? ""), \(appState.weatherViewModel.weather?.sys?.country ?? "")")
+                    Text("\(viewModel.weather?.name ?? ""), \(viewModel.weather?.sys?.country ?? "")")
                         .multilineTextAlignment(.leading)
                         .font(.title2)
                         .fontWeight(.bold)
@@ -157,22 +158,22 @@ struct WeatherAppView: View {
                         Text("Today")
                             .fontWeight(.bold)
                             .multilineTextAlignment(.trailing)
-                        Text("\(appState.weatherViewModel.lastReportDateTime.toString())")
+                        Text("\(viewModel.lastReportDateTime.toString())")
                             .font(.footnote)
                             .multilineTextAlignment(.trailing)
                     }
                 }
                 HStack {
                     VStack {
-                        Image(systemName: appState.weatherViewModel.iconName)
+                        Image(systemName: viewModel.iconName)
                             .font(.system(size: 45))
                             .foregroundStyle(.white)
-                        Text(appState.weatherViewModel.weather?.weather?.first?.main ?? "")
+                        Text(viewModel.weather?.weather?.first?.main ?? "")
                             .font(.footnote)
                     }
                     Spacer()
                     HStack {
-                        Text("\((appState.weatherViewModel.weather?.main?.temp ?? 0).toStringRounded)")
+                        Text("\((viewModel.weather?.main?.temp ?? 0).toStringRounded)")
                             .font(.system(size: 53))
                             .foregroundStyle(Color.white)
                             .fontWeight(.bold)
@@ -198,30 +199,30 @@ struct WeatherAppView: View {
             HStack {
                 WeatherDataView(icon: "drop.circle.fill",
                                header: "Humidity",
-                               value: "\(appState.weatherViewModel.weather?.main?.humidity ?? 0) %")
+                               value: "\(viewModel.weather?.main?.humidity ?? 0) %")
                 Spacer()
                 WeatherDataView(icon: "figure.walk.diamond",
                                header: "mts above sea level",
-                               value: "\(appState.weatherViewModel.weather?.main?.grnd_level ?? 0) mts")
+                               value: "\(viewModel.weather?.main?.grnd_level ?? 0) mts")
             }
             HStack {
                 WeatherDataView(icon: "thermometer.medium",
                                header: "Perceived temperature",
-                               value: "\(appState.weatherViewModel.weather?.main?.feels_like ?? 0) °C")
+                               value: "\(viewModel.weather?.main?.feels_like ?? 0) °C")
                 Spacer()
                 WeatherDataView(icon: "wind.circle",
                                header: "Wind speed",
-                                value: "\(appState.weatherViewModel.weather?.wind?.speed ?? 0) m/s")
+                                value: "\(viewModel.weather?.wind?.speed ?? 0) m/s")
                 
             }
             HStack {
                 WeatherDataView(icon: "sun.min",
                                header: "Min temperature",
-                               value: "\(appState.weatherViewModel.weather?.main?.temp_min ?? 0) °C")
+                               value: "\(viewModel.weather?.main?.temp_min ?? 0) °C")
                 Spacer()
                 WeatherDataView(icon: "sun.max",
                                header: "Max temperature",
-                               value: "\(appState.weatherViewModel.weather?.main?.temp_max ?? 0) °C")
+                               value: "\(viewModel.weather?.main?.temp_max ?? 0) °C")
             }
             .padding(.bottom)
             if !refreshButton {
@@ -248,7 +249,7 @@ struct WeatherAppView: View {
                     Text("🌐 Latitud")
                         .font(.headline)
                         .fontWeight(.bold)
-                    Text("\(appState.weatherViewModel.weather?.coord?.lat ?? 0)")
+                    Text("\(viewModel.weather?.coord?.lat ?? 0)")
                         .font(.title3)
                         .fontWeight(.bold)
                 }
@@ -256,7 +257,7 @@ struct WeatherAppView: View {
                     Text("🌐 Longitude")
                         .font(.headline)
                         .fontWeight(.bold)
-                    Text("\(appState.weatherViewModel.weather?.coord?.lon ?? 0)")
+                    Text("\(viewModel.weather?.coord?.lon ?? 0)")
                         .font(.title3)
                         .fontWeight(.bold)
                 }
@@ -272,11 +273,11 @@ struct WeatherAppView: View {
     }
     var reloadDataButton: some View {
         Button(action: {
-            self.appState.localizationManager.requestLocation()
+            self.localizationManager.requestLocation()
             withAnimation {
-                if let coordinate = self.appState.localizationManager.location?.coordinate {
+                if let coordinate = self.localizationManager.location?.coordinate {
                     refreshButton = true
-                    appState.weatherViewModel.fetchData(using: coordinate)
+                    viewModel.fetchData(using: coordinate)
                 }
                 scrollId = "top"
             }
@@ -302,8 +303,8 @@ struct WeatherAppView: View {
     }
     var mapView: some View {
         HStack {
-            if let location = self.appState.localizationManager.location,
-               let pin = self.appState.localizationManager.pinLocation {
+            if let location = self.localizationManager.location,
+               let pin = self.localizationManager.pinLocation {
                 VStack {
                     Text("🗺️ Weather Map")
                         .font(.title2)
@@ -352,7 +353,7 @@ struct WeatherAppView: View {
             ForEach(WeatherState.allCases, id: \.hashValue ) { state in
                 Button(action: {
                     withAnimation {
-                        appState.weatherViewModel.weatherStatus = state
+                        viewModel.weatherStatus = state
                         self.scrollId = "top"
                     }
                 }, label: {
@@ -398,7 +399,7 @@ struct WeatherAppView: View {
             .padding(.vertical, 20)
             .padding(.horizontal)
             if inspectResponse {
-                CodeBlockView(code: appState.weatherViewModel.readResponse(), size: 15)
+                CodeBlockView(code: viewModel.readResponse(), size: 15)
             }
         }
     }
@@ -409,10 +410,38 @@ struct WeatherAppView: View {
         let dateStr = dateFormater.string(from: date)
         return dateStr
     }
+    func getBackgroundGradient( _ state: WeatherState) -> LinearGradient {
+        switch state {
+        case .nighttime:
+            nightlightBackground
+        case .dayTime:
+            daylightBackground
+        case .afternoon:
+            afternoonlightBackground
+        case .morning:
+            morningBackground
+        }
+    }
+    func handleLocationState() {
+        switch localizationManager.authorizationStatus {
+        case .notDetermined:
+            viewModel.status = .askPermission
+            localizationManager.askForpermission()
 
+        case .authorizedWhenInUse, .authorizedAlways:
+            if localizationManager.location == nil {
+                localizationManager.requestLocation()
+                viewModel.status = .loading
+            } else {
+                viewModel.status = .initialView // Ready to let user tap “Get Weather”
+            }
+        @unknown default:
+            viewModel.status = .error
+        }
+    }
 }
 
 
 #Preview {
-    WeatherAppView()
+    WeatherAppView(.init())
 }

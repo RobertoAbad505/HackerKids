@@ -167,7 +167,7 @@ struct PortafolioView: View {
         case .soupChallenge:
             SoupChallengeView(onExit: {})
         case .weather:
-            WeatherAppView()
+            WeatherAppView(appState)
         case .movies:
             MovieBrowserView()
         case .flipCoin:

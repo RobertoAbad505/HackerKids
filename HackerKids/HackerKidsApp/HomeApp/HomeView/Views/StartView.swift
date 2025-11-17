@@ -262,7 +262,7 @@ struct StartView: View {
         case .soupChallenge:
             SoupChallengeView(onExit: {})
         case .weather:
-            WeatherAppView()
+            WeatherAppView(appState)
         case .movies:
             MovieBrowserView()
         case .flipCoin:
@@ -369,6 +369,7 @@ struct StartView: View {
         .background(.ultraThinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 45))
         .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
+        .padding(.horizontal)
     }
     var aboutMe: some View {
         VStack(alignment: .center, spacing: 20) {
@@ -389,6 +390,7 @@ struct StartView: View {
         .background(.ultraThinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 45))
         .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
+        .padding(.horizontal)
     }
     var resummeView: some View {
         VStack(alignment: .center) {
@@ -421,6 +423,7 @@ struct StartView: View {
         .clipShape(RoundedRectangle(cornerRadius: 45))
         .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
         .padding(.bottom, 20)
+        .padding(.horizontal)
     }
     var versionView: some View {
         HStack {

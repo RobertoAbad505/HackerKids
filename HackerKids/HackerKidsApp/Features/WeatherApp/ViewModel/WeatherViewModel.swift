@@ -10,13 +10,12 @@ import Foundation
 
 class WeatherViewModel: ObservableObject {
     @Published var lastReportDateTime: Date = .now
-    @Published var startedFeature = false
     private var services = WeatherServices()
-    var cancellables: Set<AnyCancellable> = .init()
     @Published var weather: WeatherModel?
     @Published var iconName: String = ""
     @Published var weatherStatus: WeatherState = .dayTime
     @Published var status: WeatherStep = .initialView
+    var cancellables: Set<AnyCancellable> = .init()
     let languageEn = "en"
     let languageEs = "es"
     
@@ -55,7 +54,6 @@ class WeatherViewModel: ObservableObject {
             self.lastReportDateTime = Date(timeIntervalSince1970: TimeInterval(intTime))
         }
         self.iconName = getIconName()
-        self.startedFeature = true
         self.status = .presenting
         print("🌤️ Weather processed: status is presenting!")
     }
@@ -106,5 +104,6 @@ enum WeatherStep {
     case initialView
     case loading
     case presenting
+    case missingLocation
     case error
 }
