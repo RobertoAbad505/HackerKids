@@ -22,6 +22,8 @@ struct WeatherAppView: View {
         center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     )//San Francisco default region
+    
+    //Dalia 2 -> 20.587544 -100.368681
     var daylightBackground: LinearGradient {
         LinearGradient(stops: [.init(color: Color(uiColor: .cyan), location: 0.70),
                                .init(color: .blue, location: 0.71),
@@ -61,11 +63,10 @@ struct WeatherAppView: View {
                        startPoint: .bottom,
                        endPoint: .top)
     }
-    @ObservedObject var viewModel: WeatherViewModel
+    @ObservedObject var viewModel: WeatherViewModel = .init()
     @ObservedObject var localizationManager: LocationManager
-    
+    @State private var isAnimating = false
     init(_ appState: AppState) {
-        self._viewModel = ObservedObject(initialValue: appState.weatherViewModel)
         self._localizationManager = ObservedObject(initialValue: appState.localizationManager)
     }
     
@@ -74,20 +75,31 @@ struct WeatherAppView: View {
             switch viewModel.status {
             case .presenting:
                 weatherViewContainer
-            default:
-                WeatherInitialView(appState)
+            case .loading:
+                loadingView
+            case .error:
+                errorView
+            case .initialView, .askPermission, .missingLocation:
+                WeatherInitialView(self.viewModel, self.localizationManager)
             }
+            //ResetButton
+//            Button(action: { viewModel.reset() }, label: { Text("HARD RESET").font(Font.largeTitle.bold())})
         }
         .onAppear {
             handleLocationState()
+            if appState.weatherViewModel.status == .presenting {
+                viewModel.restore(appState.weatherViewModel)
+            }
         }
         .background(getBackgroundGradient(viewModel.weatherStatus))
         .onChange(of: localizationManager.authorizationStatus) { value in
             switch value {
             case .authorizedAlways, .authorizedWhenInUse:
                 self.localizationManager.requestLocation()
+                self.viewModel.status = .initialView
             case .notDetermined:
                 self.localizationManager.askForpermission()
+                self.viewModel.status = .loading
             @unknown default:
                 break
             }
@@ -112,6 +124,62 @@ struct WeatherAppView: View {
                 appState.weatherViewModel = self.viewModel
             }
         }
+    }
+    var errorView : some View {
+        VStack {
+            Spacer()
+            VStack {
+                HStack {
+                    Spacer()
+                    Text(LocalizedStringResource("wheater.api.error.title"))
+                    Spacer()
+                }
+                Text("wheater.api.error.message")
+                reloadDataButton
+            }
+            .font(.title2)
+            .padding()
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 15))
+            Spacer()
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .init(horizontal: .center, vertical: .top))
+    }
+    var locationButtonView: some View {
+        VStack {
+            Image(systemName: "location.circle")
+                .font(.system(size: 110))
+                .padding(35)
+                .background(.white)
+                .clipShape(Circle())
+                .shadow(color: Color.black.opacity(0.7), radius: 10, x: -2, y: 5)
+        }
+    }
+    var loadingView: some View {
+        VStack(alignment: .center, spacing: 35) {
+            Spacer()
+            Image(systemName: "arrow.triangle.2.circlepath") // ícono de recarga
+                .font(.system(size: 90))
+                .fontWeight(.bold)
+                .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                .animation(
+                    Animation.linear(duration: 1)
+                        .repeatForever(autoreverses: false),
+                    value: isAnimating
+                )
+                .onAppear {
+                    isAnimating = true
+                }
+            Text("Obteniendo su ubicación . . .")
+                .foregroundStyle(.white)
+                .font(.system(size: 14, weight: .semibold, design: .monospaced))
+            Spacer()
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ignoresSafeArea(edges: .all)
+        .background(Color.blue.opacity(0.8))
     }
     var weatherViewContainer: some View {
         ScrollViewReader { proxy in
@@ -273,13 +341,16 @@ struct WeatherAppView: View {
     }
     var reloadDataButton: some View {
         Button(action: {
-            self.localizationManager.requestLocation()
             withAnimation {
-                if let coordinate = self.localizationManager.location?.coordinate {
-                    refreshButton = true
-                    viewModel.fetchData(using: coordinate)
+                self.viewModel.reset()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    self.localizationManager.requestLocation()
+                    if let coordinate = self.localizationManager.location?.coordinate {
+                        refreshButton = true
+                        viewModel.fetchData(using: coordinate)
+                    }
+                    self.scrollId = "top"
                 }
-                scrollId = "top"
             }
         }, label: {
             HStack {
@@ -427,7 +498,6 @@ struct WeatherAppView: View {
         case .notDetermined:
             viewModel.status = .askPermission
             localizationManager.askForpermission()
-
         case .authorizedWhenInUse, .authorizedAlways:
             if localizationManager.location == nil {
                 localizationManager.requestLocation()

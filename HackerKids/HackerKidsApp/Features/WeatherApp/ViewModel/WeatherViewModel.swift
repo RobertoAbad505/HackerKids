@@ -92,6 +92,18 @@ class WeatherViewModel: ObservableObject {
         }
         return content.toJSON()
     }
+    func restore(_ vm: WeatherViewModel) {
+        self.weather = vm.weather
+        self.lastReportDateTime = vm.lastReportDateTime
+        self.iconName = vm.iconName
+        self.status = vm.status
+    }
+    func reset() {
+        self.weather = nil
+        self.lastReportDateTime = .now
+        self.iconName = ""
+        self.status = .loading
+    }
 }
 enum WeatherState: String, CaseIterable {
     case nighttime = "Night time"
