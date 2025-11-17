@@ -29,6 +29,7 @@ struct HackerKidsApp: App {
         WindowGroup {
             HomeViewContainer()
                 .environmentObject(appState)
+                .environmentObject(appState.localizationManager)
                 .environmentObject(audioManager)
                 .preferredColorScheme(.dark)
                 .onAppear {

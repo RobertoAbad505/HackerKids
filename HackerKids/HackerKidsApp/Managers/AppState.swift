@@ -13,7 +13,8 @@ final class AppState: ObservableObject {
     @Published var pokemonViewModel = PokemonApiViewModel()
     @Published var rickAndMortyViewModel = RickAndMortyViewModel()
     @Published var weatherViewModel = WeatherViewModel()
-    @Published var localizationManager = LocationManager()
+    @Published var locationManager = LocationManager()
     
-    //Data
+    //User Settings
+    @Published var localizationManager = LocalizationManager.shared
 }

@@ -64,10 +64,10 @@ struct WeatherAppView: View {
                        endPoint: .top)
     }
     @ObservedObject var viewModel: WeatherViewModel = .init()
-    @ObservedObject var localizationManager: LocationManager
+    @ObservedObject var locationManager: LocationManager
     @State private var isAnimating = false
     init(_ appState: AppState) {
-        self._localizationManager = ObservedObject(initialValue: appState.localizationManager)
+        self._locationManager = ObservedObject(initialValue: appState.locationManager)
     }
     
     var body: some View {
@@ -80,10 +80,8 @@ struct WeatherAppView: View {
             case .error:
                 errorView
             case .initialView, .askPermission, .missingLocation:
-                WeatherInitialView(self.viewModel, self.localizationManager)
+                WeatherInitialView(self.viewModel, self.locationManager)
             }
-            //ResetButton
-//            Button(action: { viewModel.reset() }, label: { Text("HARD RESET").font(Font.largeTitle.bold())})
         }
         .onAppear {
             handleLocationState()
@@ -92,19 +90,19 @@ struct WeatherAppView: View {
             }
         }
         .background(getBackgroundGradient(viewModel.weatherStatus))
-        .onChange(of: localizationManager.authorizationStatus) { value in
+        .onChange(of: locationManager.authorizationStatus) { value in
             switch value {
             case .authorizedAlways, .authorizedWhenInUse:
-                self.localizationManager.requestLocation()
+                self.locationManager.requestLocation()
                 self.viewModel.status = .initialView
             case .notDetermined:
-                self.localizationManager.askForpermission()
+                self.locationManager.askForpermission()
                 self.viewModel.status = .loading
             @unknown default:
                 break
             }
         }
-        .onChange(of: localizationManager.permissionDenied) { denied in
+        .onChange(of: locationManager.permissionDenied) { denied in
             if denied {
                 showErrorAlert = true
             }
@@ -131,7 +129,7 @@ struct WeatherAppView: View {
             VStack {
                 HStack {
                     Spacer()
-                    Text(LocalizedStringResource("wheater.api.error.title"))
+                    Text(LangKey.Weather.Api.errorTitle)
                     Spacer()
                 }
                 Text("wheater.api.error.message")
@@ -214,8 +212,8 @@ struct WeatherAppView: View {
     }
     var cityTemperature: some View {
         VStack(alignment: .center, spacing: 20) {
-            if let location = localizationManager.location,
-                let pin = self.localizationManager.pinLocation {
+            if let location = locationManager.location,
+                let pin = self.locationManager.pinLocation {
                 HStack(alignment: .top) {
                     Text("\(viewModel.weather?.name ?? ""), \(viewModel.weather?.sys?.country ?? "")")
                         .multilineTextAlignment(.leading)
@@ -344,8 +342,8 @@ struct WeatherAppView: View {
             withAnimation {
                 self.viewModel.reset()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    self.localizationManager.requestLocation()
-                    if let coordinate = self.localizationManager.location?.coordinate {
+                    self.locationManager.requestLocation()
+                    if let coordinate = self.locationManager.location?.coordinate {
                         refreshButton = true
                         viewModel.fetchData(using: coordinate)
                     }
@@ -374,8 +372,8 @@ struct WeatherAppView: View {
     }
     var mapView: some View {
         HStack {
-            if let location = self.localizationManager.location,
-               let pin = self.localizationManager.pinLocation {
+            if let location = self.locationManager.location,
+               let pin = self.locationManager.pinLocation {
                 VStack {
                     Text("🗺️ Weather Map")
                         .font(.title2)
@@ -494,13 +492,13 @@ struct WeatherAppView: View {
         }
     }
     func handleLocationState() {
-        switch localizationManager.authorizationStatus {
+        switch locationManager.authorizationStatus {
         case .notDetermined:
             viewModel.status = .askPermission
-            localizationManager.askForpermission()
+            locationManager.askForpermission()
         case .authorizedWhenInUse, .authorizedAlways:
-            if localizationManager.location == nil {
-                localizationManager.requestLocation()
+            if locationManager.location == nil {
+                locationManager.requestLocation()
                 viewModel.status = .loading
             } else {
                 viewModel.status = .initialView // Ready to let user tap “Get Weather”

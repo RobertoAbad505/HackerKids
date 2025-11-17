@@ -24,7 +24,7 @@ struct WeatherInitialView: View {
             Button(action: {
                 withAnimation {
                     if localizationManager.isLocationAvailable,
-                       let coordinate = appState.localizationManager.location?.coordinate {
+                       let coordinate = appState.locationManager.location?.coordinate {
                         viewModel.fetchData(using: coordinate)
                     } else {
                         print("❌❌❌❌Error: GPS location is missing...")

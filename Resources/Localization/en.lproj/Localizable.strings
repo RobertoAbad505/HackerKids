@@ -1,0 +1,57 @@
+/* ============================
+   GENERIC ERRORS
+   ============================ */
+"app.title" = "HackerKidsApp EN";
+"generic.error.unexpected" = "An unexpected error occurred. Please try again.";
+"generic.error.unknown" = "Unknown error.";
+"generic.error.fetch" = "Error fetching data. Try again later.";
+"portfolio.pokemon.description" = "English data not translated";
+
+/* ============================
+   FORMATTING
+   ============================ */
+
+"format.single" = "%@";
+"format.two" = "%@, %@";
+"format.lf" = "%lf";
+"format.lld" = "%lld";
+"format.pounds" = "%lld lbs";
+"format.inches" = "%lld\"";
+"format.ratio" = "%lld/%lld";
+
+/* ============================
+   ACTIONS
+   ============================ */
+
+"action.ok" = "OK";
+"action.cancel" = "Cancel";
+"action.retry" = "Retry";
+"action.error" = "Error";
+"action.done" = "Done";
+"action.back" = "Back";
+"action.confirm" = "Confirm";
+
+/* ============================
+   TIME UNITS
+   ============================ */
+
+"time.hour" = "Hour";
+"time.minute" = "Minute";
+"time.seconds" = "Seconds";
+
+/* ============================
+   WEATHER ERRORS / PERMISSIONS
+   ============================ */
+
+"weather.permission.title" = "Location Permission Required";
+"weather.permission.message" = "We need your location to fetch the weather for your area.";
+
+"weather.api.error.title" = "Weather Error";
+"weather.api.error.message" = "Unable to retrieve weather data. Please try again.";
+
+/* ============================
+   GAME STRINGS (from your file)
+   ============================ */
+
+"game.player1.prompt" = "Who is player 1?";
+"game.win" = "You win!";

@@ -88,7 +88,6 @@
 		6FE0A73A2D50174300E1C917 /* Exceptions for "HackerKids" folder in "HackerKidsTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"/Localized: InfoPlist.strings",
 				"HackerKidsApp/Extensions/Double+FormatString.swift",
 				"HackerKidsApp/Extensions/View+Extensions.swift",
 				HackerKidsApp/Features/Login/Models/PlayerUser.swift,
@@ -104,13 +103,17 @@
 				HackerKidsApp/Features/WeatherApp/Views/WeatherAppView.swift,
 				HackerKidsApp/Features/WeatherApp/Views/WeatherInitialView.swift,
 				HackerKidsApp/Managers/LocationManager.swift,
-				Localizable.xcstrings,
 			);
 			target = 6FD516F62CA5131F0052F1D3 /* HackerKidsTests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		6F5970252ECAEC130067F75F /* Localization */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Localization;
+			sourceTree = "<group>";
+		};
 		6FD516E52CA5131D0052F1D3 /* HackerKids */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -181,6 +184,7 @@
 		6FB0209C2DA47D3100B66A9B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6F5970252ECAEC130067F75F /* Localization */,
 				6F67CC502DC1887500535260 /* coinFx.mp3 */,
 			);
 			path = Resources;
@@ -232,6 +236,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				6F5970252ECAEC130067F75F /* Localization */,
 				6FD516E52CA5131D0052F1D3 /* HackerKids */,
 			);
 			name = HackerKids_DEV;
@@ -258,6 +263,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				6F5970252ECAEC130067F75F /* Localization */,
 				6FD516E52CA5131D0052F1D3 /* HackerKids */,
 			);
 			name = HackerKids;
@@ -351,6 +357,7 @@
 				en,
 				Base,
 				"es-419",
+				es,
 			);
 			mainGroup = 6FD516DA2CA5131D0052F1D3;
 			minimizedProjectReferenceProxies = 1;

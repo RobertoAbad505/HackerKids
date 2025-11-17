@@ -110,18 +110,33 @@ struct StartView: View {
     }
     var titleView: some View {
         HStack {
-            Text("HackerKids")
+            Text(localized: LangKey.StartView.appTitle)
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
             Spacer()
             //settings button
             Menu {
-                Button("Option 1", action: {})
                 Menu("Language") {
-                    Button("English🇺🇸", action: {})
-                    Button("Spanish🇲🇽", action: {})
-                }
+                      Button(action: {appState.localizationManager.changeLanguage(.english)}) {
+                          HStack {
+                              Text("English 🇺🇸")
+                              if appState.localizationManager.currentLanguage == .english {
+                                  Image(systemName: "checkmark")
+                              }
+                          }
+                      }
+
+                      Button(action: { appState.localizationManager.changeLanguage(.spanish)}) {
+                          HStack {
+                              Text("Spanish 🇲🇽")
+                              if appState.localizationManager.currentLanguage == .spanish {
+                                  Image(systemName: "checkmark")
+                              }
+                          }
+                      }
+
+                  }
             } label: {
                 //gear icon
                 Image(systemName: "gearshape.fill")
@@ -326,6 +341,7 @@ struct StartView: View {
         }
         .padding(.horizontal)
     }
+    
     var portfolioView: some View {
         VStack(alignment: .center, spacing: 25) {
             Text("📲 Portafolio")
@@ -345,7 +361,7 @@ struct StartView: View {
                     .shadow(color: Color.black.opacity(0.6), radius: 10, x: 5, y: 5)
                     .padding(.top, 5)
             }
-            Text(LocalizedStringResource("startview.portfolio.description"))
+            Text(LangKey.StartView.portfolioDescription)
                 .font(.body)
             NavigationLink(destination: PortafolioView() , label: {
                 HStack {

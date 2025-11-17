@@ -1,0 +1,57 @@
+/* ============================
+   ERRORES GENÉRICOS
+   ============================ */
+"app.title" = "HackerKidsApp ES";
+"generic.error.unexpected" = "Ocurrió un error inesperado. Inténtalo de nuevo.";
+"generic.error.unknown" = "Error desconocido.";
+"generic.error.fetch" = "Error al obtener los datos. Inténtalo más tarde.";
+"portfolio.pokemon.description" = "Español data, traducida en español";
+
+/* ============================
+   FORMATOS
+   ============================ */
+
+"format.single" = "%@";
+"format.two" = "%@, %@";
+"format.lf" = "%lf";
+"format.lld" = "%lld";
+"format.pounds" = "%lld lbs"; // *Do not translate units unless needed*
+"format.inches" = "%lld\"";
+"format.ratio" = "%lld/%lld";
+
+/* ============================
+   ACCIONES
+   ============================ */
+
+"action.ok" = "OK";
+"action.cancel" = "Cancelar";
+"action.retry" = "Reintentar";
+"action.error" = "Error";
+"action.done" = "Listo";
+"action.back" = "Atrás";
+"action.confirm" = "Confirmar";
+
+/* ============================
+   UNIDADES DE TIEMPO
+   ============================ */
+
+"time.hour" = "Hora";
+"time.minute" = "Minuto";
+"time.seconds" = "Segundos";
+
+/* ============================
+   CLIMA: ERRORES / PERMISOS
+   ============================ */
+
+"weather.permission.title" = "Permiso de ubicación requerido";
+"weather.permission.message" = "Necesitamos tu ubicación para mostrar el clima de tu zona.";
+
+"weather.api.error.title" = "Error del clima";
+"weather.api.error.message" = "No fue posible obtener los datos del clima. Inténtalo de nuevo.";
+
+/* ============================
+   JUEGO
+   ============================ */
+
+"game.player1.prompt" = "¿Quién es el jugador 1?";
+"game.win" = "¡Ganaste!";

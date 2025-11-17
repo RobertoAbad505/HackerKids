@@ -8,6 +8,10 @@ import SwiftUI
 import Foundation
 
 extension Text {
+    init(localized key: String) {
+        let manager = LocalizationManager.shared
+        self.init(manager.localized(key))
+    }
     public func setTitle3D(_ font: Font = .largeTitle) -> some View {
         self.padding()
             .font(font)

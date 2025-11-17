@@ -1,8 +1,0 @@
-/* 
-  InfoPlist.strings
-  HackerKids
-
-  Created by Roberto Ramirez on 5/2/25.
-  
-*/
-"NSLocationWhenInUseUsageDescription" = "Your location is used to display current weather information in your area within the weather module of the app. For example, it will show the temperature and conditions based on where you are.";
