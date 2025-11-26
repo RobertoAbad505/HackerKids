@@ -25,17 +25,31 @@ struct HackerKidsApp: App {
     @StateObject private var appState = AppState()
     @StateObject private var audioManager = AudioManager()
     @StateObject private var localizationManager = LocalizationManager.shared
-    
+    @State private var showSplash = true
 
     var body: some Scene {
         WindowGroup {
-            HomeViewContainer()
+                Group {
+                   if showSplash {
+                       SplashView()
+                           .transition(.opacity) // fade out
+                   } else {
+                       HomeViewContainer()
+                           .transition(.opacity) // fade out
+                   }
+                }
                 .id(localizationManager.currentLanguage)
                 .environmentObject(appState)
                 .environmentObject(localizationManager)
                 .environmentObject(audioManager)
                 .preferredColorScheme(.dark)
                 .onAppear {
+                    // After 4 seconds, switch to HomeContainerView
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        withAnimation(.easeInOut) {
+                            showSplash = false
+                        }
+                    }
                     #if ISDEBUG
                     print("🐛🐞🐜🦟🪲🪳🕷️ IS DEVELOPMENT TARGET")
                     #else

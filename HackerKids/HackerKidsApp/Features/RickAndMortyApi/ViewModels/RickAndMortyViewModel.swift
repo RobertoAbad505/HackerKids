@@ -35,7 +35,7 @@ class RickAndMortyViewModel: ObservableObject {
             print("page already fetch")
             return
         }
-        print("Fetch next page: \(url.absoluteString)")
+        print("RickandMortyAPI: Fetch next page: \(url.absoluteString)")
         //call the service
         //sink the request
         //manage the publisher error or success

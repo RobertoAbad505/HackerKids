@@ -33,10 +33,16 @@ struct RickAndMortyHome: View {
         let count = isIpad ? (isLandscape ? 5:4): (isLandscape ? 3:2)
         return Array(repeating: GridItem(.flexible()), count: count)
     }
+    @ObservedObject var viewModel: RickAndMortyViewModel = .init()
+    @State private var isAnimating = false
+    
+    init(_ appState: AppState) {
+        self._viewModel = ObservedObject(initialValue: appState.rickAndMortyViewModel)
+    }
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
-                if !appState.rickAndMortyViewModel.errorLoading {
+                if !viewModel.errorLoading {
                     scrollViewCurrentVersion
                 } else {
                     errorView
@@ -44,9 +50,14 @@ struct RickAndMortyHome: View {
             }
             .background(Image("seaBluebackground").resizable().edgesIgnoringSafeArea(.all))
             .onAppear {
-                if appState.rickAndMortyViewModel.charactersCatalog.isEmpty {
-                    appState.rickAndMortyViewModel.fetchData()
+                if viewModel.charactersCatalog.isEmpty {
+                    viewModel.fetchData()
                     updateOrientation()
+                }
+            }
+            .onDisappear {
+                if !viewModel.charactersCatalog.isEmpty {
+                    appState.rickAndMortyViewModel = self.viewModel
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
@@ -55,14 +66,15 @@ struct RickAndMortyHome: View {
             }
             .modifier(ToolbarVisibilityModifier(isScrolling: isScrolling))
             .navigationBarTitle(
-                !appState.rickAndMortyViewModel.isNavigating ? Text("Catalog: page \(currentPage) of \(appState.rickAndMortyViewModel.totalPages)"):Text("")
+                !viewModel.isNavigating ? Text("Catalog: page \(currentPage) of \(viewModel.totalPages)"):Text("")
             )
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
-                if appState.rickAndMortyViewModel.isNavigating {
+                if viewModel.isNavigating {
                     ToolbarItem(placement: .topBarLeading, content: {
                         Button(action: {
                             withAnimation(.bouncy(duration: 1, extraBounce: 0.5)) {
-                                self.appState.rickAndMortyViewModel.isNavigating = false
+                                self.viewModel.isNavigating = false
                             }
                         }, label: {
                             Image(systemName: "chevron.backward")
@@ -73,7 +85,7 @@ struct RickAndMortyHome: View {
                         .padding(.leading)
                     })
                 }
-                if !appState.rickAndMortyViewModel.isNavigating {
+                if !viewModel.isNavigating {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
                             withAnimation(.bouncy(duration: 1, extraBounce: 0.5)) {
@@ -87,7 +99,6 @@ struct RickAndMortyHome: View {
                     }
                 }
             }
-            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         }
         .navigationBarBackButtonHidden(true)
         .navigationViewStyle(StackNavigationViewStyle())
@@ -112,7 +123,7 @@ struct RickAndMortyHome: View {
     }
     var catalogPicker: some View {
         Picker("Select catalog",
-               selection: $appState.rickAndMortyViewModel.queryObject,
+               selection: $viewModel.queryObject,
                content: {
             ForEach(RickAndMortyQueryObject.allCases) { catalog in
                 Text(catalog.rawValue).tag(catalog)
@@ -145,18 +156,21 @@ struct RickAndMortyHome: View {
         ScrollView {
             VStack {
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(Array(appState.rickAndMortyViewModel.charactersCatalog.enumerated()), id: \.element) { index, character in
-                        CharacterCardView(viewModel: appState.rickAndMortyViewModel,character: character)
-                        .onAppear {
-                            if index == appState.rickAndMortyViewModel.charactersCatalog.count - 1 {
+                    ForEach(Array(viewModel.charactersCatalog.enumerated()), id: \.element.id) { index, character in
+                        NavigationLink(destination: CharacterDetailView(viewModel: viewModel,character: character), label: {
+                            CharacterCardView(viewModel: viewModel,character: character)
+                                .navigationBarBackButtonHidden(true)
+                        })
+                       .onAppear {
+                            if index == viewModel.charactersCatalog.count - 1 {
                                 self.currentPage = "\(index / 20 + 1)"
-                                print("Fetching next page . . .")
-                                appState.rickAndMortyViewModel.fetchData(true)
+                                viewModel.fetchData(true)
                             }
                         }
                     }
                 }
                 .padding()
+                Spacer()
             }
         }
     }

@@ -69,20 +69,22 @@ struct StartView: View {
                     .modifier(ScrollViewOffset(offset: $scrollOffset))
                 }
                 .coordinateSpace(name: "scroll") // Necesario para el GeometryReader
-                .background(
-                    // Gradiente dinámica basada en el scroll
-                    LinearGradient(
-                        gradient: Gradient(colors: interpolatedColors),
-                        startPoint: startPoint,
-                        endPoint: endPoint
-                    )
-                    .ignoresSafeArea()
-                )
+//                .background(
+//                    // Gradiente dinámica basada en el scroll
+//                    LinearGradient(
+//                        gradient: Gradient(colors: interpolatedColors),
+//                        startPoint: startPoint,
+//                        endPoint: endPoint
+//                    )
+//                    .ignoresSafeArea()
+//                )
+                                
             }
             .padding(.vertical)
-            .background(colorScheme == .dark ? .black : .white)
-            .edgesIgnoringSafeArea(.all)
+//            .background(colorScheme == .dark ? .black : .white)
             .navigationBarHidden(true)
+            .edgesIgnoringSafeArea(.all)
+            .meshAnimatedBackgroundSimple()
             .onAppear {
                 selectedFeature = nil
                 navigate = false
@@ -273,7 +275,7 @@ struct StartView: View {
         case .pokemon:
             PokemonAPIView()
         case .rickAndMorty:
-            RickAndMortyHome()
+            RickAndMortyHome(appState)
         case .soupChallenge:
             SoupChallengeView(onExit: {})
         case .weather:

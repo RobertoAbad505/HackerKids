@@ -10,19 +10,16 @@ import SwiftUI
 struct CharacterCardView: View {
     @ObservedObject var viewModel: RickAndMortyViewModel
     let character: RnMCharacter
+    @State var isNavigating: Bool = false
 
     var body: some View {
         VStack {
-            NavigationLink(destination: CharacterDetailView(viewModel: self.viewModel, character: character),
-                           isActive: $viewModel.isNavigating,
-            ) {
-                labelCard
-            }
+            labelCard
         }
-        .navigationBarBackButtonHidden(true)
         .background(.ultraThinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 25))
         .shadow(radius: 1, x: 10, y: 15)
+        .navigationBarBackButtonHidden(true)
     }
     var labelCard: some View {
         VStack(alignment: .center, spacing: 0) {

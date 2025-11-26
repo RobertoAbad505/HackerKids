@@ -1,7 +1,7 @@
 /* ============================
    ERRORES GENÉRICOS
    ============================ */
-"app.title" = "HackerKidsApp ES";
+"app.title" = "HackerKids ES";
 "generic.error.unexpected" = "Ocurrió un error inesperado. Inténtalo de nuevo.";
 "generic.error.unknown" = "Error desconocido.";
 "generic.error.fetch" = "Error al obtener los datos. Inténtalo más tarde.";

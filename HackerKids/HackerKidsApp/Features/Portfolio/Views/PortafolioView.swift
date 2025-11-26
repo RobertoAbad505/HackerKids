@@ -163,7 +163,7 @@ struct PortafolioView: View {
         case .pokemon:
             PokemonAPIView()
         case .rickAndMorty:
-            RickAndMortyHome()
+            RickAndMortyHome(appState)
         case .soupChallenge:
             SoupChallengeView(onExit: {})
         case .weather:

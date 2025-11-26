@@ -27,9 +27,8 @@ struct MovieBrowserView: View {
                 activeView
             }
         }
-        .task {
-            //ASYNC CALL
-            await viewModel.fetchMostPopularMovies()
+        .onAppear() {
+            self.viewModel.fetchNextPage()
         }
     }
     

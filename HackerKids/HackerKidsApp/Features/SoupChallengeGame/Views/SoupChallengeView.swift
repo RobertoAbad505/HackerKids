@@ -31,8 +31,10 @@ struct SoupChallengeView: View {
                 startedGame
             }
         }
+        .padding(.top, 48)
         .navigationBarBackButtonHidden()
-        .background(Image("soupBackground").resizable().ignoresSafeArea())
+        .edgesIgnoringSafeArea(.all)
+        .meshAnimatedBackgroundSimple()
         .onAppear {
             viewModel.addChallenge(challenge: challenge)
         }

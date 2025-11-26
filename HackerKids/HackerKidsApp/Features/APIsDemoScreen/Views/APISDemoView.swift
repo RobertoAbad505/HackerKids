@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct APISDemoView: View {
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         VStack {
@@ -19,7 +20,7 @@ struct APISDemoView: View {
         .padding()
     }
     var rickAndMortyAPI: some View {
-        NavigationLink(destination: RickAndMortyHome() , label: {
+        NavigationLink(destination: RickAndMortyHome(appState) , label: {
             HomeButtonView(title: "Rick and Morty API", icon: "atom")
         })
     }

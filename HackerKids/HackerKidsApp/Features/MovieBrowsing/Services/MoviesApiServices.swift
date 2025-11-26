@@ -10,7 +10,9 @@ import Combine
 
 class MoviesApiServices {
     
-    let lang = "language=en-US"
+    var lang: String {
+        return "language=en-US"
+    }
     let apiKey = "api_key=bf37f9a4b4c70dfd3cd0b33655fcec82"
     let baseUrl = "https://api.themoviedb.org/3/"
     

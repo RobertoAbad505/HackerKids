@@ -14,7 +14,7 @@ class MoviesViewModel: ObservableObject {
     @Published var topTenMovies: [MovieModel] = []
     @Published var popularPlaylist: [MovieModel] = []
     @Published var moviesCatalog: [MovieModel] = []
-    
+    private var storeIndex: Int = 0
     private let api = MoviesApiServices()
     private var pageIndex = 1
     
@@ -37,6 +37,7 @@ class MoviesViewModel: ObservableObject {
     }
     //Combine api Calls
     func fetchNextPage() {
+        storeIndex = storeIndex > 3 ? 0 : storeIndex + 1
         print("Fetching page number: \(self.pageIndex)")
         api.fetchNextPage(self.pageIndex)
             .receive(on: DispatchQueue.main) //Update on the main thread
@@ -48,10 +49,26 @@ class MoviesViewModel: ObservableObject {
                     self?.presenterState = .failure //Some error happened, Presenter needs to modify user experience
                 }
             }, receiveValue: { [weak self] data in
-                self?.popularPlaylist.append(contentsOf: data.results ?? [])
                 self?.pageIndex += 1
+                self?.recevedNewData(self?.storeIndex ?? 0, data.results ?? [])
             })
             .store(in: &cancellables)
+    }
+    func recevedNewData(_ index: Int, _ newData: [MovieModel]) {
+        switch index {
+        case 0:
+            self.movies.append(contentsOf: newData)
+        case 1:
+            self.topTenMovies.append(contentsOf: newData)
+        case 2:
+            self.popularPlaylist.append(contentsOf: newData)
+        default:
+            self.moviesCatalog.append(contentsOf: newData)
+        }
+        if pageIndex < 4 {
+            fetchNextPage( )
+        }
+        presenterState = .success
     }
     func fetchGalleryMovies() {
         print("Fetch Gallery Movies . . .")//filling with pages not requested

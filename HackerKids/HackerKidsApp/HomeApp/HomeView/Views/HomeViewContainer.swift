@@ -41,6 +41,7 @@ struct HomeViewContainer: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .animation(.easeIn)
     }
 }
 

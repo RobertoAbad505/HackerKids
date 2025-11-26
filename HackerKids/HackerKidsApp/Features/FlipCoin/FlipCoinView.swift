@@ -32,7 +32,8 @@ struct FlipCoinView: View {
         ScrollView  {
             contentView
         }
-        .background(.black)
+        .edgesIgnoringSafeArea(.all)
+        .meshAnimatedBackgroundSimple()
         .toolbar(content: {
             ToolbarItem(placement: .topBarTrailing, content: {
                 Menu {
@@ -101,7 +102,7 @@ struct FlipCoinView: View {
         }
         .frame(maxWidth: .infinity)
         .ignoresSafeArea(edges: .all)
-        .background(.black)
+        .meshAnimatedBackgroundSimple()
     }
     func changeGameType(_ selection: GameType){
         self.gameType = selection

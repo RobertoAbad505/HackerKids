@@ -11,14 +11,6 @@ class PortfolioViewModel: ObservableObject {
     let features: [FeatureModel] = [
         FeatureModel(
             id: 0,
-            name: "SoupChallenge Game!",
-            description: "A word search game built with SwiftUI. Find all the words as quickly as you can to win the challenge!",
-            lclstring: LocalizedStringResource("portfolio.soupgame.description"),
-            type: .soupChallenge,
-            icon: "🧩"
-        ),
-        FeatureModel(
-            id: 1,
             name: "Flip a coin!",
             description: "Flip a coin and test your luck!",
             lclstring: LocalizedStringResource("portfolio.flipcoin.description"),
@@ -26,12 +18,20 @@ class PortfolioViewModel: ObservableObject {
             icon: "🪙"
         ),
         FeatureModel(
-            id: 2,
+            id: 1,
             name: "WeatherApp",
             description: "Get real-time weather updates based on your current location and integrate with the OpenWeatherMap API(https://openweathermap.org/api/). Uses GPS to display current conditions, forecasts, and more.",
             lclstring: LocalizedStringResource("portfolio.weather.description"),
             type: .weather,
             icon: "🌤️"
+        ),
+        FeatureModel(
+            id: 2,
+            name: "SoupChallenge Game!",
+            description: "A word search game built with SwiftUI. Find all the words as quickly as you can to win the challenge!",
+            lclstring: LocalizedStringResource("portfolio.soupgame.description"),
+            type: .soupChallenge,
+            icon: "🧩"
         ),
         FeatureModel(
             id: 3,

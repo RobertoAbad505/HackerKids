@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftUI
 import AVKit
 
-struct SplashScreenView: View {
+struct SplashVideoScreenView: View {
     
     @ObservedObject var viewModel: ChatBTFriendViewModel
     @State private var isChatActive = false
