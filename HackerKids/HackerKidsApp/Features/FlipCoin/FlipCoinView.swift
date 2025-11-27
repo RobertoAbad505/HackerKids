@@ -15,10 +15,10 @@ struct FlipCoinView: View {
     @State private var isFlipping = false
     @State private var rotation: Double = 0
     @State private var result: Bool? = nil // true = cara, false = cruz
-    let duration: Double = 2.5 // duración total del giro
+    let duration: Double = 3 // duración total del giro
     
     //Style
-    @State var colorAccent = Color.yellow
+    @State var colorAccent = Color.white
     
     //DATA
     @State private var results: [Bool] = []
@@ -32,7 +32,6 @@ struct FlipCoinView: View {
         ScrollView  {
             contentView
         }
-        .edgesIgnoringSafeArea(.all)
         .meshAnimatedBackgroundSimple()
         .toolbar(content: {
             ToolbarItem(placement: .topBarTrailing, content: {
@@ -42,8 +41,13 @@ struct FlipCoinView: View {
                         Button("2 out of 3", action: { changeGameType(.twoOutOfThree) })
                                Button("Free throws", action: { changeGameType(.freeForAll) })
                     }
+                    Button("Reset", action: {
+                        self.results.removeAll()
+                        self.winer = false
+                        self.showWiner = false
+                    })
+                    
                 } label: {
-                    //gear icon
                     Image(systemName: "gearshape.fill")
                         .font(.title2)
                         .fontWeight(.bold)
@@ -51,9 +55,17 @@ struct FlipCoinView: View {
                 }.mapStyle(.imagery)
             })
         })
-        .sheet(isPresented: $showWiner, content: {
-            roundWinView
-        })
+        .navigationTitle("Flip my luck!🪙")
+        .overlay {
+            if showWiner {
+                VStack {
+                    roundWinView
+                }
+                .background(.clear)
+                .edgesIgnoringSafeArea(.all)
+                .background(.ultraThinMaterial)
+            }
+        }
     }
     var contentView: some View {
         VStack(alignment: .center, spacing: 30) {
@@ -61,13 +73,35 @@ struct FlipCoinView: View {
             triggerView
             if self.gameType != .oneOfOne {
                 resultsView
+            } else {
+                Spacer()
+            }
+            VStack(alignment: .center, spacing: 0) {
+                Text("Game type")
+                Picker(selection: $gameType, label: Text("")) {
+                    ForEach(GameType.allCases, id: \.self) { gametype in
+                        Text(getTabName(gametype))
+                            .onTapGesture {
+                                changeGameType(gametype)
+                            }
+                    }
+                }
+                .pickerStyle(.segmented)
             }
         }
-        .padding(.top, 50)
-        .padding(.top, self.gameType == .oneOfOne ? 150:0)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.vertical, 150)
+        .padding(.top, self.gameType == .oneOfOne ? 100:0)
         .padding(.horizontal, 30)
-        .navigationTitle("Flip my luck!🪙")
+    }
+    func getTabName(_ gametype: GameType) -> String {
+        switch gametype {
+        case .oneOfOne:
+            return "1/1"
+        case .twoOutOfThree:
+            return "2/3"
+        case .freeForAll:
+            return "Free for all"
+        }
     }
     var roundWinView: some View {
         VStack(alignment: .center, spacing: 30) {
@@ -75,12 +109,14 @@ struct FlipCoinView: View {
             Text("You win!")
                 .font(.largeTitle.bold())
                 .foregroundStyle(.white)
-            if winer {
-                headsImage
-                    .frame(maxWidth: 250, maxHeight: 250)
-            } else {
-                tailsImage
-                    .frame(maxWidth: 250, maxHeight: 250)
+            VStack {
+                if winer {
+                    headsImage
+                        .frame(maxWidth: 250, maxHeight: 250)
+                } else {
+                    tailsImage
+                        .frame(maxWidth: 250, maxHeight: 250)
+                }
             }
             Button(action: {
                 showWiner.toggle()
@@ -94,15 +130,18 @@ struct FlipCoinView: View {
                         .padding(.vertical, 10)
                         .foregroundColor(.white)
                 }
+                .padding(.horizontal, 30)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke((colorAccent), lineWidth: 3)
+                )
             })
-            .padding(.horizontal, 50)
-            .background(colorAccent)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+//            .padding(.horizontal, 50)
             Spacer()
         }
         .frame(maxWidth: .infinity)
         .ignoresSafeArea(edges: .all)
-        .meshAnimatedBackgroundSimple()
+        .background(.clear)
     }
     func changeGameType(_ selection: GameType){
         self.gameType = selection
@@ -117,6 +156,10 @@ struct FlipCoinView: View {
                 .scaledToFit()
                 .frame(width: 250, height: 250)
                 .opacity(showingFront ? 1 : 0)
+                .rotation3DEffect(
+                    .degrees(rotation),
+                    axis: (x: 0, y: 1, z: 0)
+                )
             
             // Cruz (se ve cuando el ángulo es entre 90° y 270°)
             Image("tailsImg")
@@ -124,36 +167,37 @@ struct FlipCoinView: View {
                 .scaledToFit()
                 .frame(width: 250, height: 250)
                 .opacity(showingFront ? 0 : 1)
+                .rotation3DEffect(
+                    .degrees(rotation),
+                    axis: (x: 0, y: 1, z: 0)
+                )
         }
         .padding()
         .frame(width: 250, height: 250)
         .clipShape(Circle())
-        .rotation3DEffect(
-            .degrees(rotation),
-            axis: (x: 0, y: 1, z: 0)
-        )
     }
     
     var triggerView: some View {
-        HStack {
-            Spacer()
+        VStack {
             if !throwingCoing {
                 withAnimation {
-                    Button(action: flipCoin) {
-                        Text("🪙 Lanzar moneda!")
-                            .font(.headline)
-                            .padding(.vertical, 10)
-                            .foregroundColor(.white)
+                    HStack {
+                        Spacer()
+                        Button(action: flipCoin) {
+                            Text("🪙 Lanzar moneda!")
+                                .font(.headline)
+                                .padding(.vertical, 10)
+                                .foregroundColor(.white)
+                        }
+                        Spacer()
                     }
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke((colorAccent), lineWidth: 3)
+                    )
                 }
             }
-            Spacer()
         }
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke((colorAccent), lineWidth: 3)
-        )
-        .padding(.horizontal, 30)
     }
     var resultsView: some View {
         // Historial
@@ -181,55 +225,71 @@ struct FlipCoinView: View {
             case .oneOfOne:
                 EmptyView()
             case .twoOutOfThree:
-                HStack(alignment: .center) {
-                    Spacer()
-                    VStack {
-                        tailsImage
-                            .frame(maxWidth: 75, maxHeight: 75)
-                        Text("\(results.filter({ $0 == false }).count)")
-                            .font(.largeTitle)
-                    }
-                    VStack {
-                        headsImage
-                            .frame(maxWidth: 75, maxHeight: 75)
-                        Text("\(results.filter({ $0 == true }).count)")
-                            .font(.largeTitle)
-                    }
-                    Spacer()
-                }
+                markerView
             case .freeForAll:
-                ForEach(Array(results.indices.reversed()), id: \.self) { index in
-                    HStack {
-                        Image(results[index] ? "headsImg" : "tailsImg")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 75, height: 75)
-                        Text("Tiro \(index + 1): \(results[index] ? "Cara" : "Cruz")").padding(.trailing)
-                        Spacer()
+                VStack {
+                    if results.count > 0 {
+                        markerView
                     }
-                    .font(.headline)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.white)
-                    .foregroundColor(results[index] ? .yellow : .blue)
-                    .padding(5)
-                    .background(results[index] ? Color.gray : Color.clear)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke((colorAccent), lineWidth: 2)
-                    )
+                    ForEach(Array(results.indices.reversed()), id: \.self) { index in
+                        HStack {
+                            Image(results[index] ? "headsImg" : "tailsImg")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 75, height: 75)
+                            Text("Tiro \(index + 1): \(results[index] ? "Cara" : "Cruz")").padding(.trailing)
+                            Spacer()
+                        }
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.white)
+                        .foregroundColor(results[index] ? .yellow : .blue)
+                        .padding(5)
+                        .background(results[index] ? Color.gray : Color.clear)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke((colorAccent), lineWidth: 2)
+                        )
+                    }
                 }
             }
+        }
+    }
+    var markerView: some View {
+        HStack(alignment: .center) {
+            Spacer()
+            VStack {
+                tailsImage
+                    .frame(maxWidth: 75, maxHeight: 75)
+                Text("\(results.filter({ $0 == false }).count)")
+                    .font(.largeTitle)
+            }
+            VStack {
+                headsImage
+                    .frame(maxWidth: 75, maxHeight: 75)
+                Text("\(results.filter({ $0 == true }).count)")
+                    .font(.largeTitle)
+            }
+            Spacer()
         }
     }
     var headsImage: some View {
         Image("headsImg")
             .resizable()
             .scaledToFit()
+            .rotation3DEffect(
+                .degrees(rotation),
+                axis: (x: 0, y: 1, z: 0)
+            )
     }
     var tailsImage: some View {
         Image("tailsImg")
             .resizable()
             .scaledToFit()
+            .rotation3DEffect(
+                .degrees(rotation),
+                axis: (x: 0, y: 1, z: 0)
+            )
     }
     
     private var showingFront: Bool {
@@ -298,13 +358,14 @@ struct FlipCoinView: View {
         print("Winner: \((newWiner ?? false) ? "Heads" : "Tails")\n-----------------")
         self.winer = newWiner ?? false
     }
-    enum GameType: String {
+    enum GameType: String, CaseIterable {
         case oneOfOne = "One Out Of One"
         case twoOutOfThree = "Two Out Of Three"
         case freeForAll = "Free For All"
     }
     func resetGame() {
         results.removeAll()
+        print("Game Reseted \n-----------------")
     }
 }
 

@@ -10,20 +10,35 @@ import SwiftUI
 @available(iOS 17.0, macOS 14.0, *)
 struct AnimatedMeshGradientModifierSimple: ViewModifier {
     @State private var colorToggle = false
+    @State private var start = UnitPoint.topLeading
+    @State private var end = UnitPoint.bottomTrailing
 
     func body(content: Content) -> some View {
         ZStack {
-            MeshGradient(
-                width: 2, height: 2,
-                points: [
-                   .init(x: 0, y: 0),
-                   .init(x: 1, y: 0),
-                   .init(x: 0, y: 1),
-                   .init(x: 1, y: 1)
-                ],
-                colors: colorToggle ? colorSetA : colorSetB
-            )
-            .ignoresSafeArea()
+            if #available(iOS 18.0, *) {
+                MeshGradient(
+                    width: 2, height: 2,
+                    points: [
+                       .init(x: 0, y: 0),
+                       .init(x: 1, y: 0),
+                       .init(x: 0, y: 1),
+                       .init(x: 1, y: 1)
+                    ],
+                    colors: colorToggle ? colorSetA : colorSetB
+                )
+                .ignoresSafeArea()
+            } else {
+                LinearGradient(colors: [.blue, .purple, .pink],
+                                       startPoint: start,
+                                       endPoint: end)
+                    .ignoresSafeArea()
+                    .onAppear {
+                        withAnimation(.easeInOut(duration: 3).repeatForever()) {
+                            start = .bottomTrailing
+                            end = .topLeading
+                        }
+                    }
+            }
             content
         }
         .ignoresSafeArea(.all)
