@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct FlipCoinView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var audioManager: AudioManager
@@ -89,7 +87,7 @@ struct FlipCoinView: View {
                 .pickerStyle(.segmented)
             }
         }
-        .padding(.vertical, 150)
+        .padding(.vertical, 120)
         .padding(.top, self.gameType == .oneOfOne ? 100:0)
         .padding(.horizontal, 30)
     }
@@ -294,7 +292,9 @@ struct FlipCoinView: View {
     
     private var showingFront: Bool {
         let normalized = rotation.truncatingRemainder(dividingBy: 360)
-        return normalized < 90 || normalized > 270
+        let isFront: Bool = normalized < 90 || normalized > 270
+        print(">> Display front: \(isFront ? "Heads" : "Tails")")
+        return isFront
     }
     
     private func flipCoin() {
