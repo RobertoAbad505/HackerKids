@@ -41,16 +41,9 @@ struct SplashView: View {
     var body: some View {
         VStack {
             ZStack {
-                // Background gradient
-//                LinearGradient(
-//                    gradient: Gradient(colors: [.white, .yellow, .blue, .blue, .black, .black, .black, .black]),
-//                    startPoint: self.start,
-//                    endPoint: self.end
-//                )
-//                .ignoresSafeArea()
                 VStack {
                     // Multiple scrolling rows filling vertical space
-                    ForEach(0..<8) { row in
+                    ForEach(0..<7) { row in
                         ScrollingRow(
                             items: shuffledItems(for: row),
                             showIcons: row % 2 == 0, // even rows = icons only
@@ -63,15 +56,21 @@ struct SplashView: View {
                 .overlay {
                     // Title at top
                     VStack(spacing: 50) {
-                        Text("Hackerkids")
-                            .font(.system(size: 50, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                            .scaleEffect(animate ? 1.1 : 0.9)
-                            .opacity(animate ? 1 : 0.7)
-                            .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: animate)
-                            .padding(.bottom)
+                        HStack {
+                            Spacer()
+                            Text("HackerKids")
+                                .font(.largeTitle)
+                                .foregroundColor(.white)
+                                .fontWeight(.bold)
+                                .scaleEffect(animate ? 1.1 : 0.9)
+                                .opacity(animate ? 1 : 0.7)
+                                .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: animate)
+                                .padding()
+                            Spacer()
+                        }
+                        .padding()
+                        .background(.ultraThinMaterial)
                     }
-                    .padding()
                 }
             }
         }
@@ -110,9 +109,10 @@ struct ScrollingRow: View {
     @State private var colorIndex = 0
     let colors: [Color] = [
         .white,
-        .orange,
+//        .orange,
         .yellow,
         .blue,
+        Color.blendColor(.purple, .white, blend: 0.5),
         Color.blendColor(.yellow, .black, blend: 0.5),
         Color.blendColor(.yellow, .white, blend: 0.5)
     ]
@@ -120,13 +120,13 @@ struct ScrollingRow: View {
     
     var body: some View {
         GeometryReader { geo in
-            HStack(spacing: 50) {
+            HStack(spacing: 45) {
                 ForEach(items, id: \.0) { item in
                     VStack {
                         if showIcons {
                             Image(systemName: item.1)
                                 .font(.system(size: 36))
-                                .fontWeight(.heavy)
+                                .fontWeight(.bold)
                                 .foregroundColor(currentColor)
                                 .animation(.linear(duration: 4).repeatForever(autoreverses: false), value: offset)
                                 .foregroundColor(colors[colorIndex])

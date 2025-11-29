@@ -44,7 +44,6 @@ struct FlipCoinView: View {
                         self.winer = false
                         self.showWiner = false
                     })
-                    
                 } label: {
                     Image(systemName: "gearshape.fill")
                         .font(.title2)
@@ -67,24 +66,25 @@ struct FlipCoinView: View {
     }
     var contentView: some View {
         VStack(alignment: .center, spacing: 30) {
-            coinView
-            triggerView
+            CoinFlipView(results: $results, onCoinLand: { _ in
+                showResults()
+            })
+            .background(.clear)
             if self.gameType != .oneOfOne {
                 resultsView
-            } else {
-                Spacer()
             }
             VStack(alignment: .center, spacing: 0) {
                 Text("Game type")
                 Picker(selection: $gameType, label: Text("")) {
                     ForEach(GameType.allCases, id: \.self) { gametype in
                         Text(getTabName(gametype))
-                            .onTapGesture {
-                                changeGameType(gametype)
-                            }
                     }
                 }
                 .pickerStyle(.segmented)
+                .onChange(of: gameType) { newValue in
+                    changeGameType(newValue) // your reset function
+                    print("game reset! -> \(newValue)")
+                }
             }
         }
         .padding(.vertical, 120)
@@ -102,7 +102,7 @@ struct FlipCoinView: View {
         }
     }
     var roundWinView: some View {
-        VStack(alignment: .center, spacing: 30) {
+        VStack(alignment: .center, spacing: 25) {
             Spacer()
             Text("You win!")
                 .font(.largeTitle.bold())
@@ -116,25 +116,30 @@ struct FlipCoinView: View {
                         .frame(maxWidth: 250, maxHeight: 250)
                 }
             }
+            if self.gameType != .oneOfOne {
+                scoreBoardView
+            }
             Button(action: {
                 showWiner.toggle()
+                resetGame()
             }, label: {
                 HStack {
+                    Spacer()
                     Text("⟲")
-                        .font(.system(size: 30, design: .rounded))
+                        .font(.system(size: 45, design: .rounded))
                     Text(" Try again!")
                         .font(.headline)
                         .fontWeight(.bold)
                         .padding(.vertical, 10)
                         .foregroundColor(.white)
+                    Spacer()
                 }
-                .padding(.horizontal, 30)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .stroke((colorAccent), lineWidth: 3)
                 )
             })
-//            .padding(.horizontal, 50)
+            .padding(25)
             Spacer()
         }
         .frame(maxWidth: .infinity)
@@ -145,73 +150,18 @@ struct FlipCoinView: View {
         self.gameType = selection
         resetGame()
     }
-    
-    var coinView: some View {
-        ZStack {
-            // Cara (se ve cuando el ángulo es < 90° o > 270°)
-            Image("headsImg")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 250, height: 250)
-                .opacity(showingFront ? 1 : 0)
-                .rotation3DEffect(
-                    .degrees(rotation),
-                    axis: (x: 0, y: 1, z: 0)
-                )
-            
-            // Cruz (se ve cuando el ángulo es entre 90° y 270°)
-            Image("tailsImg")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 250, height: 250)
-                .opacity(showingFront ? 0 : 1)
-                .rotation3DEffect(
-                    .degrees(rotation),
-                    axis: (x: 0, y: 1, z: 0)
-                )
-        }
-        .padding()
-        .frame(width: 250, height: 250)
-        .clipShape(Circle())
-    }
-    
-    var triggerView: some View {
-        VStack {
-            if !throwingCoing {
-                withAnimation {
-                    HStack {
-                        Spacer()
-                        Button(action: flipCoin) {
-                            Text("🪙 Lanzar moneda!")
-                                .font(.headline)
-                                .padding(.vertical, 10)
-                                .foregroundColor(.white)
-                        }
-                        Spacer()
-                    }
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke((colorAccent), lineWidth: 3)
-                    )
-                }
-            }
-        }
-    }
     var resultsView: some View {
         // Historial
-        VStack(alignment: .leading) {
-            if results.count == 0 {
-                 Spacer()
-            }
+        VStack(alignment: .center, spacing: 5) {
             HStack {
                 Spacer()
                 Text(self.gameType.rawValue)
+                    .font(.headline)
                 Spacer()
             }
-            .font(.title3)
-            .padding()
             scoreBoardView
         }
+        .padding()
         .overlay(
             RoundedRectangle(cornerRadius: 12)
                 .stroke((colorAccent), lineWidth: 3)
@@ -260,13 +210,13 @@ struct FlipCoinView: View {
                 tailsImage
                     .frame(maxWidth: 75, maxHeight: 75)
                 Text("\(results.filter({ $0 == false }).count)")
-                    .font(.largeTitle)
+                    .font(.title3)
             }
             VStack {
                 headsImage
                     .frame(maxWidth: 75, maxHeight: 75)
                 Text("\(results.filter({ $0 == true }).count)")
-                    .font(.largeTitle)
+                    .font(.title3)
             }
             Spacer()
         }
@@ -285,67 +235,26 @@ struct FlipCoinView: View {
             .resizable()
             .scaledToFit()
             .rotation3DEffect(
-                .degrees(rotation),
+                .degrees(180),
                 axis: (x: 0, y: 1, z: 0)
             )
     }
-    
-    private var showingFront: Bool {
-        let normalized = rotation.truncatingRemainder(dividingBy: 360)
-        let isFront: Bool = normalized < 90 || normalized > 270
-        print(">> Display front: \(isFront ? "Heads" : "Tails")")
-        return isFront
-    }
-    
-    private func flipCoin() {
-        self.throwingCoing = true
-        audioManager.playSoundEffect(named: "coinFx")
-        guard !isFlipping else { return }
-        isFlipping = true
-        result = nil
-        
-        let finalResult = Bool.random()
-        
-        // Si es true → debe acabar en 0°, si es false → en 180°
-        let target = finalResult ? 0 : 180
-        
-        // Vueltas completas extras (entre 2 y 4 para variar)
-        let extraSpins = Int.random(in: 2...4) * 360
-        
-        // Ángulo final garantizado
-        let endRotation = Double(extraSpins + target)
-        
-        withAnimation(.easeOut(duration: duration)) {
-            rotation += endRotation
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            // Normalizamos para evitar acumulación
-            rotation = Double(target)
-            result = finalResult
-            isFlipping = false
-            results.append(finalResult)
-            showResults()
-            self.throwingCoing = false
-        }
-    }
+
     func showResults() {
         let _ = getWinner()
         switch self.gameType {
             case .oneOfOne:
             if results.count == 1 {
                 self.showWiner = true
-                self.resetGame()
             }
         case .twoOutOfThree:
             if results.count == 2 && results[0] == results [1] {
-                
                 self.showWiner = true
-                self.resetGame()
+//                self.resetGame()
             }
             if results.count == 3 {
                 self.showWiner = true
-                self.resetGame()
+//                self.resetGame()
             }
         default:
             return
