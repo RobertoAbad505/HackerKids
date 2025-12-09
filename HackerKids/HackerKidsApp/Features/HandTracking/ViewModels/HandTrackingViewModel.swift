@@ -13,8 +13,8 @@ import SwiftUI
 
 @MainActor
 final class HandTrackingViewModel: ObservableObject {
-    @Published var fingerPoints: [CGPoint] = []
-    @Published var gesture: String = "—"
+    @Published var hands: [HandPoints] = []
+    @Published var gesture: String = "-"
     @Published var showCameraView: Bool = false
     @Published var flipCamera: Bool = false
 
@@ -48,7 +48,10 @@ final class HandTrackingViewModel: ObservableObject {
    func exitCamera() {
        showCameraView = false
        gesture = "—"
-       fingerPoints = []
+       hands = []
    }
 }
-
+struct HandPoints {
+    let isLeft: Bool
+    let points: [CGPoint]
+}

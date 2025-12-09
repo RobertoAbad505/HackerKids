@@ -16,35 +16,38 @@ import CoreGraphics
 final class HandTrackingGestureDetector {
 
     // MARK: - Public API
-    func analyzeObservation(
-        _ observation: VNHumanHandPoseObservation,
+    func analyzeObservations(
+        _ observations: [VNHumanHandPoseObservation],
         viewModel: HandTrackingViewModel
     ) {
+        var detectedHands: [HandPoints] = []
 
-        guard let points = try? observation.recognizedPoints(.all) else {
-            DispatchQueue.main.async {
-                viewModel.fingerPoints = []
-                viewModel.gesture = "-"
-            }
-            return
+        for obs in observations {
+            guard let points = try? obs.recognizedPoints(.all) else { continue }
+
+            let fingerTips = extractFingerTipPoints(from: points)
+            if fingerTips.isEmpty { continue }
+
+            let isLeft = isLeftHand(points)
+            detectedHands.append(HandPoints(isLeft: isLeft, points: fingerTips))
         }
 
-        // 1. Extract normalized fingertip locations
-        let fingerTips = extractFingerTipPoints(from: points)
-
-        // 2. Detect finger extension states
-        let state = detectFingerStates(from: points)
-
-        // 3. Detect gesture
-        let gesture = detectGesture(from: state)
-
-        // 4. Update ViewModel on main thread
         DispatchQueue.main.async {
-            viewModel.fingerPoints = fingerTips
-            viewModel.gesture = gesture
+            viewModel.hands = detectedHands
         }
     }
+    
+    // MARK: - Detect left or right hand
+    private func isLeftHand(_ points: [VNHumanHandPoseObservation.JointName : VNRecognizedPoint]) -> Bool {
 
+        guard
+            let thumb = points[.thumbTip], thumb.confidence > 0.3,
+            let index = points[.indexTip], index.confidence > 0.3
+        else { return false }
+
+        // Si el pulgar está más a la izquierda que el índice → mano izquierda
+        return thumb.location.x < index.location.x
+    }
 
     // MARK: - Finger Tip Extraction
     private func extractFingerTipPoints(

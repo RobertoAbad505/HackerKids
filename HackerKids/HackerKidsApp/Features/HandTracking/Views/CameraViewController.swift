@@ -29,14 +29,13 @@ final class CameraViewController: UIViewController, AVCaptureVideoDataOutputSamp
         previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
 
-        // Forzar orientación del preview (portrait normalmente)
+        // Forzar orientation del preview (portrait)
         if let connection = previewLayer.connection {
             connection.videoOrientation = .portrait
-            // Mirror only for front camera preview, not in the data
             connection.automaticallyAdjustsVideoMirroring = false
+            // Mirror only for front camera preview
             connection.isVideoMirrored = (currentPosition == .front)
         }
-        view.layer.addSublayer(previewLayer)
     }
 
     override func viewDidLayoutSubviews() {
@@ -91,38 +90,30 @@ final class CameraViewController: UIViewController, AVCaptureVideoDataOutputSamp
                        didOutput sampleBuffer: CMSampleBuffer,
                        from connection: AVCaptureConnection)
     {
-        // 1. Prepare orientation based on camera used
-        let orientation: CGImagePropertyOrientation = .up
-
-        // 2. Convert sample buffer to pixel buffer
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
-        let handler = VNImageRequestHandler(
-            cvPixelBuffer: pixelBuffer,
-            orientation: orientation,
-            options: [:]
-        )
+        // CORRECCIÓN CLAVE
+        let orientation: CGImagePropertyOrientation = {
+            if currentPosition == .front {
+                return .leftMirrored
+            } else {
+                return .right
+            }
+        }()
+
+        let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer,
+                                            orientation: orientation,
+                                            options: [:])
 
         do {
-            // 3. Perform request
             try handler.perform([handPoseRequest])
-
-            // 4. Extract only one observation
-            guard let observation = handPoseRequest.results?.first else {
-                DispatchQueue.main.async {
-                    self.viewModel.fingerPoints = []
-                    self.viewModel.gesture = "-"
-                }
-                return
-            }
-
-            // 5. Delegate everything to the gesture detector
-            gestureDetector.analyzeObservation(observation, viewModel: viewModel)
-
+            let observations = handPoseRequest.results ?? []
+            gestureDetector.analyzeObservations(observations, viewModel: viewModel)
         } catch {
             print("Vision error: \(error)")
         }
     }
+
 
     func flipCamera() {
         captureSession.beginConfiguration()
