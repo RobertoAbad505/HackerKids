@@ -14,7 +14,7 @@ struct FingerOverlayView: View {
         GeometryReader { geo in
             ForEach(Array(points.enumerated()), id: \.offset) { index, point in
                 Circle()
-                    .fill(Color.green.opacity(0.9))
+                    .fill(Color.red.opacity(0.9))
                     .frame(width: 22, height: 22)
                     .position(
                         x: point.x * geo.size.width,

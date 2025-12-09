@@ -28,6 +28,15 @@ final class CameraViewController: UIViewController, AVCaptureVideoDataOutputSamp
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
+
+        // Forzar orientación del preview (portrait normalmente)
+        if let connection = previewLayer.connection {
+            connection.videoOrientation = .portrait
+            // Mirror only for front camera preview, not in the data
+            connection.automaticallyAdjustsVideoMirroring = false
+            connection.isVideoMirrored = (currentPosition == .front)
+        }
+        view.layer.addSublayer(previewLayer)
     }
 
     override func viewDidLayoutSubviews() {
@@ -83,8 +92,7 @@ final class CameraViewController: UIViewController, AVCaptureVideoDataOutputSamp
                        from connection: AVCaptureConnection)
     {
         // 1. Prepare orientation based on camera used
-        let orientation: CGImagePropertyOrientation =
-            (currentPosition == .front) ? .upMirrored : .up
+        let orientation: CGImagePropertyOrientation = .up
 
         // 2. Convert sample buffer to pixel buffer
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }

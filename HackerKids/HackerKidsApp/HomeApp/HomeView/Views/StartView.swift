@@ -69,29 +69,18 @@ struct StartView: View {
                     .modifier(ScrollViewOffset(offset: $scrollOffset))
                 }
                 .coordinateSpace(name: "scroll") // Necesario para el GeometryReader
-//                .background(
-//                    // Gradiente dinámica basada en el scroll
-//                    LinearGradient(
-//                        gradient: Gradient(colors: interpolatedColors),
-//                        startPoint: startPoint,
-//                        endPoint: endPoint
-//                    )
-//                    .ignoresSafeArea()
-//                )
-                                
             }
             .padding(.vertical)
-//            .background(colorScheme == .dark ? .black : .white)
             .navigationBarHidden(true)
             .edgesIgnoringSafeArea(.all)
             .meshAnimatedBackgroundSimple()
             .onAppear {
                 selectedFeature = nil
                 navigate = false
-                self.appState.aboutViewModel.fetchGitHubUser()
-//                SessionManager.shared.fetchLastSession(modelContext)
-                MyiOSCard().writeLocal()
                 if !firstRotation { DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) { self.rotate(); self.firstRotation = true }}
+            }
+            .task {
+                self.appState.aboutViewModel.fetchGitHubUser()
             }
             .sheet(isPresented: $appState.aboutViewModel.showMailView) {
                 MailView(

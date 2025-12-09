@@ -36,7 +36,7 @@ class AboutAppViewModel: ObservableObject {
                 case .failure(let error):
                     self?.errorMessage = error.localizedDescription
                 case .finished:
-                    print("GIT card fetched successfully . . . ")
+                    print("Git Call completed")
                 }
             }, receiveValue: { [weak self] response in
                 self?.gitHubUser = response
