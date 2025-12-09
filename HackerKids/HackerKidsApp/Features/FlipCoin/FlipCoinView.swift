@@ -30,6 +30,7 @@ struct FlipCoinView: View {
         ScrollView  {
             contentView
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .meshAnimatedBackgroundSimple()
         .toolbar(content: {
             ToolbarItem(placement: .topBarTrailing, content: {
@@ -73,23 +74,30 @@ struct FlipCoinView: View {
             if self.gameType != .oneOfOne {
                 resultsView
             }
-            VStack(alignment: .center, spacing: 0) {
-                Text("Game type")
-                Picker(selection: $gameType, label: Text("")) {
-                    ForEach(GameType.allCases, id: \.self) { gametype in
-                        Text(getTabName(gametype))
-                    }
-                }
-                .pickerStyle(.segmented)
-                .onChange(of: gameType) { newValue in
-                    changeGameType(newValue) // your reset function
-                    print("game reset! -> \(newValue)")
-                }
-            }
+            Spacer()
+            gameTypeView
         }
-        .padding(.vertical, 120)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.top, 120)
         .padding(.top, self.gameType == .oneOfOne ? 100:0)
         .padding(.horizontal, 30)
+        .padding(.bottom, 20)
+    }
+    var gameTypeView: some View {
+        VStack(alignment: .center, spacing: 0) {
+            Text("Game type")
+            Picker(selection: $gameType, label: Text("")) {
+                ForEach(GameType.allCases, id: \.self) { gametype in
+                    Text(getTabName(gametype))
+                }
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: gameType) { newValue in
+                changeGameType(newValue)
+                print("game reset! -> \(newValue)")
+            }
+        }
+        .padding(.bottom, 30)
     }
     func getTabName(_ gametype: GameType) -> String {
         switch gametype {
@@ -157,11 +165,11 @@ struct FlipCoinView: View {
                 Spacer()
                 Text(self.gameType.rawValue)
                     .font(.headline)
+                    .padding()
                 Spacer()
             }
             scoreBoardView
         }
-        .padding()
         .overlay(
             RoundedRectangle(cornerRadius: 12)
                 .stroke((colorAccent), lineWidth: 3)
@@ -172,34 +180,32 @@ struct FlipCoinView: View {
             switch self.gameType {
             case .oneOfOne:
                 EmptyView()
-            case .twoOutOfThree:
+            case .twoOutOfThree, .freeForAll:
                 markerView
-            case .freeForAll:
-                VStack {
-                    if results.count > 0 {
-                        markerView
-                    }
-                    ForEach(Array(results.indices.reversed()), id: \.self) { index in
-                        HStack {
-                            Image(results[index] ? "headsImg" : "tailsImg")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 75, height: 75)
-                            Text("Tiro \(index + 1): \(results[index] ? "Cara" : "Cruz")").padding(.trailing)
-                            Spacer()
-                        }
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.white)
-                        .foregroundColor(results[index] ? .yellow : .blue)
-                        .padding(5)
-                        .background(results[index] ? Color.gray : Color.clear)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke((colorAccent), lineWidth: 2)
-                        )
-                    }
+            }
+        }
+    }
+    var flipsList: some View {
+        VStack {
+            if results.count > 0 {
+                markerView
+            }
+            ForEach(Array(results.indices.reversed()), id: \.self) { index in
+                HStack {
+                    Image(results[index] ? "headsImg" : "tailsImg")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 75, height: 75)
+                    Text("\(index + 1)#: \(results[index] ? "Cara" : "Cruz")").padding(.trailing)
+                    Spacer()
                 }
+                .font(.headline.bold())
+                .foregroundColor(results[index] ? .yellow : .blue)
+                .background(results[index] ? Color.gray.opacity(0.5) : Color.clear)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke((colorAccent), lineWidth: 2)
+                )
             }
         }
     }

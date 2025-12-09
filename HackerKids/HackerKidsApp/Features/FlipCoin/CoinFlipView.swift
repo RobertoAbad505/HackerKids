@@ -52,7 +52,10 @@ struct CoinFlipView: View {
             HStack {
                 Spacer()
                 Button(action: flipCoin) {
-                    Text("🪙 Lanzar moneda!")
+                    Image(systemName: "iphone.gen1.radiowaves.left.and.right")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(.white)
+                    Text("Flip the coin!")
                         .font(.headline)
                         .padding(.vertical, 10)
                         .foregroundColor(.white)

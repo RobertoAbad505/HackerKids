@@ -284,6 +284,8 @@ struct StartView: View {
             MovieBrowserView()
         case .flipCoin:
             FlipCoinView()
+        case .handTracking:
+            HandTrackingStartView()
         }
     }
     var contactoView: some View {

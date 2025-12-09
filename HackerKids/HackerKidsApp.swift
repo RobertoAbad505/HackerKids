@@ -25,7 +25,7 @@ struct HackerKidsApp: App {
     @StateObject private var appState = AppState()
     @StateObject private var audioManager = AudioManager()
     @StateObject private var localizationManager = LocalizationManager.shared
-    @State private var showSplash = true
+    @State private var showSplash = false
 
     var body: some Scene {
         WindowGroup {

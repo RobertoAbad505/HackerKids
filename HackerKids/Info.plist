@@ -46,6 +46,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>$(NSLocationWhenInUseUsageDescription)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app require access to your camera to use Vision.&quot;</string>
 	<key>api.github.com</key>
 	<dict>
 		<key>NSExceptionAllowsInsecureHTTPLoads</key>

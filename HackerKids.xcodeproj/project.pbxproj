@@ -90,6 +90,13 @@
 			membershipExceptions = (
 				"HackerKidsApp/Extensions/Double+FormatString.swift",
 				"HackerKidsApp/Extensions/View+Extensions.swift",
+				HackerKidsApp/Features/HandTracking/ViewModels/HandTrackingGestureDetector.swift,
+				HackerKidsApp/Features/HandTracking/ViewModels/HandTrackingViewModel.swift,
+				HackerKidsApp/Features/HandTracking/Views/CameraView.swift,
+				HackerKidsApp/Features/HandTracking/Views/CameraViewController.swift,
+				HackerKidsApp/Features/HandTracking/Views/FingerOverlayView.swift,
+				HackerKidsApp/Features/HandTracking/Views/HandTrackingCameraView.swift,
+				HackerKidsApp/Features/HandTracking/Views/HandTrackingStartView.swift,
 				HackerKidsApp/Features/Login/Models/PlayerUser.swift,
 				HackerKidsApp/Features/Login/ViewModels/LoginViewModel.swift,
 				HackerKidsApp/Features/Portfolio/Models/FeatureModel.swift,
@@ -102,6 +109,7 @@
 				HackerKidsApp/Features/WeatherApp/ViewModel/WeatherViewModel.swift,
 				HackerKidsApp/Features/WeatherApp/Views/WeatherAppView.swift,
 				HackerKidsApp/Features/WeatherApp/Views/WeatherInitialView.swift,
+				HackerKidsApp/Managers/CameraAuthorizationManager.swift,
 				HackerKidsApp/Managers/LocationManager.swift,
 			);
 			target = 6FD516F62CA5131F0052F1D3 /* HackerKidsTests */;
@@ -470,6 +478,8 @@
 				INFOPLIST_FILE = "HackerKids-DEV-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = MeetMeApp_DEV;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Solicita permiso para la experiencia visual";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Solicita su permiso para buscar resultados cercanos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -504,6 +514,8 @@
 				INFOPLIST_FILE = "HackerKids-DEV-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = MeetMeApp_DEV;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Solicita permiso para la experiencia visual";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Solicita su permiso para buscar resultados cercanos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

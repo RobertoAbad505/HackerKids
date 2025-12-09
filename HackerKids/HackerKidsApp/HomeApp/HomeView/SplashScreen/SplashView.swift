@@ -69,7 +69,7 @@ struct SplashView: View {
                             Spacer()
                         }
                         .padding()
-                        .background(.ultraThinMaterial)
+                        .background(.ultraThinMaterial.opacity(0.7))
                     }
                 }
             }

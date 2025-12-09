@@ -22,4 +22,5 @@ enum Feature: String, CaseIterable {
     case weather
     case movies
     case flipCoin
+    case handTracking
 }

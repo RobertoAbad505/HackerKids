@@ -172,6 +172,8 @@ struct PortafolioView: View {
             MovieBrowserView()
         case .flipCoin:
             FlipCoinView()
+        case .handTracking:
+            HandTrackingStartView()
         }
     }
     // Interpola colores según el offset
