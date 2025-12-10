@@ -32,12 +32,11 @@ final class HandTrackingGestureDetector {
 
                // extract tips (no mirror here; captureOutput orientation handles rotation)
                let fingerTips = extractFingerTipPoints(from: points)
-               print(">>> extracted tips:", fingerTips.map { String(format: "(%.3f,%.3f)", $0.x, $0.y) })
 
                // detect finger states & gesture per hand
                let state = detectFingerStates(from: points)
                let gesture = detectGesture(from: state)
-               print(">>> per-hand gesture:", gesture, "state:", state)
+               print("Gesture detected: \(gesture)")
 
                // detect left/right
                let isLeft = inferHandSide(from: points)
@@ -159,7 +158,6 @@ final class HandTrackingGestureDetector {
 
         case (true, false, false, false, false):
             return "👍 Thumbs Up"
-
         case (false, true, false, false, false):
             return "☝️ Pointing"
 
@@ -171,9 +169,14 @@ final class HandTrackingGestureDetector {
 
         case (true, true, true, true, true):
             return "🖐️ Open Hand"
-
+        case (true, true, false, false, true):
+            return "🤟 Punk hand"
+        case (false, false, true, true, true):
+            return "👌 Ok hand"
+        case (true, false, false, false, true):
+            return "🤙 Chill hand"
         default:
-            return "-"
+            return ""
         }
     }
 }
