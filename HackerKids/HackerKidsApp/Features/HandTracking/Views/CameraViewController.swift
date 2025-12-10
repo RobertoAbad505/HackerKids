@@ -105,35 +105,44 @@ final class CameraViewController: UIViewController, AVCaptureVideoDataOutputSamp
                                             orientation: orientation,
                                             options: [:])
 
+        // DEBUG: report number of observations
+        
         do {
             try handler.perform([handPoseRequest])
+            if let results = handPoseRequest.results {
+                print(">>> captureOutput: observations count = \(results.count)")
+            } else {
+                print(">>> captureOutput: observations is nil")
+            }
             let observations = handPoseRequest.results ?? []
             gestureDetector.analyzeObservations(observations, viewModel: viewModel)
         } catch {
             print("Vision error: \(error)")
         }
     }
-
-
     func flipCamera() {
         captureSession.beginConfiguration()
 
-        // Remove current inputs
+        // Remove existing inputs
         captureSession.inputs.forEach { captureSession.removeInput($0) }
 
         // Toggle position
         currentPosition = (currentPosition == .front) ? .back : .front
 
-        // Add new input
-        let newPosition: AVCaptureDevice.Position =
-            (currentPosition == .front) ? .front : .back
+        let newPosition = currentPosition
 
-        if let newDevice = AVCaptureDevice.default(.builtInWideAngleCamera,
-                                                   for: .video,
-                                                   position: newPosition),
-           let newInput = try? AVCaptureDeviceInput(device: newDevice),
-           captureSession.canAddInput(newInput) {
-            captureSession.addInput(newInput)
+        if let device = AVCaptureDevice.default(.builtInWideAngleCamera,
+                                                for: .video,
+                                                position: newPosition),
+           let input = try? AVCaptureDeviceInput(device: device),
+           captureSession.canAddInput(input) {
+            captureSession.addInput(input)
+        }
+
+        // FIX: Update preview mirroring
+        if let conn = previewLayer.connection {
+            conn.isVideoMirrored = (currentPosition == .front)
+            conn.automaticallyAdjustsVideoMirroring = false
         }
 
         captureSession.commitConfiguration()

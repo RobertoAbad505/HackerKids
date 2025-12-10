@@ -17,8 +17,9 @@ struct FingerOverlayView: View {
                 let color = hand.isLeft ? Color.blue : Color.green
                 ForEach(Array(hand.points.enumerated()), id: \.offset) { _, point in
                     Circle()
+                        .stroke(Color.white, lineWidth: 5)
                         .fill(color.opacity(0.9))
-                        .frame(width: 22, height: 22)
+                        .frame(width: 25, height: 25)
                         .position(
                             x: point.x * geo.size.width,
                             y: (1 - point.y) * geo.size.height

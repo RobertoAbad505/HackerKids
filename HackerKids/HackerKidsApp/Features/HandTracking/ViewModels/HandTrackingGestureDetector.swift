@@ -15,37 +15,48 @@ import CoreGraphics
 /// - Finger tip screen positions
 final class HandTrackingGestureDetector {
 
+    var currentCameraIsFront: Bool = true
     // MARK: - Public API
     func analyzeObservations(
         _ observations: [VNHumanHandPoseObservation],
         viewModel: HandTrackingViewModel
     ) {
-        var detectedHands: [HandPoints] = []
+        // debug
+           print(">>> analyzeObservations called with \(observations.count) observations")
 
-        for obs in observations {
-            guard let points = try? obs.recognizedPoints(.all) else { continue }
+           var detectedHands: [HandPoints] = []
+           var gestureSummary = "-"
 
-            let fingerTips = extractFingerTipPoints(from: points)
-            if fingerTips.isEmpty { continue }
+           for obs in observations {
+               guard let points = try? obs.recognizedPoints(.all) else { continue }
 
-            let isLeft = isLeftHand(points)
-            detectedHands.append(HandPoints(isLeft: isLeft, points: fingerTips))
-        }
+               // extract tips (no mirror here; captureOutput orientation handles rotation)
+               let fingerTips = extractFingerTipPoints(from: points)
+               print(">>> extracted tips:", fingerTips.map { String(format: "(%.3f,%.3f)", $0.x, $0.y) })
 
-        DispatchQueue.main.async {
-            viewModel.hands = detectedHands
-        }
+               // detect finger states & gesture per hand
+               let state = detectFingerStates(from: points)
+               let gesture = detectGesture(from: state)
+               print(">>> per-hand gesture:", gesture, "state:", state)
+
+               // detect left/right
+               let isLeft = inferHandSide(from: points)
+               detectedHands.append(HandPoints(isLeft: isLeft, points: fingerTips))
+
+               // aggregate gesture for UI (simple strategy)
+               gestureSummary = gestureSummary == "-" ? gesture : (gestureSummary + " | " + gesture)
+           }
+
+           DispatchQueue.main.async {
+               viewModel.hands = detectedHands
+               viewModel.gesture = gestureSummary
+               print(">>> DETECTOR updated viewModel.hands.count=\(detectedHands.count) gesture=\(gestureSummary)")
+           }
     }
     
-    // MARK: - Detect left or right hand
-    private func isLeftHand(_ points: [VNHumanHandPoseObservation.JointName : VNRecognizedPoint]) -> Bool {
-
-        guard
-            let thumb = points[.thumbTip], thumb.confidence > 0.3,
-            let index = points[.indexTip], index.confidence > 0.3
-        else { return false }
-
-        // Si el pulgar está más a la izquierda que el índice → mano izquierda
+    private func inferHandSide(from points: [VNHumanHandPoseObservation.JointName : VNRecognizedPoint]) -> Bool {
+        // returns true if left hand
+        guard let thumb = points[.thumbTip], let index = points[.indexTip] else { return false }
         return thumb.location.x < index.location.x
     }
 
@@ -62,6 +73,7 @@ final class HandTrackingGestureDetector {
             guard let point = points[finger], point.confidence > 0.3 else { return nil }
 
             // Mirror X so movement is natural on screen
+            //RETURN THE POIINT ACCORDING TO THE SELECTED CAMERA
             return CGPoint(
                 x: point.location.x,
                 y: point.location.y
