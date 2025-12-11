@@ -14,7 +14,7 @@ import SwiftUI
 @MainActor
 final class HandTrackingViewModel: ObservableObject {
     @Published var hands: [HandPoints] = []
-    @Published var gesture: String = "-"
+    @Published var gesture: String = ""
     @Published var showCameraView: Bool = false
     @Published var flipCamera: Bool = false
 
