@@ -42,7 +42,7 @@ struct HandTrackingCameraView: View {
             if hasGesture {
                 HStack {
                     Text(viewModel.gesture)
-                        .font(.largeTitle)
+                        .font(.headline)
                 }
                 .frame(maxWidth: .infinity)
                 .padding()

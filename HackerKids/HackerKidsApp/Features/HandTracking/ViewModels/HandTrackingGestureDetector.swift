@@ -14,7 +14,10 @@ import CoreGraphics
 /// - Detected gestures
 /// - Finger tip screen positions
 final class HandTrackingGestureDetector {
-
+    
+    private var lastGestures: [String] = []
+    private let gestureWindow = 5
+    
     var currentCameraIsFront: Bool = true
     // MARK: - Public API
     func analyzeObservations(
@@ -41,7 +44,7 @@ final class HandTrackingGestureDetector {
                detectedHands.append(HandPoints(isLeft: isLeft, points: fingerTips))
 
                // aggregate gesture for UI (simple strategy)
-               gestureSummary = gestureSummary == "" ? gesture : (gestureSummary + " | " + gesture)
+               gestureSummary = gestureSummary == "" ? gesture : (gestureSummary + " " + gesture)
            }
            DispatchQueue.main.async {
                viewModel.hands = detectedHands
@@ -159,18 +162,20 @@ final class HandTrackingGestureDetector {
 
         guard
             let rawTip = points[.thumbTip], rawTip.confidence > 0.25,
-            let rawPip = points[.thumbIP], rawPip.confidence > 0.25
+            let rawIP  = points[.thumbIP],  rawIP.confidence > 0.25,
+            let rawCMC = points[.thumbCMC], rawCMC.confidence > 0.25
         else { return false }
 
         let tip = normalizedPoint(rawTip, cameraIsFront: cameraIsFront)
-        let pip = normalizedPoint(rawPip, cameraIsFront: cameraIsFront)
+        let ip  = normalizedPoint(rawIP,  cameraIsFront: cameraIsFront)
+        let cmc = normalizedPoint(rawCMC, cameraIsFront: cameraIsFront)
 
         if horizontal {
-            /// Mano horizontal → el pulgar se mueve verticalmente
-            return abs(tip.y - pip.y) > 0.07
+            // Mano horizontal → pulgar arriba/abajo
+            return (cmc.y - tip.y) > 0.10
         } else {
-            /// Mano vertical → el pulgar se mueve lateralmente
-            return abs(tip.x - pip.x) > 0.07
+            // Mano vertical → pulgar lateral
+            return abs(tip.x - ip.x) > 0.07
         }
     }
 
@@ -179,24 +184,18 @@ final class HandTrackingGestureDetector {
 
     // MARK: - Gesture Recognition
     private func detectGesture(from state: FingerState) -> String {
-
         let s = state
-
         switch (s.thumb, s.index, s.middle, s.ring, s.little) {
-
-        case (true, false, false, false, false):
-            return "👍 Thumbs Up"
         case (false, true, false, false, false):
             return "☝️ Pointing"
-
+        case (true, false, false, false, false):
+            return "✊ Fist"
+        case (false, false, false, false, false):
+            return "👍 Thumbs Up"
+        case (_, true, true, true, true):
+            return "✋ Stop"
         case (false, true, true, false, false):
             return "✌️ Victory"
-
-        case (false, false, false, false, false):
-            return "✊ Fist"
-
-        case (true, true, true, true, true):
-            return "🖐️ Open Hand"
         case (true, true, false, false, true):
             return "🤟 Punk hand"
         case (false, false, true, true, true):
