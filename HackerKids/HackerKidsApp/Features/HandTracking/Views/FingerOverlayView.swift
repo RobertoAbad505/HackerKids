@@ -22,7 +22,7 @@ struct FingerOverlayView: View {
                         .frame(width: 25, height: 25)
                         .position(
                             x: point.x * geo.size.width,
-                            y: (1 - point.y) * geo.size.height
+                            y: point.y * geo.size.height
                         )
                 }
             }

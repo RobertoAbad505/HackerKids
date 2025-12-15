@@ -44,6 +44,7 @@ final class CameraViewController: UIViewController, AVCaptureVideoDataOutputSamp
     }
 
     func setupCamera() {
+        gestureDetector.currentCameraIsFront = (currentPosition == .front)
         captureSession.beginConfiguration()
         captureSession.sessionPreset = .high
 
@@ -121,6 +122,7 @@ final class CameraViewController: UIViewController, AVCaptureVideoDataOutputSamp
         }
     }
     func flipCamera() {
+        gestureDetector.currentCameraIsFront = (currentPosition == .front)
         captureSession.beginConfiguration()
 
         // Remove existing inputs
