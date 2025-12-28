@@ -34,6 +34,14 @@ final class HandTrackingViewModel: ObservableObject {
     @Published var isRspOn: Bool = false
     @Published var playerMove: RPSMove?
     
+    //Countdown
+    @Published var ringProgress: CGFloat = 0
+    @Published var ringRotation: Double = 0
+    
+    //show hint
+    @Published var showHint: Bool = false
+    @Published var hintMessage: String = ""
+    
     let cameraAuth = CameraAuthorizationManager()
 
     init() {
@@ -66,42 +74,64 @@ final class HandTrackingViewModel: ObservableObject {
        gesture = "—"
        hands = []
    }
+    
     func startRPS() {
-        self.rpsPhase = .countdown
-        countdown()
+        rpsPhase = .countdown
+        
+        ringProgress = 0
+        ringRotation = 0
+        animateScale = false
+        
+        startRingCountdown(step: 0)
     }
     
-    private func countdown() {
+    
+    private func startRingCountdown(step: Int) {
         let values = ["3", "2", "1"]
-        
-        for (index, value) in values.enumerated() {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index)) {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    self.rspButton = value
-                    self.animateScale.toggle() // dispara la animación
-                }
-            }
+
+        // Cuando termina el conteo numérico
+        guard step < values.count else {
+            showGoAndWaitForGesture()
+            return
         }
-        
-        // Mostrar "Go!" y luego desaparecer
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double(values.count)) {
-            withAnimation(.easeInOut(duration: 0.3)) {
-                self.rspButton = "Go!"
-                self.animateScale.toggle()
-            }
+
+        // Texto actual
+        rspButton = values[step]
+
+        // Animación del anillo (1 vuelta por número)
+        ringProgress = 0
+        withAnimation(.linear(duration: 1)) {
+            ringProgress = 1
+            ringRotation += 360
         }
-        
-        // Desaparecer el botón después de 1 segundo de "Go!"
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double(values.count) + 1) {
+
+        // Pequeña animación de escala del texto (opcional)
+        withAnimation(.spring()) {
+            animateScale.toggle()
+        }
+
+        // Siguiente paso después de 1 segundo
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            HapticManager.shared.alert()
+            self.startRingCountdown(step: step + 1)
+        }
+    }
+    private func showGoAndWaitForGesture() {
+        rspButton = "Go!"
+
+        withAnimation(.easeInOut(duration: 0.3)) {
+            animateScale.toggle()
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             withAnimation {
-                //aqui termina el round
-                //cambiamos el estatus hasta que el usuario mantenga un gesto "estable"
+                // Aquí termina el round
                 self.rpsPhase = .waitingForGesture
-                //capturtar el gesto una vez que sea estable
                 self.captureUserGesture()
             }
         }
     }
+
     
     private func captureUserGesture() {
         // Espera corta para permitir estabilidad
@@ -110,13 +140,14 @@ final class HandTrackingViewModel: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
             guard let move = RPSMove(from: self.gesture) else {
                 //No se detecto gesto, reiniciar el flujo
-                self.rpsResult = "No gesture detected"
+                self.showTemporaryHint("Too slow! Show up your hand steady before countdown ends!\n No worries AI is not watching👀")
                 self.rpsPhase = .result
                 self.rspButton = "Press to start!"
                 return
             }
             self.frozenGesture = move.rawValue
             self.evaluateRPS(userMove: move)
+            HapticManager.shared.alert()
         }
     }
     private func evaluateRPS(userMove: RPSMove) {
@@ -141,6 +172,19 @@ final class HandTrackingViewModel: ObservableObject {
         self.rpsPhase = .result
         self.isRspOn = true
         self.rspButton = "Press to start!"
+    }
+    func showTemporaryHint(_ message: String, duration: Double = 5) {
+        hintMessage = message
+
+        withAnimation(.easeInOut) {
+            showHint = true
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            withAnimation(.easeInOut) {
+                self.showHint = false
+            }
+        }
     }
 }
 enum HandTrackerMode: String, CaseIterable {

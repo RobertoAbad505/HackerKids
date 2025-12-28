@@ -29,6 +29,10 @@ final class HapticManager {
         generatorHeavy.prepare()
         generatorHeavy.impactOccurred(intensity: 1)
     }
+    func alert() {
+        generatorHeavy.prepare()
+        generatorHeavy.impactOccurred()
+    }
 }
 
 extension UIWindow {

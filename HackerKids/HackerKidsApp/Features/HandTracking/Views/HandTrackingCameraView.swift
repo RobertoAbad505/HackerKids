@@ -28,6 +28,16 @@ struct HandTrackingCameraView: View {
             })
         }
         .toolbar(.hidden, for: .tabBar)
+        .overlay{
+            VStack {
+                if viewModel.showHint {
+                    hint
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .zIndex(10)
+                }
+                Spacer()
+            }
+        }
     }
     var buttonsOverlay: some View {
         VStack {
@@ -65,18 +75,44 @@ struct HandTrackingCameraView: View {
         Button(action: {
             viewModel.startRPS()
         }, label: {
-            Circle()
-                .fill(.green.opacity(0.5))
-                .stroke(Color.white, lineWidth: 5)
-                .overlay {
-                    Text(viewModel.rspButton)
-                        .font(.system(size: 20, weight: .bold))
-                        .scaleEffect(viewModel.animateScale ? 1.3 : 1.0)
-                        .animation(.spring(), value: viewModel.animateScale)
-                }
+            ZStack {//Multi layer component
+                //background
+                Circle()
+                    .fill(.ultraThinMaterial)
+                    .overlay {
+                        Circle().stroke(.white.opacity(0.2), lineWidth: 1)
+                    }
+
+                //ring animation
+                Circle()
+                    .trim(from: 0, to: viewModel.ringProgress)
+                    .stroke(Color.green, lineWidth: 5)
+                    .rotationEffect(.degrees(viewModel.ringRotation))
+
+                //button text
+                Text(viewModel.rspButton)
+                    .font(.system(size: 20, weight: .bold))
+                    .scaleEffect(viewModel.animateScale ? 1.3 : 1.0)
+                    .animation(.spring(), value: viewModel.animateScale)
+            }
         })
-        .frame(maxWidth: 150, maxHeight: 150)
-        .shadow(color: Color.black.opacity(0.5), radius: 10, x: 10, y: 10)
+        .frame(maxWidth: 180, maxHeight: 180)
+        .shadow(color: Color.black.opacity(0.9), radius: 10, x: 10, y: 10)
+    }
+    var hint: some View {
+        HStack {
+            Image(systemName: "info.circle")
+                .font(.system(size: 20))
+            Text(viewModel.hintMessage)
+                .font(Font.footnote.bold())
+        }
+        .padding()
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke((.white), lineWidth: 3)
+        )
     }
     var rpsResultsView: some View {
         VStack(alignment: .center, spacing: 25) {

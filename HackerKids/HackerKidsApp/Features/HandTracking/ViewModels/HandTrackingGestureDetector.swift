@@ -203,7 +203,7 @@ final class HandTrackingGestureDetector {
         case (true, false, false, false, true):
             return "🤙 Chill hand"
         default:
-            return ""
+            return "..."
         }
     }
     /// Normaliza un punto de Vision para que coincida con el sistema usado en pantalla.
