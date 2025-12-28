@@ -27,15 +27,74 @@ struct HandTrackingCameraView: View {
                 exitButton
             })
         }
+        .toolbar(.hidden, for: .tabBar)
     }
     var buttonsOverlay: some View {
         VStack {
             flipCameraButton
-            Spacer()
-            gestureDisplay
-            takePictureButton
+            switch viewModel.trackingMode {
+            case .gestures:
+                trackGesturesDisplay
+            case .rps:
+                rpsDisplay
+            }
+            trackerModes
         }
         .foregroundStyle(Color.white.opacity(0.8))
+    }
+    var trackGesturesDisplay: some View {
+        VStack {
+            Spacer()
+            gestureDisplay
+        }
+    }
+    var rpsDisplay: some View {
+        VStack(alignment: .center) {
+            Spacer()
+            if !viewModel.isRspOn {
+                Button(action: {
+                    viewModel.startRPS()
+                }, label: {
+                    Circle()
+                        .fill(.green)
+                        .stroke(Color.white, lineWidth: 5)
+                        .overlay {
+                            Text(viewModel.rspButton)
+                                .font(.system(size: 20, weight: .bold))
+                                .scaleEffect(viewModel.animateScale ? 1.3 : 1.0)
+                                .animation(.spring(), value: viewModel.animateScale)
+                        }
+                })
+                .frame(maxWidth: 200, maxHeight: 200)
+            } else {
+                //Show marker or results view, also add reset button here
+                Button(action: {
+                    //Reset game
+                    viewModel.isRspOn = false
+                }, label: {
+                    Text("Results")
+                })
+            }
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    var trackerModes: some View {
+        HStack(alignment: .center, spacing: 0) {
+            Picker(selection: $viewModel.trackingMode, label: Text("Tracking mode:")) {
+                ForEach(HandTrackerMode.allCases, id: \.self) { gametype in
+                    Text(gametype.rawValue)
+                        .padding()
+                }
+            }
+            .pickerStyle(.palette)
+            .onChange(of: viewModel.trackingMode) { _ in
+                print("Tracker reset...")
+            }
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .transition(.opacity)
+        }
     }
     var gestureDisplay: some View {
         VStack {
@@ -96,3 +155,6 @@ struct HandTrackingCameraView: View {
     }
 }
 
+#Preview {
+    HandTrackingCameraView(viewModel: .init())
+}
