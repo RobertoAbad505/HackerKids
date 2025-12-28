@@ -104,16 +104,16 @@ final class HandTrackingGestureDetector {
         let thumbExtended  = isThumbExtended(tip: thumbTip, ip: thumbIP)
 
         // ✅ DEBUG CORRECTO
-        print("""
-        ---- DEBUG FINGER STATES ----
-        cameraIsFront = \(currentCameraIsFront)
-        Index:  tip=\(String(describing: indexTip))  pip=\(String(describing: indexPIP))  → \(indexExtended)
-        Middle: tip=\(String(describing: middleTip)) pip=\(String(describing: middlePIP)) → \(middleExtended)
-        Ring:   tip=\(String(describing: ringTip))   pip=\(String(describing: ringPIP))   → \(ringExtended)
-        Little: tip=\(String(describing: littleTip)) pip=\(String(describing: littlePIP)) → \(littleExtended)
-        Thumb:  tip=\(String(describing: thumbTip))  ip=\(String(describing: thumbIP))    → \(thumbExtended)
-        --------------------------------
-        """)
+//        print("""
+//        ---- DEBUG FINGER STATES ----
+//        cameraIsFront = \(currentCameraIsFront)
+//        Index:  tip=\(String(describing: indexTip))  pip=\(String(describing: indexPIP))  → \(indexExtended)
+//        Middle: tip=\(String(describing: middleTip)) pip=\(String(describing: middlePIP)) → \(middleExtended)
+//        Ring:   tip=\(String(describing: ringTip))   pip=\(String(describing: ringPIP))   → \(ringExtended)
+//        Little: tip=\(String(describing: littleTip)) pip=\(String(describing: littlePIP)) → \(littleExtended)
+//        Thumb:  tip=\(String(describing: thumbTip))  ip=\(String(describing: thumbIP))    → \(thumbExtended)
+//        --------------------------------
+//        """)
 
         return FingerState(
             thumb: thumbExtended,
@@ -235,7 +235,6 @@ final class HandTrackingGestureDetector {
 
         return result
     }
-
 }
 
 

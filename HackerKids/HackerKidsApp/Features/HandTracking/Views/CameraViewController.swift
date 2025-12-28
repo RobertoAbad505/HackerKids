@@ -110,11 +110,11 @@ final class CameraViewController: UIViewController, AVCaptureVideoDataOutputSamp
         
         do {
             try handler.perform([handPoseRequest])
-            if let results = handPoseRequest.results {
-                print(">>> captureOutput: observations count = \(results.count)")
-            } else {
-                print(">>> captureOutput: observations is nil")
-            }
+//            if let results = handPoseRequest.results {
+//                print(">>> captureOutput: observations count = \(results.count)")
+//            } else {
+//                print(">>> captureOutput: observations is nil")
+//            }
             let observations = handPoseRequest.results ?? []
             gestureDetector.analyzeObservations(observations, viewModel: viewModel)
         } catch {

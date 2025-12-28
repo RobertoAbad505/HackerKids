@@ -52,32 +52,79 @@ struct HandTrackingCameraView: View {
         VStack(alignment: .center) {
             Spacer()
             if !viewModel.isRspOn {
-                Button(action: {
-                    viewModel.startRPS()
-                }, label: {
-                    Circle()
-                        .fill(.green)
-                        .stroke(Color.white, lineWidth: 5)
-                        .overlay {
-                            Text(viewModel.rspButton)
-                                .font(.system(size: 20, weight: .bold))
-                                .scaleEffect(viewModel.animateScale ? 1.3 : 1.0)
-                                .animation(.spring(), value: viewModel.animateScale)
-                        }
-                })
-                .frame(maxWidth: 200, maxHeight: 200)
+                rpsIdleView
             } else {
-                //Show marker or results view, also add reset button here
-                Button(action: {
-                    //Reset game
-                    viewModel.isRspOn = false
-                }, label: {
-                    Text("Results")
-                })
+                rpsResultsView
             }
             Spacer()
+            gestureDisplay
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    var rpsIdleView: some View {
+        Button(action: {
+            viewModel.startRPS()
+        }, label: {
+            Circle()
+                .fill(.green.opacity(0.5))
+                .stroke(Color.white, lineWidth: 5)
+                .overlay {
+                    Text(viewModel.rspButton)
+                        .font(.system(size: 20, weight: .bold))
+                        .scaleEffect(viewModel.animateScale ? 1.3 : 1.0)
+                        .animation(.spring(), value: viewModel.animateScale)
+                }
+        })
+        .frame(maxWidth: 150, maxHeight: 150)
+        .shadow(color: Color.black.opacity(0.5), radius: 10, x: 10, y: 10)
+    }
+    var rpsResultsView: some View {
+        VStack(alignment: .center, spacing: 25) {
+            //Show marker or results view, also add reset button here
+            Text("🏁 R E S U L T S 🏁")
+                .font(Font.title3.bold())
+                .monospaced()
+            HStack(alignment: .center, spacing: 25) {
+                VStack {
+                    Text("You")
+                    Text(viewModel.playerMove?.rawValue ?? "unkown")
+                }
+                Text("vs")
+                VStack {
+                    Text("App")
+                    Text(viewModel.appMove?.rawValue ?? "unkown")
+                }
+            }
+            .font(Font.title3.bold())
+            .padding()
+            Text(viewModel.rpsResult)
+                .font(Font.title2.bold())
+                .padding(.bottom, 15)
+            Button(action: {
+                //Reset game
+                viewModel.isRspOn = false
+            }, label: {
+                Image(systemName: "repeat.circle")
+                    .font(.system(size: 25))
+                Text("Try again!")
+                    .font(.body)
+            })
+            .padding(.horizontal, 55)
+            .padding(.vertical, 10)
+            .background(.green.opacity(0.5))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke((.white), lineWidth: 3)
+            )
+        }
+        .padding(45)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke((.white), lineWidth: 3)
+        )
     }
     var trackerModes: some View {
         HStack(alignment: .center, spacing: 0) {

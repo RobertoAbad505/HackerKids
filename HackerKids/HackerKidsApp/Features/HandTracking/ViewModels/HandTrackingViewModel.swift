@@ -14,8 +14,6 @@ import SwiftUI
 @MainActor
 final class HandTrackingViewModel: ObservableObject {
     @Published var animateScale: Bool = false
-    @Published var rspButton: String = "Press to start!!"
-    @Published var isRspOn: Bool = false
     @Published var trackingMode: HandTrackerMode = .gestures
     @Published var hands: [HandPoints] = []
     @Published var gesture: String = "-" {
@@ -25,7 +23,17 @@ final class HandTrackingViewModel: ObservableObject {
     }
     @Published var showCameraView: Bool = false
     @Published var flipCamera: Bool = false
-
+    
+    
+    //RSP GAME
+    @Published var rpsPhase: RPSPhase = .idle
+    @Published var frozenGesture: String?          // snapshot del usuario
+    @Published var appMove: RPSMove?
+    @Published var rpsResult: String = ""
+    @Published var rspButton: String = "Press to start!!"
+    @Published var isRspOn: Bool = false
+    @Published var playerMove: RPSMove?
+    
     let cameraAuth = CameraAuthorizationManager()
 
     init() {
@@ -59,6 +67,7 @@ final class HandTrackingViewModel: ObservableObject {
        hands = []
    }
     func startRPS() {
+        self.rpsPhase = .countdown
         countdown()
     }
     
@@ -85,10 +94,53 @@ final class HandTrackingViewModel: ObservableObject {
         // Desaparecer el botón después de 1 segundo de "Go!"
         DispatchQueue.main.asyncAfter(deadline: .now() + Double(values.count) + 1) {
             withAnimation {
-                self.isRspOn = true
-                self.rspButton = "Press to start!"
+                //aqui termina el round
+                //cambiamos el estatus hasta que el usuario mantenga un gesto "estable"
+                self.rpsPhase = .waitingForGesture
+                //capturtar el gesto una vez que sea estable
+                self.captureUserGesture()
             }
         }
+    }
+    
+    private func captureUserGesture() {
+        // Espera corta para permitir estabilidad
+        print("captureUserGesture()")
+        print(">>>> RPS GESTURE DETECTED: \(self.gesture)")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            guard let move = RPSMove(from: self.gesture) else {
+                //No se detecto gesto, reiniciar el flujo
+                self.rpsResult = "No gesture detected"
+                self.rpsPhase = .result
+                self.rspButton = "Press to start!"
+                return
+            }
+            self.frozenGesture = move.rawValue
+            self.evaluateRPS(userMove: move)
+        }
+    }
+    private func evaluateRPS(userMove: RPSMove) {
+        self.appMove = RPSMove.allCases.randomElement()!
+        self.appMove = appMove
+        self.playerMove = userMove
+        
+        let result: String
+        
+        switch (userMove, appMove) {
+        case let (u, a) where u == a:
+            result = "Draw 🤝"
+        case (.rock, .scissors),
+             (.paper, .rock),
+             (.scissors, .paper):
+            result = "YOU WIN!!! 🎉"
+        default:
+            result = "You Lose 😅"
+        }
+
+        self.rpsResult = result
+        self.rpsPhase = .result
+        self.isRspOn = true
+        self.rspButton = "Press to start!"
     }
 }
 enum HandTrackerMode: String, CaseIterable {
@@ -98,4 +150,24 @@ enum HandTrackerMode: String, CaseIterable {
 struct HandPoints {
     let isLeft: Bool
     let points: [CGPoint]
+}
+enum RPSPhase {
+    case idle
+    case countdown
+    case waitingForGesture
+    case result
+}
+enum RPSMove: String, CaseIterable {
+    case rock = "✊"
+    case paper = "✋"
+    case scissors = "✌️"
+
+    init?(from gesture: String) {
+        switch gesture {
+        case "✊ Fist": self = .rock
+        case "✋ Stop": self = .paper
+        case "✌️ Victory": self = .scissors
+        default: return nil
+        }
+    }
 }
