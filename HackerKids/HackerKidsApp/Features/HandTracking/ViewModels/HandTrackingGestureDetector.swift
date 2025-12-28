@@ -37,7 +37,7 @@ final class HandTrackingGestureDetector {
                // detect finger states & gesture per hand
                let state = detectFingerStates(from: points)
                let gesture = detectGesture(from: state)
-               print("Gesture detected: \(gesture)")
+//               print("Gesture detected: \(gesture)")
 
                // detect left/right
                let isLeft = inferHandSide(from: points)

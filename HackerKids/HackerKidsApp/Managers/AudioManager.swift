@@ -16,7 +16,7 @@ class AudioManager: ObservableObject {
             return true
         }
         guard let url = Bundle.main.url(forResource: name, withExtension: "mp3") else {
-            print("❌Audio file not found.")
+            print("❌Audio \(name) file not found.")
             return false
         }
 
@@ -32,9 +32,9 @@ class AudioManager: ObservableObject {
         }
         return false
     }
-    func playSoundEffect(named name: String) {
-        guard let url = Bundle.main.url(forResource: name, withExtension: "mp3") else {
-            print("❌sound FX file not found.")
+    func playSoundEffect(named name: String, _ soundExtension: String = "mp3") {
+        guard let url = Bundle.main.url(forResource: name, withExtension: soundExtension) else {
+            print("❌sound FX \(name) file not found.")
             return
         }
         do {

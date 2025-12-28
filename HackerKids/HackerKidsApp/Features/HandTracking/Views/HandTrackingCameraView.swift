@@ -28,6 +28,7 @@ struct HandTrackingCameraView: View {
             })
         }
         .toolbar(.hidden, for: .tabBar)
+        .navigationBarBackButtonHidden()
         .overlay{
             VStack {
                 if viewModel.showHint {
@@ -38,6 +39,9 @@ struct HandTrackingCameraView: View {
                 Spacer()
             }
         }
+        .onAppear() {
+            AudioManager().playSoundEffect(named: "visionStart", "wav")
+        }
     }
     var buttonsOverlay: some View {
         VStack {
@@ -47,6 +51,8 @@ struct HandTrackingCameraView: View {
                 trackGesturesDisplay
             case .rps:
                 rpsDisplay
+            case .drawing:
+                trackGesturesDisplay
             }
             trackerModes
         }
@@ -67,7 +73,7 @@ struct HandTrackingCameraView: View {
                 rpsResultsView
             }
             Spacer()
-            gestureDisplay
+//            rpsGestureDisplay
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -123,18 +129,22 @@ struct HandTrackingCameraView: View {
             HStack(alignment: .center, spacing: 25) {
                 VStack {
                     Text("You")
+                        .font(Font.title3.bold())
                     Text(viewModel.playerMove?.rawValue ?? "unkown")
+                        .font(Font.largeTitle.bold())
                 }
                 Text("vs")
+                    .font(Font.title3.bold())
                 VStack {
                     Text("App")
+                        .font(Font.title3.bold())
                     Text(viewModel.appMove?.rawValue ?? "unkown")
+                        .font(Font.largeTitle.bold())
                 }
             }
-            .font(Font.title3.bold())
             .padding()
             Text(viewModel.rpsResult)
-                .font(Font.title2.bold())
+                .font(Font.title.bold())
                 .padding(.bottom, 15)
             Button(action: {
                 //Reset game
@@ -163,22 +173,21 @@ struct HandTrackingCameraView: View {
         )
     }
     var trackerModes: some View {
-        HStack(alignment: .center, spacing: 0) {
-            Picker(selection: $viewModel.trackingMode, label: Text("Tracking mode:")) {
-                ForEach(HandTrackerMode.allCases, id: \.self) { gametype in
-                    Text(gametype.rawValue)
-                        .padding()
-                }
+        Picker("Tracking mode:", selection: $viewModel.trackingMode) {
+            ForEach(HandTrackerMode.allCases) { mode in
+                Text(mode.rawValue)
+                    .tag(mode)
             }
-            .pickerStyle(.palette)
-            .onChange(of: viewModel.trackingMode) { _ in
-                print("Tracker reset...")
-            }
-            .background(.ultraThinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .transition(.opacity)
         }
+        .pickerStyle(.segmented)
+        .onChange(of: viewModel.trackingMode) { _, newValue in
+            print("Tracker reset → \(newValue)")
+        }
+        .padding(8)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
+
     var gestureDisplay: some View {
         VStack {
             if hasGesture {
@@ -195,6 +204,22 @@ struct HandTrackingCameraView: View {
         }
         .padding(.horizontal)
     }
+//    var rpsGestureDisplay: some View {
+//        VStack {
+//            if viewModel.isRspOn {
+//                HStack {
+//                    Text(viewModel.gesture.isEmpty ? "" : viewModel.gesture)
+//                        .font(.headline)
+//                }
+//                .padding(.horizontal, 10)
+//                .frame(maxWidth: .infinity)
+//                .padding()
+//                .background(.ultraThinMaterial)
+//                .clipShape(RoundedRectangle(cornerRadius: 12))
+//                .transition(.opacity)
+//            }
+//        }
+//    }
     var exitButton: some View {
         Button(action: {
             viewModel.exitCamera()

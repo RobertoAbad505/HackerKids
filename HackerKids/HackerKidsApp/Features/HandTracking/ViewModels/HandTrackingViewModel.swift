@@ -41,6 +41,7 @@ final class HandTrackingViewModel: ObservableObject {
     //show hint
     @Published var showHint: Bool = false
     @Published var hintMessage: String = ""
+    var audioManager: AudioManager = .init()
     
     let cameraAuth = CameraAuthorizationManager()
 
@@ -82,6 +83,7 @@ final class HandTrackingViewModel: ObservableObject {
         ringRotation = 0
         animateScale = false
         
+        self.audioManager.playSoundEffect(named: "gameCountdown", "wav")
         startRingCountdown(step: 0)
     }
     
@@ -109,7 +111,6 @@ final class HandTrackingViewModel: ObservableObject {
         withAnimation(.spring()) {
             animateScale.toggle()
         }
-
         // Siguiente paso después de 1 segundo
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             HapticManager.shared.alert()
@@ -140,6 +141,7 @@ final class HandTrackingViewModel: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
             guard let move = RPSMove(from: self.gesture) else {
                 //No se detecto gesto, reiniciar el flujo
+                self.audioManager.playSoundEffect(named: "gameError", "wav")
                 self.showTemporaryHint("Too slow! Show up your hand steady before countdown ends!\n No worries AI is not watching👀")
                 self.rpsPhase = .result
                 self.rspButton = "Press to start!"
@@ -160,11 +162,14 @@ final class HandTrackingViewModel: ObservableObject {
         switch (userMove, appMove) {
         case let (u, a) where u == a:
             result = "Draw 🤝"
+            self.audioManager.playSoundEffect(named: "gameDraw")
         case (.rock, .scissors),
              (.paper, .rock),
              (.scissors, .paper):
-            result = "YOU WIN!!! 🎉"
+            result = "🎉 YOU WIN! 🎉"
+            self.audioManager.playSoundEffect(named: "gameWin")
         default:
+            self.audioManager.playSoundEffect(named: "gameLoose2", "wav")
             result = "You Lose 😅"
         }
 
@@ -187,9 +192,12 @@ final class HandTrackingViewModel: ObservableObject {
         }
     }
 }
-enum HandTrackerMode: String, CaseIterable {
-    case gestures = "Gestures"
-    case rps = "Rock, Paper, Scissors"
+enum HandTrackerMode: String, CaseIterable, Identifiable {
+    case gestures = "Gestures🤟"
+    case rps = "RPS🪨📃✂️"
+    case drawing = "Air drawing✍️"
+    
+    var id: Self { self }
 }
 struct HandPoints {
     let isLeft: Bool
@@ -208,6 +216,7 @@ enum RPSMove: String, CaseIterable {
 
     init?(from gesture: String) {
         switch gesture {
+        case "👍 Thumbs Up": self = .rock
         case "✊ Fist": self = .rock
         case "✋ Stop": self = .paper
         case "✌️ Victory": self = .scissors
