@@ -33,6 +33,8 @@ final class HandTrackingViewModel: ObservableObject {
     @Published var rspButton: String = "Press to start!!"
     @Published var isRspOn: Bool = false
     @Published var playerMove: RPSMove?
+    @Published var rpsPlayerScore: Int = 0
+    @Published var rpsCPUScore: Int = 0    
     
     //Countdown
     @Published var ringProgress: CGFloat = 0
@@ -168,11 +170,12 @@ final class HandTrackingViewModel: ObservableObject {
              (.scissors, .paper):
             result = "🎉 YOU WIN! 🎉"
             self.audioManager.playSoundEffect(named: "gameWin")
+            self.rpsPlayerScore += 1
         default:
             self.audioManager.playSoundEffect(named: "gameLoose2", "wav")
+            self.rpsCPUScore += 1
             result = "You Lose 😅"
         }
-
         self.rpsResult = result
         self.rpsPhase = .result
         self.isRspOn = true

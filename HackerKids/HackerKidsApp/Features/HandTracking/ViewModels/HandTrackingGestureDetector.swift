@@ -194,7 +194,7 @@ final class HandTrackingGestureDetector {
             return "👍 Thumbs Up"
         case (_, true, true, true, true):
             return "✋ Stop"
-        case (false, true, true, false, false):
+        case (_, true, true, false, false):
             return "✌️ Victory"
         case (true, true, false, false, true):
             return "🤟 Punk hand"

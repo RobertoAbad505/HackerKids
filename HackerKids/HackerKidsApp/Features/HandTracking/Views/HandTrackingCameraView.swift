@@ -73,9 +73,37 @@ struct HandTrackingCameraView: View {
                 rpsResultsView
             }
             Spacer()
-//            rpsGestureDisplay
+            if viewModel.rpsCPUScore > 0 || viewModel.rpsPlayerScore > 0 {
+                withAnimation(.easeInOut(duration: 5)){                
+                    rpsScoreView
+                }
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    var rpsScoreView: some View {
+        HStack {
+         Spacer()
+            VStack {
+                Text("YOU")
+                    .font(.system(size: 15, weight: .thin))
+                Text("\(viewModel.rpsPlayerScore)")
+                    .font(.system(size: 30, weight: .bold))
+            }
+            .padding()
+            .background(Color.green.opacity(0.3))
+            .cornerRadius(10)
+            VStack {
+                Text("CPU")
+                    .font(.system(size: 15, weight: .thin))
+                Text("\(viewModel.rpsCPUScore)")
+                    .font(.system(size: 30, weight: .bold))
+            }
+            .padding()
+            .background(Color.green.opacity(0.3))
+            .cornerRadius(20)
+         Spacer()
+        }
     }
     var rpsIdleView: some View {
         Button(action: {
