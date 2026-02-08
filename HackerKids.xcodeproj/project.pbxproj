@@ -116,6 +116,7 @@
 				"HackerKidsApp/Extensions/View+Extensions.swift",
 				HackerKidsApp/Features/HandTracking/ViewModels/HandTrackingGestureDetector.swift,
 				HackerKidsApp/Features/HandTracking/ViewModels/HandTrackingViewModel.swift,
+				HackerKidsApp/Features/HandTracking/Views/AirDrawingCanvasView.swift,
 				HackerKidsApp/Features/HandTracking/Views/CameraView.swift,
 				HackerKidsApp/Features/HandTracking/Views/CameraViewController.swift,
 				HackerKidsApp/Features/HandTracking/Views/FingerOverlayView.swift,

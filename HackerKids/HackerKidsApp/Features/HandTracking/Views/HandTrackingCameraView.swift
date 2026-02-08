@@ -19,7 +19,7 @@ struct HandTrackingCameraView: View {
         ZStack(alignment: .topLeading) {
             CameraView(viewModel: viewModel)
                 .ignoresSafeArea()
-            FingerOverlayView(hands: viewModel.hands)
+            FingerOverlayView(hands: viewModel.hands, viewModel: self.viewModel)
             buttonsOverlay
         }
         .toolbar {
@@ -52,7 +52,7 @@ struct HandTrackingCameraView: View {
             case .rps:
                 rpsDisplay
             case .drawing:
-                trackGesturesDisplay
+                airDrawingDisplay
             }
             trackerModes
         }
@@ -62,6 +62,13 @@ struct HandTrackingCameraView: View {
         VStack {
             Spacer()
             gestureDisplay
+        }
+    }
+    var airDrawingDisplay: some View {
+        VStack {
+            AirDrawingCanvasView(viewModel: viewModel)
+            Spacer()
+            ColorPaletteView(viewModel: viewModel)
         }
     }
     var rpsDisplay: some View {
@@ -232,22 +239,6 @@ struct HandTrackingCameraView: View {
         }
         .padding(.horizontal)
     }
-//    var rpsGestureDisplay: some View {
-//        VStack {
-//            if viewModel.isRspOn {
-//                HStack {
-//                    Text(viewModel.gesture.isEmpty ? "" : viewModel.gesture)
-//                        .font(.headline)
-//                }
-//                .padding(.horizontal, 10)
-//                .frame(maxWidth: .infinity)
-//                .padding()
-//                .background(.ultraThinMaterial)
-//                .clipShape(RoundedRectangle(cornerRadius: 12))
-//                .transition(.opacity)
-//            }
-//        }
-//    }
     var exitButton: some View {
         Button(action: {
             viewModel.exitCamera()
@@ -290,6 +281,59 @@ struct HandTrackingCameraView: View {
         }
     }
 }
+struct ColorPaletteView: View {
+    @ObservedObject var viewModel: HandTrackingViewModel
+
+    private let columns = [
+        GridItem(.adaptive(minimum: 28), spacing: 8)
+    ]
+
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: 8) {
+            ForEach(DrawingColor.allCases) { color in
+                ColorSwatch(
+                    color: color,
+                    isSelected: color == viewModel.currentColor
+                )
+                .onTapGesture {
+                    viewModel.setColor(color)
+                }
+            }
+        }
+        .padding(10)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .shadow(radius: 4)
+    }
+}
+struct ColorSwatch: View {
+    let color: DrawingColor
+    let isSelected: Bool
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 6)
+            .fill(color.swiftUIColor)
+            .frame(width: 28, height: 28)
+            .overlay(
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(
+                        isSelected ? Color.white : Color.clear,
+                        lineWidth: 3
+                    )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(
+                        Color.black.opacity(0.2),
+                        lineWidth: 1
+                    )
+            )
+            .scaleEffect(isSelected ? 1.1 : 1.0)
+            .animation(.easeOut(duration: 0.15), value: isSelected)
+            .accessibilityLabel(color.name)
+    }
+}
+
 
 #Preview {
     HandTrackingCameraView(viewModel: .init())

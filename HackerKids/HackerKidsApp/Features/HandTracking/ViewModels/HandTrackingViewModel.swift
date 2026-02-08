@@ -24,6 +24,16 @@ final class HandTrackingViewModel: ObservableObject {
     @Published var showCameraView: Bool = false
     @Published var flipCamera: Bool = false
     
+    //AIR DRAWING
+    // MARK: - Air Drawing CTRL
+    @Published var drawingStrokes: [DrawingStroke] = []
+    @Published var currentDrawingPath: [CGPoint] = []
+    @Published var isDrawing: Bool = false
+    private var lastSmoothedPoint: CGPoint?
+    @Published var currentColor: DrawingColor = .blue
+    private var lastPoint: CGPoint?
+    private var lastTimestamp: TimeInterval?
+    @Published var currentLineWidth: CGFloat = 6
     
     //RSP GAME
     @Published var rpsPhase: RPSPhase = .idle
@@ -194,6 +204,128 @@ final class HandTrackingViewModel: ObservableObject {
             }
         }
     }
+    private func smoothPoint(_ point: CGPoint) -> CGPoint {
+        guard let last = lastSmoothedPoint else {
+            lastSmoothedPoint = point
+            return point
+        }
+
+        let alpha: CGFloat = 0.25
+        let smoothed = CGPoint(
+            x: last.x + (point.x - last.x) * alpha,
+            y: last.y + (point.y - last.y) * alpha
+        )
+
+        lastSmoothedPoint = smoothed
+        return smoothed
+    }
+    
+    func startDrawing() {
+        isDrawing = true
+        currentDrawingPath = []
+        lastSmoothedPoint = nil
+    }
+
+    func stopDrawing() {
+        guard !currentDrawingPath.isEmpty else { return }
+
+        drawingStrokes.append(
+            DrawingStroke(
+                points: currentDrawingPath,
+                color: currentColor,
+                baseLineWidth: currentLineWidth
+            )
+        )
+
+        currentDrawingPath = []
+        isDrawing = false
+        lastPoint = nil
+        lastTimestamp = nil
+    }
+
+    func addDrawingPoint(_ point: CGPoint) {
+        guard isDrawing else { return }
+
+        let smoothed = smoothPoint(point)
+        let now = CACurrentMediaTime()
+
+        currentLineWidth = dynamicLineWidth(
+            currentPoint: smoothed,
+            timestamp: now
+        )
+
+        currentDrawingPath.append(smoothed)
+    }
+
+    func clearDrawing() {
+        drawingStrokes.removeAll()
+        currentDrawingPath.removeAll()
+    }
+    func nextColor() {
+        let all = DrawingColor.allCases
+        if let index = all.firstIndex(of: currentColor) {
+            currentColor = all[(index + 1) % all.count]
+            markColorChanged()
+        }
+    }
+    func setColor(_ color: DrawingColor) {
+        currentColor = color
+    }
+    func previousColor() {
+        let all = DrawingColor.allCases
+        if let index = all.firstIndex(of: currentColor) {
+            currentColor = all[(index - 1 + all.count) % all.count]
+        }
+    }
+
+    func resetColor() {
+        currentColor = .blue
+    }
+    private var lastColorChange = Date.distantPast
+
+    func canChangeColor() -> Bool {
+        Date().timeIntervalSince(lastColorChange) > 0.6
+    }
+
+    func markColorChanged() {
+        lastColorChange = Date()
+    }
+    private func dynamicLineWidth(
+        currentPoint: CGPoint,
+        timestamp: TimeInterval
+    ) -> CGFloat {
+
+        guard
+            let lastPoint = lastPoint,
+            let lastTime = lastTimestamp
+        else {
+            self.lastPoint = currentPoint
+            self.lastTimestamp = timestamp
+            return 6 // valor inicial
+        }
+
+        let distance = hypot(
+            currentPoint.x - lastPoint.x,
+            currentPoint.y - lastPoint.y
+        )
+
+        let deltaTime = max(timestamp - lastTime, 0.016)
+        let velocity = distance / CGFloat(deltaTime)
+
+        // 🎯 Ajusta estos valores a tu gusto
+        let minWidth: CGFloat = 2
+        let maxWidth: CGFloat = 10
+        let maxVelocity: CGFloat = 3.5
+
+        let normalized = min(velocity / maxVelocity, 1)
+        let width = maxWidth - normalized * (maxWidth - minWidth)
+
+        self.lastPoint = currentPoint
+        self.lastTimestamp = timestamp
+
+        return width
+    }
+    
 }
 enum HandTrackerMode: String, CaseIterable, Identifiable {
     case gestures = "Gestures🤟"
@@ -227,3 +359,46 @@ enum RPSMove: String, CaseIterable {
         }
     }
 }
+struct DrawingStroke {
+    let points: [CGPoint]
+    let color: DrawingColor
+    let baseLineWidth: CGFloat
+}
+enum DrawingColor: CaseIterable, Identifiable {
+    case black
+    case blue
+    case red
+    case green
+    case orange
+    case yellow
+    case purple
+    case pink
+    case cyan
+    case brown
+    case gray
+
+    var id: Self { self }
+
+    var swiftUIColor: Color {
+        switch self {
+        case .black: return .black
+        case .blue: return .blue
+        case .red: return .red
+        case .green: return .green
+        case .orange: return .orange
+        case .yellow: return .yellow
+        case .purple: return .purple
+        case .pink: return .pink
+        case .cyan: return .cyan
+        case .brown: return .brown
+        case .gray: return .gray
+        }
+    }
+
+    /// Nombre opcional para debug / accesibilidad
+    var name: String {
+        String(describing: self).capitalized
+    }
+}
+
+

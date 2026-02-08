@@ -24,33 +24,82 @@ final class HandTrackingGestureDetector {
         _ observations: [VNHumanHandPoseObservation],
         viewModel: HandTrackingViewModel
     ) {
-        // debug
-           var detectedHands: [HandPoints] = []
-           var gestureSummary = ""
+        var detectedHands: [HandPoints] = []
+        var gestureSummary = ""
 
-           for obs in observations {
-               guard let points = try? obs.recognizedPoints(.all) else { continue }
+        // AIR DRAWING DATA (solo recolectamos)
+        var drawingPoint: CGPoint?
+        var drawingGesture: String?
 
-               // extract tips (no mirror here; captureOutput orientation handles rotation)
-               let fingerTips = extractFingerTipPoints(from: points)
+        for obs in observations {
+            guard let points = try? obs.recognizedPoints(.all) else { continue }
 
-               // detect finger states & gesture per hand
-               let state = detectFingerStates(from: points)
-               let gesture = detectGesture(from: state)
-//               print("Gesture detected: \(gesture)")
+            let fingerTips = extractFingerTipPoints(from: points)
 
-               // detect left/right
-               let isLeft = inferHandSide(from: points)
-               detectedHands.append(HandPoints(isLeft: isLeft, points: fingerTips))
+            let state = detectFingerStates(from: points)
+            let gesture = detectGesture(from: state)
 
-               // aggregate gesture for UI (simple strategy)
-               gestureSummary = gestureSummary == "" ? gesture : (gestureSummary + " " + gesture)
-           }
-           DispatchQueue.main.async {
-               viewModel.hands = detectedHands
-               viewModel.gesture = gestureSummary
-           }
+            let isLeft = inferHandSide(from: points)
+            detectedHands.append(HandPoints(isLeft: isLeft, points: fingerTips))
+
+            gestureSummary = gestureSummary.isEmpty
+                ? gesture
+                : gestureSummary + " " + gesture
+
+            // 👉 Solo capturamos indexTip (NO tocamos el ViewModel)
+            if let indexTip = points[.indexTip],
+               indexTip.confidence > 0.7 {
+
+                drawingPoint = normalizedPoint(
+                    indexTip,
+                    cameraIsFront: currentCameraIsFront
+                )
+                drawingGesture = gesture
+            }
+        }
+
+        // ✅ ÚNICO punto donde tocamos el ViewModel
+        DispatchQueue.main.async {
+
+            // Estado base (lo que ya tenías)
+            viewModel.hands = detectedHands
+            viewModel.gesture = gestureSummary
+
+            // 🎨 AIR DRAWING MODE
+            guard viewModel.trackingMode == .drawing,
+                  let point = drawingPoint,
+                  let gesture = drawingGesture else {
+                viewModel.stopDrawing()
+                return
+            }
+
+            switch gesture {
+            case "☝️ Pointing":
+                viewModel.gesture = "🖌️ Drawing"
+                if !viewModel.isDrawing {
+                    viewModel.startDrawing()
+                }
+                viewModel.addDrawingPoint(point)
+
+            case "✌️ Victory":
+                viewModel.gesture = "⏭️ Next color"
+                viewModel.nextColor()
+            case "🤘 Punk hand":
+                viewModel.gesture = "⏮️ previous color"
+                viewModel.previousColor()
+            case "👍 Thumbs Up":
+                viewModel.resetColor()
+            case "✊ Fist":
+                viewModel.stopDrawing()
+            case "✋ Stop":
+                viewModel.gesture = "↪️ Clear drawing"
+                viewModel.clearDrawing()
+            default:
+                viewModel.stopDrawing()
+            }
+        }
     }
+
     
     private func inferHandSide(from points: [VNHumanHandPoseObservation.JointName : VNRecognizedPoint]) -> Bool {
         // returns true if left hand
@@ -186,7 +235,7 @@ final class HandTrackingGestureDetector {
     private func detectGesture(from state: FingerState) -> String {
         let s = state
         switch (s.thumb, s.index, s.middle, s.ring, s.little) {
-        case (false, true, false, false, false):
+        case (_, true, false, false, false):
             return "☝️ Pointing"
         case (true, false, false, false, false):
             return "✊ Fist"
